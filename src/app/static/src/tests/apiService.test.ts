@@ -1,6 +1,7 @@
 import {api} from "../app/apiService";
 import {mockAxios, mockError, mockFailure, mockRootState, mockSuccess} from "./mocks";
 import {freezer} from '../app/utils';
+import {Language} from "../app/store/translations/locales";
 
 const rootState = mockRootState();
 
@@ -17,6 +18,8 @@ describe("ApiService", () => {
         (console.warn as jest.Mock).mockClear();
         jest.clearAllMocks();
     });
+
+    const detail = "HTTP error 500, there was a problem processing your request. Please contact support."
 
     it("console logs error", async () => {
         mockAxios.onGet(`/baseline/`)
@@ -281,7 +284,27 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(500);
 
-        await expectCouldNotParseAPIResponseError();
+        await expectCouldNotParseAPIResponseError(detail);
+    });
+
+    it("can commit error in french if API response is malformed", async () => {
+
+        mockAxios.onGet(`/baseline/`)
+            .reply(500, {data: {}, errors: []});
+
+        const detail = "Erreur HTTP 500, il y a eu un problème lors du traitement de votre demande. Veuillez contacter l'assistance."
+
+        await expectCouldNotParseAPIResponseError(detail, Language.fr);
+    });
+
+    it("can commit error in Portuguese if API response is malformed", async () => {
+
+        mockAxios.onGet(`/baseline/`)
+            .reply(500, {data: {}, errors: []});
+
+        const detail = "Erro HTTP 500, ocorreu um problema ao processar sua solicitação. Entre em contato com o suporte."
+
+        await expectCouldNotParseAPIResponseError(detail, Language.pt);
     });
 
     it("throws error if API response status is missing", async () => {
@@ -289,7 +312,7 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(500, {data: {}, errors: []});
 
-        await expectCouldNotParseAPIResponseError();
+        await expectCouldNotParseAPIResponseError(detail);
     });
 
     it("throws error if API response errors are missing", async () => {
@@ -297,7 +320,7 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(500, {data: {}, status: "failure"});
 
-        await expectCouldNotParseAPIResponseError();
+        await expectCouldNotParseAPIResponseError(detail);
     });
 
     it("does nothing on error if ignoreErrors is true", async () => {
@@ -360,9 +383,9 @@ describe("ApiService", () => {
         })
     });
 
-    async function expectCouldNotParseAPIResponseError() {
+    async function expectCouldNotParseAPIResponseError(detail: string, lang: Language = Language.en) {
         const commit = jest.fn();
-        await api({commit, rootState} as any)
+        await api({commit, rootState: {language: lang}} as any)
             .get("/baseline/");
 
         expect(commit.mock.calls.length).toBe(1);
@@ -370,7 +393,7 @@ describe("ApiService", () => {
             type: `errors/ErrorAdded`,
             payload: {
                 error: "MALFORMED_RESPONSE",
-                detail: "Could not parse API response. Please contact support."
+                detail: detail
             }
         });
         expect(commit.mock.calls[0][1]).toStrictEqual({root: true});
