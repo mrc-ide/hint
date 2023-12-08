@@ -7,22 +7,49 @@ import {
 } from "./plottingSelections";
 import {ModelOutputTabs, PayloadWithType} from "../../types";
 import {DataExplorationState} from "../dataExploration/dataExploration";
+import { CalibrateDataResponse } from "../../generated";
+import { RootState } from "../../root";
 
 export interface PlottingSelectionsActions {
-    updateBarchartSelections: (store: ActionContext<PlottingSelectionsState, DataExplorationState>, payload: PayloadWithType<BarchartSelections>) => void
-    updateChoroplethSelections: (store: ActionContext<PlottingSelectionsState, DataExplorationState>, payload: PayloadWithType<Partial<ChoroplethSelections>>) => void
-    updateBubblePlotSelections: (store: ActionContext<PlottingSelectionsState, DataExplorationState>, payload: PayloadWithType<Partial<BubblePlotSelections>>) => void
-    updateTableSelections: (store: ActionContext<PlottingSelectionsState, DataExplorationState>, payload: PayloadWithType<Partial<TableSelections>>) => void
+    updateBarchartSelections: (store: ActionContext<PlottingSelectionsState, RootState>, payload: PayloadWithType<BarchartSelections>) => void
+    updateChoroplethSelections: (store: ActionContext<PlottingSelectionsState, RootState>, payload: PayloadWithType<Partial<ChoroplethSelections>>) => void
+    updateBubblePlotSelections: (store: ActionContext<PlottingSelectionsState, RootState>, payload: PayloadWithType<Partial<BubblePlotSelections>>) => void
+    updateTableSelections: (store: ActionContext<PlottingSelectionsState, RootState>, payload: PayloadWithType<Partial<TableSelections>>) => void
 }
 
-export const actions: ActionTree<PlottingSelectionsState, DataExplorationState> & PlottingSelectionsActions = {
+type DataPoint = CalibrateDataResponse["data"][number];
+export type FetchResultDataPayload = Partial<{
+    [K in keyof DataPoint]: DataPoint[K][]
+} & {
+    area_level: number[]
+} >
+
+export const actions: ActionTree<PlottingSelectionsState, RootState> & PlottingSelectionsActions = {
 
     async updateBarchartSelections(context, payload) {
-        const {commit, dispatch} = context;
-        const indicatorId = payload.payload.indicatorId;
+        const {commit, dispatch, state, rootState} = context;
+        const fetchPayload: FetchResultDataPayload = {};
+        const newSelections = {
+            ...state.barchart,
+            ...payload.payload
+        };
+        fetchPayload.indicator = [newSelections.indicatorId];
+        fetchPayload.age_group = [];
+        fetchPayload.area_id = [];
+        fetchPayload.area_level = [];
+        fetchPayload.calendar_quarter = [];
+        fetchPayload.sex = [];
+        const filtersMetadata = rootState.modelCalibrate.metadata?.plottingMetadata.barchart.filters;
+        if (!filtersMetadata) return;
+        for (const filter in newSelections.selectedFilterOptions) {
+            const filterId = filtersMetadata.find(f => f.id === filter)!.column_id;
+            if (fetchPayload[filterId]) {
+                fetchPayload[filterId]!.push(...newSelections.selectedFilterOptions[filter].map(f => f.id));
+            }
+        }
         const tab = ModelOutputTabs.Bar;
-        const resultDataPayload = { indicatorId, tab };
-        await dispatch("modelCalibrate/getResultData", resultDataPayload, {root:true});
+        const resultDataPayload = { payload: fetchPayload, tab };
+        await dispatch("modelCalibrate/getFilteredData", resultDataPayload, {root:true});
         commit({type: PlottingSelectionsMutations.updateBarchartSelections, payload: payload.payload});
     },
 

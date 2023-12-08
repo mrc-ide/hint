@@ -5,6 +5,7 @@ import {getters} from "./getters";
 import {Dict} from "../../types";
 import {DataExplorationState} from "../dataExploration/dataExploration";
 import {actions} from "./actions";
+import { RootState } from "../../root";
 
 export interface PlottingSelectionsState {
     calibratePlot: BarchartSelections,
@@ -165,7 +166,7 @@ export const initialPlottingSelectionsState = (): PlottingSelectionsState => {
 
 const namespaced = true;
 
-export const plottingSelections = (existingState: Partial<DataExplorationState> | null): Module<PlottingSelectionsState, DataExplorationState> => {
+export const plottingSelections = (existingState: Partial<DataExplorationState> | null): Module<PlottingSelectionsState, RootState> => {
     return {
         namespaced,
         state: {...initialPlottingSelectionsState(), ...existingState && existingState.plottingSelections},

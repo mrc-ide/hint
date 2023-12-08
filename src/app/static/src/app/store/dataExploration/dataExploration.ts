@@ -81,7 +81,7 @@ export const storeOptions: StoreOptions<DataExplorationState> = {
         baseline: baseline(existingState),
         metadata: metadata(existingState),
         surveyAndProgram: surveyAndProgram(existingState),
-        plottingSelections: plottingSelections(existingState),
+        plottingSelections: plottingSelections(existingState) as any,
         stepper: dataExplorationStepper(existingState),
         errors,
         hintrVersion: hintrVersion(existingState)

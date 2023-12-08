@@ -18,9 +18,15 @@ import {CalibrateResultWithType, Dict, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
 import {PlottingSelectionsMutations} from "../plottingSelections/mutations";
 import { ModelOutputMutation } from "../modelOutput/mutations";
+import { FetchResultDataPayload } from "../plottingSelections/actions";
 
 type ResultDataPayload = {
     indicatorId: string,
+    tab: ModelOutputTabs
+}
+
+type FilterDataPayload = {
+    payload: FetchResultDataPayload,
     tab: ModelOutputTabs
 }
 
@@ -33,6 +39,7 @@ export interface ModelCalibrateActions {
     getComparisonPlot: (store: ActionContext<ModelCalibrateState, RootState>) => void
     resumeCalibrate: (store: ActionContext<ModelCalibrateState, RootState>) => void
     getResultData: (store: ActionContext<ModelCalibrateState, RootState>, payload: ResultDataPayload) => void
+    getFilteredData: (store: ActionContext<ModelCalibrateState, RootState>, payload: FilterDataPayload) => void
 }
 
 export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrateActions = {
@@ -161,6 +168,29 @@ export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrat
             }
             commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: false}}, {root: true});
         }
+    },
+
+    async getFilteredData(context, payload) {
+        const {payload: fetchPayload, tab} = payload;
+        const {commit, state} = context;
+        const calibrateId = state.calibrateId;
+
+        if (!state.status.done || fetchPayload.indicator?.length === 0) return;
+
+        const loadingTimeout = setTimeout(() => {
+            commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: true}}, {root: true});
+        }, 300);
+
+        const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
+            .ignoreSuccess()
+            .withError(ModelCalibrateMutation.SetError)
+            .freezeResponse()
+            .postAndReturn<CalibrateDataResponse["data"]>(`calibrate/result/filteredData/${calibrateId}`, fetchPayload);
+        if (response) {
+            commit({type: ModelCalibrateMutation.SetData, payload: response.data});
+        }
+        clearTimeout(loadingTimeout);
+        commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: false}}, {root: true});
     }
 };
 

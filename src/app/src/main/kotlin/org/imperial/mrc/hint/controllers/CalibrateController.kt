@@ -6,6 +6,7 @@ import org.imperial.mrc.hint.clients.HintrAPIClient
 import org.imperial.mrc.hint.models.ModelOptions
 import org.imperial.mrc.hint.models.SuccessResponse
 import org.imperial.mrc.hint.models.asResponseEntity
+import org.imperial.mrc.hint.models.FilterQuery
 import org.imperial.mrc.hint.service.CalibrateDataService
 
 @RestController
@@ -48,6 +49,16 @@ class CalibrateController(val apiClient: HintrAPIClient, val calibrateDataServic
         @PathVariable("indicator") indicator: String): ResponseEntity<String>
     {
         val dataObj = calibrateDataService.getCalibrateData(id, indicator)
+        return SuccessResponse(dataObj).asResponseEntity()
+    }
+
+    @PostMapping("/result/filteredData/{id}")
+    @ResponseBody
+    fun calibrateResultData(
+        @PathVariable("id") id: String,
+        @RequestBody filterQuery: FilterQuery): ResponseEntity<String>
+    {
+        val dataObj = calibrateDataService.getFilteredCalibrateData(id, filterQuery)
         return SuccessResponse(dataObj).asResponseEntity()
     }
 
