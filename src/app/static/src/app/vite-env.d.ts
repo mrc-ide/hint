@@ -1,4 +1,4 @@
-// static/vuex-shims.d.ts
+/// <reference types="vite/client" />
 import {Store} from "vuex";
 import {RootState} from "./src/app/root";
 

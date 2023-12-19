@@ -51,25 +51,25 @@
                         :class="uploading || isPreparing ? 'btn-secondary' : 'btn-red'"
                         :disabled="uploading || isPreparing">
                     <span v-translate="'upload'"></span>
-                    <vue-feather type="upload" size="20" class="icon ml-2" style="margin-top: -4px;"></vue-feather>
+                    <vue-feather type="upload" size="20" class="icon ms-2" style="margin-top: -4px;"></vue-feather>
                 </button>
                 <div id="uploading" v-if="uploading" class="d-flex align-items-end">
                     <loading-spinner size="xs"></loading-spinner>
-                    <div class="d-flex align-items-center height-40 ml-2'">
+                    <div class="d-flex align-items-center height-40 ms-2'">
                         <span>{{ uploadingStatus }}</span>
                     </div>
                 </div>
                 <div id="uploadComplete" v-if="uploadComplete" class="d-flex align-items-end">
-                    <div class="d-flex align-items-center height-40 mr-1">
-                        <span class="font-weight-bold" v-translate="'uploadComplete'"></span>
+                    <div class="d-flex align-items-center height-40 me-1">
+                        <span class="fw-bold" v-translate="'uploadComplete'"></span>
                     </div>
                     <div class="d-flex align-items-center height-40">
                         <tick color="#e31837" v-if="uploadComplete"></tick>
                     </div>
                 </div>
                 <div id="releaseCreated" v-if="releaseCreated || releaseFailed" class="d-flex align-items-end">
-                    <div class="d-flex align-items-center height-40 mr-1">
-                        <span class="font-weight-bold"
+                    <div class="d-flex align-items-center height-40 me-1">
+                        <span class="fw-bold"
                               v-translate="releaseCreated ? 'releaseCreated' : 'releaseFailed'"></span>
                     </div>
                     <div class="d-flex align-items-center height-40">

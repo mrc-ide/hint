@@ -28,7 +28,7 @@
     import {
         BarchartIndicator,
         Filter,
-        FilterConfig
+FilterConfig
     } from "../../vue-chart/src/bar/types";
     import BarChartWithFilters from "../../vue-chart/src/bar/BarChartWithFilters.vue";
     import {
@@ -78,7 +78,7 @@
                     xAxisLabel: i18next.t("xAxis", this.currentLanguage),
                     disaggLabel: i18next.t("disaggBy", this.currentLanguage),
                     filters: this.filters,
-                };
+                } as FilterConfig;
             },
             selections() {
                 return this.$store.state.plottingSelections.calibratePlot;

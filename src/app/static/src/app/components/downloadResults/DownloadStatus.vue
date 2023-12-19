@@ -2,7 +2,7 @@
     <div>
         <div v-if="preparing" id="preparing" class="d-flex align-items-end">
             <loading-spinner size="xs"></loading-spinner>
-            <div class="d-flex align-items-center height-40 ml-2'">
+            <div class="d-flex align-items-center height-40 ms-2'">
                 <span v-translate="translateKey"></span>
             </div>
         </div>

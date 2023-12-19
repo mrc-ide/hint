@@ -4,7 +4,7 @@ import {VueWrapper, flushPromises, mount, shallowMount} from "@vue/test-utils";
 import SelectDataset from "../../../app/components/adr/SelectDataset.vue";
 import SelectRelease from "../../../app/components/adr/SelectRelease.vue";
 import Modal from "../../../app/components/Modal.vue";
-import TreeSelect from "@reside-ic/vue3-treeselect"
+import TreeSelect from "@reside-ic/vue3-treeselect";
 import {
     mockBaselineState, mockDataExplorationState,
     mockDataset,
@@ -28,9 +28,9 @@ import {expectTranslatedWithStoreType, mountWithTranslate, shallowMountWithTrans
 import {ADRState} from "../../../app/store/adr/adr";
 import {getters} from "../../../app/store/dataExploration/getters"
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
-import Mock = jest.Mock;
 import { DataExplorationState } from "../../../app/store/dataExploration/dataExploration";
 import HintTreeSelect from "../../../app/components/HintTreeSelect.vue";
+import {describe, expect, it, Mock, vi, beforeEach, afterEach, beforeAll, afterAll} from "vitest";
 
 describe("select dataset", () => {
 
@@ -184,25 +184,25 @@ describe("select dataset", () => {
         activity_id: "activityId",
     }
 
-    const setDatasetMock = jest.fn();
-    const setReleaseMock = jest.fn();
-    const markResourcesUpdatedMock = jest.fn();
-    const getDatasetsMock = jest.fn();
-    const getReleasesMock = jest.fn();
-    const getDatasetMock = jest.fn();
+    const setDatasetMock = vi.fn();
+    const setReleaseMock = vi.fn();
+    const markResourcesUpdatedMock = vi.fn();
+    const getDatasetsMock = vi.fn();
+    const getReleasesMock = vi.fn();
+    const getDatasetMock = vi.fn();
 
     const baselineActions: Partial<BaselineActions> & ActionTree<any, any> = {
-        importShape: jest.fn(),
-        importPopulation: jest.fn(),
-        importPJNZ: jest.fn(),
-        refreshDatasetMetadata: jest.fn(),
-        deleteAll: jest.fn()
+        importShape: vi.fn(),
+        importPopulation: vi.fn(),
+        importPJNZ: vi.fn(),
+        refreshDatasetMetadata: vi.fn(),
+        deleteAll: vi.fn()
     }
 
     const surveyProgramActions: Partial<SurveyAndProgramActions> & ActionTree<any, any> = {
-        importSurvey: jest.fn(),
-        importProgram: jest.fn(),
-        importANC: jest.fn(),
+        importSurvey: vi.fn(),
+        importProgram: vi.fn(),
+        importANC: vi.fn(),
     }
 
     const mockGetters = {
@@ -228,8 +228,8 @@ describe("select dataset", () => {
                     getDataset: getDatasetMock
                 },
                 mutations: {
-                    [ADRMutation.ClearReleases]: jest.fn(),
-                    [ADRMutation.SetReleases]: jest.fn()
+                    [ADRMutation.ClearReleases]: vi.fn(),
+                    [ADRMutation.SetReleases]: vi.fn()
                 }
             },
             baseline: {
@@ -274,7 +274,7 @@ describe("select dataset", () => {
                     namespaced: true,
                     state: mockProjectsState({currentProject: {id: 1, name: "v1", versions: []}, currentVersion}),
                     actions: {
-                        newVersion: jest.fn()
+                        newVersion: vi.fn()
                     }
                 },
                 ...genericModules(baselineProps, adrProps, requireConfirmation, baselineGetters)
@@ -299,12 +299,12 @@ describe("select dataset", () => {
     }
 
     beforeEach(() => {
-        jest.useFakeTimers();
+        vi.useFakeTimers();
     });
 
     afterEach(() => {
-        jest.resetAllMocks();
-        jest.restoreAllMocks();
+        vi.resetAllMocks();
+        vi.restoreAllMocks();
     });
 
     it("refreshes selected dataset metdata on mount and sets interval to poll refresh", () => {
@@ -316,7 +316,7 @@ describe("select dataset", () => {
         });
         expect((rendered.vm as any).pollingId).not.toBeNull();
         expect((baselineActions.refreshDatasetMetadata as Mock).mock.calls.length).toBe(1);
-        jest.advanceTimersByTime(10000);
+        vi.advanceTimersByTime(10000);
         expect((baselineActions.refreshDatasetMetadata as Mock).mock.calls.length).toBe(2);
     });
 
@@ -358,7 +358,7 @@ describe("select dataset", () => {
         const fakeDataset = mockDataset();
         fakeDataset.resources.pjnz = mockDatasetResource({outOfDate: true});
         const store = getStore({selectedDataset: fakeDataset});
-        const mockTooltipDirective = jest.fn();
+        const mockTooltipDirective = vi.fn();
         const rendered = mountWithTranslate(SelectDataset, store, {
             global: {
                 plugins: [store],
@@ -425,8 +425,8 @@ describe("select dataset", () => {
         });
 
         const oldPollingId = (rendered.vm as any).pollingId;
-        const clearIntervalSpy = jest.spyOn(window, "clearInterval");
-        const setIntervalSpy = jest.spyOn(window, "setInterval");
+        const clearIntervalSpy = vi.spyOn(window, "clearInterval");
+        const setIntervalSpy = vi.spyOn(window, "setInterval");
 
         await rendered.findAll("button")[0].trigger("click");
 
@@ -556,7 +556,7 @@ describe("select dataset", () => {
                 plugins: [store]
             }, 
         });
-        await expectTranslatedWithStoreType(rendered.find(".font-weight-bold"), "Selected dataset:",
+        await expectTranslatedWithStoreType(rendered.find(".fw-bold"), "Selected dataset:",
             "Ensemble de données sélectionné :", "Conjunto de dados selecionado:", store);
         expect(rendered.find("a").text()).toBe("Some data");
         expect(rendered.find("a").attributes("href")).toBe("www.adr.com/naomi-data/some-data");
@@ -572,7 +572,7 @@ describe("select dataset", () => {
                 plugins: [store]
             }, 
         });
-        await expectTranslatedWithStoreType(rendered.find(".font-weight-bold"), "Selected dataset:",
+        await expectTranslatedWithStoreType(rendered.find(".fw-bold"), "Selected dataset:",
             "Ensemble de données sélectionné :", "Conjunto de dados selecionado:", store);
 
         expect(rendered.find("a").text()).toBe("Some data — release1");
@@ -624,9 +624,8 @@ describe("select dataset", () => {
             }, 
         });
         await rendered.find("button").trigger("click");
-        const select = rendered.findComponent(TreeSelect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("multiple")).toBe(false);
-        expect(select.props("searchable")).toBe(true);
 
         const expectedOptions = [
             {
@@ -635,7 +634,7 @@ describe("select dataset", () => {
                 customLabel: `Some data
                             <div class="text-muted small" style="margin-top:-5px; line-height: 0.8rem">
                                 (some-data)<br/>
-                                <span class="font-weight-bold">org</span>
+                                <span class="fw-bold">org</span>
                             </div>`
             },
             {
@@ -644,7 +643,7 @@ describe("select dataset", () => {
                 customLabel: `Some data 2
                             <div class="text-muted small" style="margin-top:-5px; line-height: 0.8rem">
                                 (some-data)<br/>
-                                <span class="font-weight-bold">org</span>
+                                <span class="fw-bold">org</span>
                             </div>`
             }
         ]
@@ -1149,7 +1148,7 @@ describe("select dataset", () => {
             }, 
         });
         const pollingId = (rendered.vm as any).pollingId;
-        const spy = jest.spyOn(window, "clearInterval");
+        const spy = vi.spyOn(window, "clearInterval");
         rendered.unmount();
         expect(spy.mock.calls[0][0]).toBe(pollingId);
     });
@@ -1187,8 +1186,8 @@ describe("select dataset", () => {
                 stubs: ["treeselect"]
             },
         });
-        const clearInterval = jest.spyOn(window, "clearInterval");
-        const setInterval = jest.spyOn(window, "setInterval");
+        const clearInterval = vi.spyOn(window, "clearInterval");
+        const setInterval = vi.spyOn(window, "setInterval");
 
         await rendered.find("button").trigger("click");
 
@@ -1227,8 +1226,8 @@ describe("select dataset", () => {
                 stubs: ["treeselect"]
             },
         });
-        const clearInterval = jest.spyOn(window, "clearInterval");
-        const setInterval = jest.spyOn(window, "setInterval");
+        const clearInterval = vi.spyOn(window, "clearInterval");
+        const setInterval = vi.spyOn(window, "setInterval");
         const pollingId = (rendered.vm as any).pollingId;
 
         await rendered.find("button").trigger("click");

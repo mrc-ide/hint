@@ -1,7 +1,7 @@
 <template>
     <div v-if="projects.length > 0">
         <h5 v-translate="'projectHistory'"></h5>
-        <div id="headers" class="row font-weight-bold pt-2">
+        <div id="headers" class="row fw-bold pt-2">
             <div class="col-md-1 header-cell"></div>
             <div class="col-md-3 header-cell" v-translate="'projectName'"></div>
             <div class="col-md-1 header-cell" v-translate="'versions'"></div>
@@ -38,7 +38,7 @@
                        @click="loadVersion($event, p.id, p.versions[0].id)">
                         {{ p.name }}
                     </a>
-                    <span class="float-right">
+                    <span class="float-end">
                     <button v-if="showTooltip" href="#" class="btn btn-sm btn-red-icons"
                             v-tooltip="getTranslatedValue('editProjectNote')"
                             @click.prevent="handleEditProjectNote(p.id)"
@@ -137,7 +137,7 @@
                      class="row font-italic bg-light py-2">
                     <div class="col-md-1 version-cell"></div>
                     <div class="col-md-3 version-cell edit-cell">
-                        <span class="float-right">
+                        <span class="float-end">
                             <button v-if="showTooltip" href="#" class="btn btn-sm btn-red-icons"
                                     v-tooltip="getTranslatedValue('editVersionNote')"
                                     v-translate:aria-label="'editVersionNote'"

@@ -2,7 +2,7 @@
     <div id="upload-progress">
         <modal :open="openModal">
             <div class="mt-3 d-flex align-items-end h4">
-                <div class="d-flex align-items-center height-40 mr-2">
+                <div class="d-flex align-items-center height-40 me-2">
                     <span id="upload-header" v-translate="'uploadFromZip'"></span>
                 </div>
                 <loading-spinner size="xs"></loading-spinner>

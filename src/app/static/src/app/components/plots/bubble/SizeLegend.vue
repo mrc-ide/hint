@@ -12,7 +12,7 @@
                     </text>
                 </svg>
                 <div class="adjust-scale mt-1">
-                    <a @click="toggleAdjust" href="" class="float-right">
+                    <a @click="toggleAdjust" href="" class="float-end">
                         <span v-if="showAdjust" v-translate="'done'"></span>
                         <span v-if="!showAdjust" v-translate="'adjustScale'"></span>
                     </a>

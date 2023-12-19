@@ -7,8 +7,8 @@
                 value="useLatest"
                 v-model="choiceADR"
             />
-            <label for="useLatest" v-translate="'useLatest'" class="ml-1"></label>
-            <span class="icon-small ml-1" v-tooltip="translate('datasetTooltip')">
+            <label for="useLatest" v-translate="'useLatest'" class="ms-1"></label>
+            <span class="icon-small ms-1" v-tooltip="translate('datasetTooltip')">
                 <vue-feather type="help-circle" class="align-middle"></vue-feather>
             </span>
             <br />
@@ -20,8 +20,8 @@
                 value="useRelease"
                 v-model="choiceADR"
             />
-            <label for="useRelease" v-translate="'useRelease'" class="ml-1"></label>
-            <span class="icon-small ml-1" v-tooltip="translate('releaseTooltip')">
+            <label for="useRelease" v-translate="'useRelease'" class="ms-1"></label>
+            <span class="icon-small ms-1" v-tooltip="translate('releaseTooltip')">
                 <vue-feather type="help-circle" class="align-middle"></vue-feather>
             </span>
             <br />
@@ -29,7 +29,7 @@
 
         <label
             for="releaseSelector"
-            class="font-weight-bold"
+            class="fw-bold"
             v-translate="'releases'"
         ></label>
         <hint-tree-select

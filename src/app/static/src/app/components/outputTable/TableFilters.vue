@@ -5,7 +5,7 @@
                        :model-value="tableSelections.preset"
                        @update:model-value="changePresetSelection"/>
     </div>
-    <div class="form-group">
+    <div class="form-group mt-3 mb-3">
         <h4 v-translate="'indicator'"></h4>
         <single-select :options="indicatorOptions"
                        :model-value="tableSelections.indicator"

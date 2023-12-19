@@ -21,7 +21,7 @@
                      v-translate="'uniqueProjectName'"
                      v-if="invalidName(newProjectName)"></div>
                 <button type="button"
-                        class="btn btn-red mt-2 float-right"
+                        class="btn btn-red mt-2 float-end"
                         :disabled="disableCreate"
                         @click="createProject({name: newProjectName})"
                         v-translate="'createProject'">

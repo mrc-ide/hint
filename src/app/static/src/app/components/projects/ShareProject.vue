@@ -34,13 +34,13 @@
             </div>
             <template v-slot:footer>
             <div style="display: flex; align-items: center; justify-content: space-between;">
-                <div class="text-muted help-text float-left"
+                <div class="text-muted help-text float-start"
                      v-show="showValidationMessage"
                      v-translate="'emailMultiValidation'"
                      style="width: 60%;">
                 </div>
                 <error-alert v-if="cloneProjectError" :error="cloneProjectError!"></error-alert>
-                <div class="float-right">
+                <div class="float-end">
                     <button type="button"
                             class="btn btn-red"
                             @click="confirmShareProject"
@@ -48,7 +48,7 @@
                             v-translate="'ok'">
                     </button>
                     <button type="button"
-                            class="btn btn-white ml-2"
+                            class="btn btn-white ms-2"
                             @mousedown="cancelShareProject"
                             :disabled="cloningProject"
                             v-translate="'cancel'">

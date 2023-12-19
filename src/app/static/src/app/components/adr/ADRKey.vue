@@ -3,12 +3,12 @@
         <div class="col-8">
             <div class="d-flex d-inline-block">
                 <label for="key"
-                       class="font-weight-bold align-self-center col-form-label"
+                       class="fw-bold align-self-center col-form-label"
                        v-translate="'adrKey'">
                 </label>
-                <div class="align-self-center pl-2">
+                <div class="align-self-center ps-2">
                     <div v-if="!editing">
-                        <span class="pr-2 align-middle">
+                        <span class="pe-2 align-middle">
                           {{ keyText }}
                         </span>
                         <span v-if="!key">
@@ -41,7 +41,7 @@
                                type="text"
                                v-translate:placeholder="'enterKey'"/>
                         <div class="input-group-append">
-                            <button class="btn btn-red mr-2"
+                            <button class="btn btn-red me-2"
                                     type="button"
                                     v-translate="'save'"
                                     :disabled="!editableKey"

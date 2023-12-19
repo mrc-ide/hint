@@ -14,7 +14,7 @@
                                      @update:model-value="indicatorChanged"></hint-tree-select>
                     </div>
                 </div>
-                <div class="row form-group">
+                <div class="row form-group mt-2">
                     <label class="col-3 col-form-label" v-translate="'detail'">
                     </label>
                     <div class="col">

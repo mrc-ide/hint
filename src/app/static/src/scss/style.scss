@@ -1,9 +1,7 @@
-@import "partials/variables";
 @import "../../node_modules/bootstrap/scss/bootstrap.scss";
-@import "../../node_modules/bootstrap/scss//mixins";
 @import "../../node_modules/leaflet/dist/leaflet.css";
-@import "../../node_modules/vue3-treeselect/dist/vue3-treeselect.css";
-//@import "../app/vue-dynamic-form/src/style-partial.scss";
+@import "../../node_modules/@reside-ic/vue3-treeselect/dist/vue3-treeselect.css";
+@import "partials/variables";
 @import "partials/maps";
 @import "partials/stepper";
 @import "partials/header";
@@ -15,6 +13,7 @@
 
 a {
   color: $theme-red;
+  text-decoration: none;
 
   &:hover {
     color: darken($theme-red, 10%);

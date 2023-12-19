@@ -3,7 +3,7 @@
         <div v-if="initialised" class="row">
             <div class="col-md-3">
                 <div id="indicator-fg" class="form-group">
-                    <label class="font-weight-bold">{{filterConfig.indicatorLabel || "Indicator"}}</label>
+                    <label class="fw-bold mt-1">{{filterConfig.indicatorLabel || "Indicator"}}</label>
                     <hint-tree-select :multiple=false
                                  :clearable="false"
                                  :options="indicators"
@@ -11,14 +11,14 @@
                                  :normalizer="normalizeIndicators"></hint-tree-select>
                 </div>
                 <div v-if="!xAxisIsFixed" id="x-axis-fg" class="form-group">
-                    <label class="font-weight-bold">{{filterConfig.xAxisLabel || "X Axis"}}</label>
+                    <label class="fw-bold mt-2">{{filterConfig.xAxisLabel || "X Axis"}}</label>
                     <hint-tree-select :multiple=false
                                  :clearable="false"
                                  :options="filterXaxisOptions"
                                  v-model="xAxisId"></hint-tree-select>
                 </div>
                 <div v-if="!disaggregateIsFixed" id="disagg-fg" class="form-group">
-                    <label class="font-weight-bold">{{filterConfig.disaggLabel || "Disaggregate by"}}</label>
+                    <label class="fw-bold mt-2">{{filterConfig.disaggLabel || "Disaggregate by"}}</label>
                     <hint-tree-select :multiple=false
                                  :clearable="false"
                                  :options="filterDisaggregateOptions"

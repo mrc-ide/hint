@@ -1,8 +1,7 @@
 <template>
     <div v-if="showAlert">
         <div class="content alert alert-warning pt-0">
-            <button @click="$emit('clear-warnings')" type="button" class="close pt-2 pull-right" v-translate:aria-label="'close'">
-                <span aria-hidden="true">&times;</span>
+            <button @click="$emit('clear-warnings')" type="button" class="btn-close pt-2 float-end small mt-1" v-translate:aria-label="'close'">
             </button>
             <warning v-for="(value, key) in filteredWarnings" :key="key" :origin="`${key}`" :warnings="value" :max-lines="maxLines"></warning>
         </div>

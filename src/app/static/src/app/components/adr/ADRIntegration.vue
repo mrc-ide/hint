@@ -4,9 +4,9 @@
         <div v-if="ssoLogin || key">
             <select-dataset></select-dataset>
             <div class="pt-3" id="adr-capacity" v-if="selectedDataset">
-                <span class="font-weight-bold align-self-stretch" v-translate="'adrAccessLevel'"></span>
+                <span class="fw-bold align-self-stretch" v-translate="'adrAccessLevel'"></span>
                 <span v-tooltip="handleUploadPermission(hasUploadPermission, true)">
-                    <span class="text-danger ml-1">{{ handleUploadPermission(hasUploadPermission, false) }}</span>
+                    <span class="text-danger ms-1">{{ handleUploadPermission(hasUploadPermission, false) }}</span>
                 </span>
             </div>
         </div>

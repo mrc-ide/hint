@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label class="font-weight-bold">{{label}}</label>
+        <label class="fw-bold mt-2 mb-1">{{label}}</label>
         <hint-tree-select :instanceId="id"
                      :multiple="isXAxisOrDisagg"
                      :clearable="false"

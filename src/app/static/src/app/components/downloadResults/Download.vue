@@ -5,7 +5,7 @@
                 :disabled="disabled"
                 @click="download">
             <span v-translate="translateKey.button"></span>
-            <vue-feather type="download" size="20" class="icon ml-2" style="margin-top: -4px;"></vue-feather>
+            <vue-feather type="download" size="20" class="icon ms-2" style="margin-top: -4px;"></vue-feather>
         </button>
         <div>
             <download-status id="progress"

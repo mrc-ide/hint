@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mt-3">
         <h4 v-translate="'filters'"></h4>
         <div :id="'filter-' + filter.id" v-for="filter in filters" :key="filter.id" class="form-group">
             <filter-select :value="getSelectedFilterValues(filter.id)"

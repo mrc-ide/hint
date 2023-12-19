@@ -5,7 +5,7 @@
                 :disabled="running"
                 v-translate="'fitModel'">
         </button>
-        <div v-if="complete" class="mt-3 d-flex align-items-center mr-2" id="model-run-complete">
+        <div v-if="complete" class="mt-3 d-flex align-items-center me-2" id="model-run-complete">
             <h4 v-translate="'fittingComplete'"></h4>
             <tick color="#e31837" width="20px"></tick>
         </div>
@@ -18,7 +18,7 @@
                 <loading-spinner size="sm"></loading-spinner>
             </div>
             <div>
-                <button class="btn btn-red float-right" id="cancel-model-run"
+                <button class="btn btn-red float-end" id="cancel-model-run"
                         v-on:click="cancelRun" v-translate="'cancelFitting'">
                 </button>
             </div>

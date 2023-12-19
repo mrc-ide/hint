@@ -2,13 +2,13 @@
     <div class="row mt-2">
         <div class="col">
             <a id="back" href="#"
-               class="text-uppercase font-weight-bold pr-1"
+               class="text-uppercase fw-bold pe-1"
                :class="{'disabled': backDisabled}"
                v-on="backDisabled ? {} : { click: back }"
                v-translate="'back'"></a>
             /
             <a id="continue" href="#"
-               class="text-uppercase font-weight-bold"
+               class="text-uppercase fw-bold"
                :class="{'disabled': nextDisabled}"
                v-on="nextDisabled ? {} : { click: next }"
                v-translate="'continue'"></a>

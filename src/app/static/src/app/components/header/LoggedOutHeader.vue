@@ -2,7 +2,7 @@
     <header class="mb-5">
         <nav class="navbar navbar-dark bg-secondary">
             <div class="container-fluid">
-                <div class="navbar-header">
+                <div class="navbar-brand">
                     {{ title }}
                 </div>
                 <language-menu></language-menu>

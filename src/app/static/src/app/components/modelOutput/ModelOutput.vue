@@ -50,7 +50,7 @@
                     :selections="barchartSelections"
                     :formatFunction="formatBarchartValue"
                     :showRangesInTooltips="true"
-                    :no-data-message="noChartData"
+                    :no-data-message="(noChartData as any)"
                     :show-error-bars="true"
                     @update:selections="updateBarchartSelectionsAndXAxisOrder"></bar-chart-with-filters>
                 <div class="row mt-2">
@@ -102,7 +102,7 @@
                     :selections="comparisonPlotSelections"
                     :formatFunction="formatBarchartValue"
                     :showRangesInTooltips="true"
-                    :no-data-message="noChartData"
+                    :no-data-message="(noChartData as any)"
                     :show-error-bars="true"
                     @update:selections="updateComparisonPlotSelectionsAndXAxisOrder"></bar-chart-with-filters>
                 <div class="row mt-2">

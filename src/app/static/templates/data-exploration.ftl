@@ -8,10 +8,10 @@
     <link href="/public/css/app.css" rel="stylesheet">
     <!-- endinject -->
     <script defer src="/public/js/app.js"></script>
-    <script defer src="/public/js/node_modules_leaflet_dist_images_marker-icon_png.chunk.js"></script>
-    <script defer src="/public/js/node_modules_leaflet_dist_images_marker-icon-2x_png.chunk.js"></script>
-    <script defer src="/public/js/node_modules_leaflet_dist_images_marker-shadow_png.chunk.js"></script>
-    <script defer src="/public/js/node_modules_leaflet_dist_leaflet-src_esm_js.chunk.js"></script>
+    <script defer src="/public/js/marker-icon.chunk.js"></script>
+    <script defer src="/public/js/marker-icon-2x.chunk.js"></script>
+    <script defer src="/public/js/marker-shadow.chunk.js"></script>
+    <script defer src="/public/js/leaflet-src.esm.chunk.js"></script>
 </head>
 <body>
 <div id="dataExplorationApp" :class="language" data-user="${user}" data-title="${title}"></div>

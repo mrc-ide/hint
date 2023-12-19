@@ -1,8 +1,8 @@
 <template>
     <div class="row">
         <div class="col-md-3">
-            <div id="color-indicator" class="form-group">
-                <label class="font-weight-bold" v-translate="'colorIndicator'"></label>
+            <div id="color-indicator" class="form-group mt-1">
+                <label class="fw-bold" v-translate="'colorIndicator'"></label>
                 <hint-tree-select :multiple=false
                             :clearable="false"
                             :options="indicators"
@@ -11,8 +11,8 @@
                             @update:model-value="onColorIndicatorSelect($event)">
                 </hint-tree-select>
             </div>
-            <div id="size-indicator" class="form-group">
-                <label class="font-weight-bold" v-translate="'sizeIndicator'"></label>
+            <div id="size-indicator" class="form-group mt-2 mb-3">
+                <label class="fw-bold" v-translate="'sizeIndicator'"></label>
                 <hint-tree-select :multiple=false
                             :clearable="false"
                             :options="indicators"
@@ -39,7 +39,7 @@
             </div>
         </div>
         <div id="chart" class="col-md-9">
-            <l-map ref="map" style="height: 800px; width: 100%" @ready="updateBounds" @vnode-updated="updateBounds">
+            <l-map ref="map" style="height: 800px; width: 100%" @ready="updateBounds" @vue:updated="updateBounds">
                 <template v-for="feature in currentFeatures" :key="feature.id">
                     <l-geo-json :geojson="feature"
                                 :optionsStyle="() => style">
@@ -80,7 +80,7 @@
     import MapLegend from "../MapLegend.vue";
     import FilterSelect from "../FilterSelect.vue";
     import {CircleMarker, GeoJSON, circleMarker} from "leaflet";
-    import {ChoroplethIndicatorMetadata, FilterOption, NestedFilterOption} from "../../../generated";
+    import {ChoroplethIndicatorMetadata, FilterOption} from "../../../generated";
     import {
         BubblePlotSelections,
         ScaleSelections,
@@ -89,7 +89,7 @@
     } from "../../../store/plottingSelections/plottingSelections";
     import {getFeatureIndicators} from "./utils";
     import {getIndicatorRange, toIndicatorNameLookup, formatOutput} from "../utils";
-    import {BubbleIndicatorValuesDict, Dict, Filter, LevelLabel, NumericRange} from "../../../types";
+    import {Dict, Filter, LevelLabel, NumericRange} from "../../../types";
     import {flattenOptions, flattenToIdSet} from "../../../utils";
     import SizeLegend from "./SizeLegend.vue";
     import {initialiseScaleFromMetadata} from "../choropleth/utils";

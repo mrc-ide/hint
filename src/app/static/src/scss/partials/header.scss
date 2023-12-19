@@ -1,13 +1,15 @@
-@mixin navbar-header-mixin($color) {
+@mixin navbar-brand-mixin($color) {
   margin-top: -8px;
   margin-bottom: -8px;
   padding: 10px;
-  margin-left: -30px;
+  margin-left: -12px;
+  margin-right: 0px;
+  font-size: medium;
   background-color: darken($color, 10%);
   color: white;
 }
-.navbar-header {
-  @include navbar-header-mixin($theme-red)
+.navbar-brand {
+  @include navbar-brand-mixin($theme-red)
 }
 
 header {
@@ -53,6 +55,6 @@ header {
   }
 }
 
-.navbar-header-secondary {
- @include navbar-header-mixin($theme-green)
+.navbar-brand-secondary {
+ @include navbar-brand-mixin($theme-green)
 }

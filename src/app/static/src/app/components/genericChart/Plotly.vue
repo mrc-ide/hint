@@ -18,7 +18,7 @@
     import {mapStateProp} from "../../utils";
     import {RootState} from "../../root";
     import {Language} from "../../store/translations/locales";
-    import {InputTimeSeriesRow, InputTimeSeriesData} from "../../../app/generated";
+    import {InputTimeSeriesRow, InputTimeSeriesData} from "../../generated";
 
     const config = {
         responsive: false,

@@ -1,9 +1,9 @@
 <template>
-    <div v-if="display" class="text-muted small pl-1">
-        <span class="small float-right">
+    <div v-if="display" class="text-muted small ps-1">
+        <span class="small float-end">
             <span v-translate="'project'"></span>: {{ projectName }} {{ versionLabel }}
         </span><br/>
-        <span v-if="time" class="small float-right">
+        <span v-if="time" class="small float-end">
             <span v-translate="'lastSaved'"></span> {{ formattedTime }}
             <vue-feather type="check" size="14" class="align-middle mb-1"></vue-feather>
         </span>

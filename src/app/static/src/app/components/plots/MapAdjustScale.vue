@@ -1,9 +1,9 @@
 import {ScaleType} from "../../store/plottingSelections/plottingSelections";
 <template>
-    <div v-if="show" class="pt-2 pl-3">
+    <div v-if="show" class="pt-2 ps-3">
         <div class="static-container">
             <div><span v-translate="'static'"></span></div>
-            <div class="ml-2">
+            <div class="ms-2">
                 <div class="form-check static-default">
                     <label class="form-check-label">
                         <input id="type-input-default" class="form-check-input" type="radio" :name="scaleTypeGroup"
@@ -21,27 +21,27 @@ import {ScaleType} from "../../store/plottingSelections/plottingSelections";
                     </label>
                 </div>
 
-                <div class="mt-2 ml-2 static-custom-values">
+                <div class="mt-2 ms-2 static-custom-values">
                     <form novalidate>
                         <div class="row p-0 mb-2">
                             <label for="custom-min-input" class="col col-form-label col-2"><span v-translate="'min'"></span></label>
-                            <div class="col pt-1 pr-1">
+                            <div class="col pt-1 pe-1">
                                 <input id="custom-min-input" type="number" :step="step"
                                        v-model.number="scaleToAdjust.customMin"
                                        :max="scaleToAdjust.customMax"
                                        @change="update" @keyup="update" :disabled="disableCustom">
                             </div>
-                            <p v-if="scaleToAdjust.customMin" class="col col-form-label pl-0">{{ scaleText}}</p>
+                            <p v-if="scaleToAdjust.customMin" class="col col-form-label ps-0">{{ scaleText}}</p>
                         </div>
                         <div class="row">
                             <label class="col col-form-label col-2" for="custom-max-input"><span v-translate="'max'"></span></label>
-                            <div class="col pt-1 pr-1">
+                            <div class="col pt-1 pe-1">
                                 <input id="custom-max-input" type="number" :step="step"
                                        v-model.number="scaleToAdjust.customMax"
                                        :min="scaleToAdjust.customMin"
                                        @change="update" @keyup="update" :disabled="disableCustom">
                             </div>
-                            <p v-if="scaleToAdjust.customMax" class="col col-form-label pl-0">{{ scaleText}}</p>
+                            <p v-if="scaleToAdjust.customMax" class="col col-form-label ps-0">{{ scaleText}}</p>
                         </div>
                     </form>
                 </div>
@@ -49,7 +49,7 @@ import {ScaleType} from "../../store/plottingSelections/plottingSelections";
         </div>
         <div class="dynamic-container">
             <div class="mt-1"><span v-translate="'fitToCurrentDataset'"></span></div>
-            <div class="ml-2">
+            <div class="ms-2">
                 <div class="form-check mt-1">
                     <label class="form-check-label">
                         <input id="type-input-dynamic-full" class="form-check-input" type="radio" :name="scaleTypeGroup"
@@ -59,7 +59,7 @@ import {ScaleType} from "../../store/plottingSelections/plottingSelections";
                     </label>
                 </div>
             </div>
-            <div class="ml-2">
+            <div class="ms-2">
                 <div class="form-check mt-1">
                     <label class="form-check-label">
                         <input id="type-input-dynamic-filtered" class="form-check-input" type="radio" :name="scaleTypeGroup"

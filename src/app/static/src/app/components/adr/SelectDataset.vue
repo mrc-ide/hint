@@ -1,7 +1,7 @@
 <template>
     <div class="d-flex">
         <div v-if="selectedDataset" class="mt-2">
-            <span class="font-weight-bold mr-1"
+            <span class="fw-bold me-1"
                   v-translate="'selectedDataset'"
                   id="selectedDatasetSpan">
             </span>
@@ -21,12 +21,12 @@
             </span>
         </div>
         <button v-if="outOfDateMessage"
-                class="btn btn-white ml-2"
+                class="btn btn-white ms-2"
                 @click="refresh"
                 v-translate="'refresh'">
         </button>
         <button class="btn btn-red"
-                :class="selectedDataset && 'ml-2'"
+                :class="selectedDataset && 'ms-2'"
                 @click="toggleModal">
             {{ selectText }}
         </button>
@@ -34,7 +34,7 @@
             <h4 v-if="!loading" v-translate="'browseADR'"></h4>
             <p v-if="loading" v-translate="'importingFiles'"></p>
             <div v-if="!loading">
-                <label class="font-weight-bold" v-translate="'datasets'"></label>
+                <label class="fw-bold" v-translate="'datasets'"></label>
                 <hint-tree-select id="datasetSelector"
                              :multiple="false"
                              :searchable="true"
@@ -60,7 +60,7 @@
                 <div v-if="adrError" id="fetch-error">
                     <div v-if="adrError.detail">{{adrError.detail}}</div>
                     <button @click="getDatasets"
-                            class="btn btn-red float-right"
+                            class="btn btn-red float-end"
                             v-translate="'tryAgain'">
                     </button>
                 </div>
@@ -215,7 +215,7 @@
                     customLabel: `${d.title}
                             <div class="text-muted small" style="margin-top:-5px; line-height: 0.8rem">
                                 (${d.name})<br/>
-                                <span class="font-weight-bold">${d.organization.title}</span>
+                                <span class="fw-bold">${d.organization.title}</span>
                             </div>`,
                 }));
             },

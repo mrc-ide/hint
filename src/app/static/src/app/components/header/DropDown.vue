@@ -6,7 +6,7 @@
         @click="toggle"
         @blur="close">
         </p>
-        <div class="dropdown-menu" :class="{'show':show, 'dropdown-menu-right': right}"
+        <div class="dropdown-menu" :class="{'show':show, 'dropdown-menu-end': right}"
         @mouseenter="menuFocused"
         @mouseleave="menuUnfocused"
         @click="toggle">
@@ -75,5 +75,10 @@ p {
     color: white;
     margin: 0;
     cursor: pointer;
+}
+
+.dropdown-menu-end {
+  right: 0;
+  left: auto;
 }
 </style>

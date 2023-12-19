@@ -1,8 +1,8 @@
 <template>
     <div class="form-group">
-        <label class="font-weight-bold mb-0" v-translate="label"></label>
+        <label class="fw-bold mb-0" v-translate="label"></label>
         <span id="required" v-if="required"
-              class="ml-1"
+              class="ms-1"
               style="font-size: small;"
               :class="existingFileName? '': 'text-danger'">(<span v-translate="'required'"></span>)
         </span>
@@ -15,7 +15,7 @@
             <span v-if="existingFileName">
                 <strong v-translate="'file'"></strong>: {{ existingFileName }}
             </span>
-            <a class="small float-right"
+            <a class="small float-end"
                href="#"
                v-on:click="handleFileDelete"
                v-translate="'remove'"></a>

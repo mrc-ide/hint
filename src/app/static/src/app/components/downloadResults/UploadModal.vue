@@ -17,7 +17,7 @@
                            value="createRelease"
                            v-model="choiceUpload"
                            class="form-check-input"/>
-                    <span class="form-check-label pl-2">
+                    <span class="form-check-label ps-2">
                         <label for="createRelease" v-translate="'createRelease'" class="d-inline"></label>
                         <span class="icon-small d-inline" v-tooltip="translate('createReleaseTooltip')">
                             <vue-feather type="help-circle"></vue-feather>
@@ -31,7 +31,7 @@
                            value="uploadFiles"
                            v-model="choiceUpload"
                            class="form-check-input"/>
-                    <span class="form-check-label pl-2">
+                    <span class="form-check-label ps-2">
                         <label for="uploadFiles" v-translate="'uploadFiles'" class="d-inline"></label>
                         <span class="icon-small d-inline" v-tooltip="translate('uploadFilesTooltip')">
                             <vue-feather type="help-circle"></vue-feather>
@@ -39,7 +39,7 @@
                     </span>
                     <br/>
                 </div>
-                <div v-for="(uploadFileSection, sectionIndex) in uploadFileSections" :key="sectionIndex" class="pl-4">
+                <div v-for="(uploadFileSection, sectionIndex) in uploadFileSections" :key="sectionIndex" class="ps-4">
                     <h5 v-if="Object.keys(uploadFileSections[1]).length > 0"
                         v-translate="getSectionHeading(sectionIndex)"
                         class="mt-3"></h5>

@@ -5,8 +5,7 @@
                 <p v-for="(error, index) in errors" :key="index">
                     {{ error }}
                 </p>
-                <button type="button" class="close" @click="dismissAll">
-                    <span aria-hidden="true">&times;</span>
+                <button type="button" class="btn-close small mt-1" @click="dismissAll">
                 </button>
             </div>
         </div>

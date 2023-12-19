@@ -8,9 +8,8 @@ import HintDataExploration from "./components/HintDataExploration.vue";
 import ForgotPassword from "./components/password/ForgotPassword.vue";
 import ResetPassword from "./components/password/ResetPassword.vue";
 import 'floating-vue/dist/style.css';
-import "../scss/style.scss";
-import "bootstrap/scss/bootstrap-grid.scss";
 import "@reside-ic/vue-nested-multiselect/style.css";
+import "../scss/style.scss";
 
 const mountEl = document.querySelector("#app");
 const mountElDataExploration = document.querySelector("#dataExplorationApp");

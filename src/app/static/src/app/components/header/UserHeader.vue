@@ -2,21 +2,21 @@
     <header class="mb-5">
         <nav class="navbar navbar-dark bg-secondary">
             <div class="container-fluid">
-                <div class="navbar-header">
+                <div class="navbar-brand">
                     {{ title }}
                 </div>
-                <router-link id="projects-link" v-if="!isGuest" to="/projects" class="ml-2 pr-2 border-right"
+                <router-link id="projects-link" v-if="!isGuest" to="/projects" class="ms-2 pe-2 border-end"
                              v-translate="'projects'"
                              style="flex:none"></router-link>
                 <file-menu :title="title || ''"></file-menu>
-                <span v-if="!isGuest" class="pr-2 mr-2 border-right text-white">
+                <span v-if="!isGuest" class="pe-2 me-2 border-end text-white">
                     <span v-translate="'loggedInAs'"></span> {{ user }}
                 </span>
-                <hintr-version-menu class="pr-2 mr-2 border-right"/>
-                <online-support-menu class="pr-2 mr-2 border-right"/>
-                <a v-if="!isGuest" href="/logout" class="pr-2 mr-2 border-right" v-translate="'logout'">
+                <hintr-version-menu class="pe-2 me-2 border-end"/>
+                <online-support-menu class="pe-2 me-2 border-end"/>
+                <a v-if="!isGuest" href="/logout" class="pe-2 me-2 border-end" v-translate="'logout'">
                 </a>
-                <a v-if="isGuest" href="/login" class="pr-2 mr-2 border-right" v-translate="'logIn'">
+                <a v-if="isGuest" href="/login" class="pe-2 me-2 border-end" v-translate="'logIn'">
                 </a>
                 <language-menu></language-menu>
             </div>

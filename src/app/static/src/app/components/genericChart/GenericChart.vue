@@ -25,7 +25,7 @@
                     <plotly class="chart"
                             v-if="!chartDataIsEmpty"
                            :chart-data="chartDataPage"
-                           :layout-data="chartConfigValues.layoutData"
+                           :layout-data="(chartConfigValues.layoutData as any)"
                            :style="{height: chartConfigValues.scrollHeight}"></plotly>
                     <div v-else class="mt-5" id="empty-generic-chart-data">
                         <div class="empty-chart-message px-3 py-2">
@@ -37,7 +37,7 @@
                 </div>
                 <div v-if="totalPages > 1" id="page-controls" class="text-center mt-2">
                     <button id="previous-page"
-                            class="btn btn-sm mr-2"
+                            class="btn btn-sm me-2"
                             :class="prevPageEnabled ? 'btn-red' : 'btn-secondary'"
                             v-translate:aria-label="'previousPage'"
                             :disabled="!prevPageEnabled"
@@ -48,7 +48,7 @@
                         {{pageNumberText}}
                     </span>
                     <button id="next-page"
-                            class="btn btn-sm ml-2"
+                            class="btn btn-sm ms-2"
                             :class="nextPageEnabled ? 'btn-red' : 'btn-secondary'"
                             v-translate:aria-label="'nextPage'"
                             :disabled="!nextPageEnabled"

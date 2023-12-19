@@ -1,15 +1,15 @@
 <template>
     <div>
-        <div class="custom-file">
+        <div class="input-group custom-file-button mb-2">
             <input type="file"
-                   style="display:none"
+                   style="display: none;"
                    :ref="name"
                    :id="name"
                    :accept="accept"
                    :disabled="uploading"
                    v-on:change="handleFileSelect"/>
             <label :for="name"
-                   class="custom-file-label"
+                   class="input-group-text custom-file-button-label"
                    :class="{'uploading': uploading}">
                 <span v-translate="'selectNewFile'"></span>
             </label>
@@ -89,3 +89,25 @@
 
     })
 </script>
+
+<style scoped>
+.custom-file-button input[type=file] {
+  margin-left: -2px !important;
+}
+
+.custom-file-button input[type=file]::-webkit-file-upload-button {
+  display: none;
+}
+
+.custom-file-button input[type=file]::file-selector-button {
+  display: none;
+}
+
+.custom-file-button-label {
+    width: 100%;
+}
+
+.custom-file-button-label:hover {
+    cursor: pointer;
+}
+</style>

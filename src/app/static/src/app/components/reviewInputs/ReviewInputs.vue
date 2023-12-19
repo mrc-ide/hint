@@ -40,16 +40,19 @@
                         </hint-tree-select>
                     </div>
                 </choropleth>
-                <div>
-                    <area-indicators-table :table-data="data"
-                                           :area-filter-id="areaFilterId"
-                                           :filters="filters"
-                                           :countryAreaFilterOption="countryAreaFilterOption"
-                                           :indicators="filterTableIndicators"
-                                           :selections="plottingSelections"
-                                           :round-format-output="false"
-                                           :selectedFilterOptions="plottingSelections.selectedFilterOptions">
-                    </area-indicators-table>
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-9">
+                        <area-indicators-table :table-data="data"
+                                               :area-filter-id="areaFilterId"
+                                               :filters="filters"
+                                               :countryAreaFilterOption="countryAreaFilterOption"
+                                               :indicators="filterTableIndicators"
+                                               :selections="plottingSelections"
+                                               :round-format-output="false"
+                                               :selectedFilterOptions="plottingSelections.selectedFilterOptions">
+                        </area-indicators-table>
+                    </div>
                 </div>
             </div>
         </template>
