@@ -52,21 +52,18 @@ describe("Data Exploration App", () => {
         return new Vuex.Store<DataExplorationState>(localStoreOptions);
     };
 
-    it("loads input data on mount", (done) => {
+    it("loads input data on mount", async () => {
         const store = getStore();
         mount(HintDataExploration, {
             global: {
                 plugins: [store]
             }
         });
-
-        setTimeout(() => {
-            expect(baselineActions.getBaselineData).toHaveBeenCalled();
-            expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
-            expect(adrActions.getSchemas).toHaveBeenCalled();
-            expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
-            done();
-        });
+        await nextTick();
+        expect(baselineActions.getBaselineData).toHaveBeenCalled();
+        expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
+        expect(adrActions.getSchemas).toHaveBeenCalled();
+        expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
     });
 
     it("gets language from state", () => {

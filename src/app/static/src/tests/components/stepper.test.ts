@@ -450,7 +450,7 @@ describe("Stepper component", () => {
         expect(steps[0].props().active).toBe(true);
     });
 
-    it("updates from completed state when active step data is populated", (done) => {
+    it("updates from completed state when active step data is populated", async () => {
         const baselineState = {
             country: "Malawi",
             iso3: "MWI",
@@ -469,11 +469,8 @@ describe("Stepper component", () => {
             "type": "Validated",
             "payload": mockValidateBaselineResponse()
         });
-
-        nextTick().then(() => {
-            expect(vm.navigationProps.nextDisabled).toBe(false);
-            done();
-        });
+        await nextTick();
+        expect(vm.navigationProps.nextDisabled).toBe(false);
     });
 
     it("active step only becomes active once state becomes ready", async () => {

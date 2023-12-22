@@ -6,6 +6,7 @@ import {ErrorsMutation} from "../../app/store/errors/mutations";
 import {Project} from "../../app/types";
 import {serialiseState} from "../../app/localStorageManager";
 import { Mock } from "vitest";
+import { flushPromises } from "@vue/test-utils";
 
 describe("Projects actions", () => {
     beforeEach(() => {
@@ -77,7 +78,7 @@ describe("Projects actions", () => {
         expect(result).toBe(false);
     });
 
-    it("createProject posts to new project endpoint and sets error on unsuccessful response",  (done) => {
+    it("createProject posts to new project endpoint and sets error on unsuccessful response",  async () => {
         mockAxios.onPost(`/project/`)
             .reply(500, mockFailure("TestError"));
 
@@ -87,23 +88,21 @@ describe("Projects actions", () => {
 
         actions.createProject({commit, dispatch, state, rootState} as any, {name: "newProject"});
 
-        setTimeout(() => {
-            expect(dispatch).toHaveBeenCalledTimes(1)
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
-            expect(commit.mock.calls[1][0]).toStrictEqual({type: "modelCalibrate/ResetIds"});
-            expect(commit.mock.calls[2][0]).toStrictEqual({type: "modelRun/ResetIds"});
-            expect(commit.mock.calls[3][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        await flushPromises();
+        expect(dispatch).toHaveBeenCalledTimes(1)
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
+        expect(commit.mock.calls[1][0]).toStrictEqual({type: "modelCalibrate/ResetIds"});
+        expect(commit.mock.calls[2][0]).toStrictEqual({type: "modelRun/ResetIds"});
+        expect(commit.mock.calls[3][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
 
-            const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
-            expect(commit.mock.calls[4][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            done();
+        const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
+        expect(commit.mock.calls[4][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
     });
 
-    it("createProject posts to new project endpoint and resets project with root on successful response",  (done) => {
+    it("createProject posts to new project endpoint and resets project with root on successful response",  async () => {
         mockAxios.onPost(`/project/`)
             .reply(200, mockSuccess("TestProject"));
 
@@ -113,22 +112,20 @@ describe("Projects actions", () => {
 
         actions.createProject({commit, dispatch, state, rootState} as any, {name: "newProject"});
 
-        setTimeout(() => {
-            expect(dispatch).toHaveBeenCalledTimes(1)
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
-            expect(commit.mock.calls[1][0]).toStrictEqual({type: "modelCalibrate/ResetIds"});
-            expect(commit.mock.calls[2][0]).toStrictEqual({type: "modelRun/ResetIds"});
-            expect(commit.mock.calls[3][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        await flushPromises();
+        expect(dispatch).toHaveBeenCalledTimes(1)
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
+        expect(commit.mock.calls[1][0]).toStrictEqual({type: "modelCalibrate/ResetIds"});
+        expect(commit.mock.calls[2][0]).toStrictEqual({type: "modelRun/ResetIds"});
+        expect(commit.mock.calls[3][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
 
-            const posted = mockAxios.history.post[0].data;
-            expect(posted).toEqual("name=newProject");
-            expect(commit.mock.calls[4][0]).toStrictEqual({type: RootMutation.SetProject, payload: "TestProject"});
-            expect(commit.mock.calls[4][1]).toStrictEqual({root: true});
-            done();
-        });
+        const posted = mockAxios.history.post[0].data;
+        expect(posted).toEqual("name=newProject");
+        expect(commit.mock.calls[4][0]).toStrictEqual({type: RootMutation.SetProject, payload: "TestProject"});
+        expect(commit.mock.calls[4][1]).toStrictEqual({root: true});
     });
 
-    it("gets projects and commits mutation on successful response",  (done) => {
+    it("gets projects and commits mutation on successful response",  async () => {
         const testProjects = [{id: 1, name: "v1", versions: []}];
         mockAxios.onGet("/projects/")
             .reply(200, mockSuccess(testProjects));
@@ -138,17 +135,15 @@ describe("Projects actions", () => {
 
         actions.getProjects({commit, state, rootState} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: ProjectsMutations.SetPreviousProjects,
-                payload: testProjects
-            });
-            done();
+        await flushPromises();
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: ProjectsMutations.SetPreviousProjects,
+            payload: testProjects
         });
     });
 
-    it("gets current project and commits mutation on successful response",  (done) => {
+    it("gets current project and commits mutation on successful response",  async () => {
         const testProjects = [{id: 1, name: "v1", versions: []}];
         mockAxios.onGet("/project/current")
             .reply(200, mockSuccess(testProjects));
@@ -159,18 +154,16 @@ describe("Projects actions", () => {
 
         actions.getCurrentProject({commit, state, rootState, rootGetters} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: ProjectsMutations.SetCurrentProject,
-                payload: testProjects
-            });
-            expect(commit.mock.calls[2][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: false});
-            done();
+        await flushPromises();
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: ProjectsMutations.SetCurrentProject,
+            payload: testProjects
         });
+        expect(commit.mock.calls[2][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: false});
     });
 
-    it("if current version, createProject uploads current version before post to new project endpoint",  (done) => {
+    it("if current version, createProject uploads current version before post to new project endpoint",  async () => {
         mockAxios.onPost(`/project/`)
             .reply(200, mockSuccess("TestProject"));
         mockAxios.onPost("/project/1/version/version-id/state/")
@@ -190,16 +183,14 @@ describe("Projects actions", () => {
 
         actions.createProject({commit, dispatch, state, rootState} as any, {name: "newProject"});
 
-        setTimeout(() => {
-            expect(dispatch).toHaveBeenCalledTimes(1)
-            expect(mockAxios.history.post.length).toBe(2);
-            expect(mockAxios.history.post[0].url).toBe("/project/1/version/version-id/state/");
-            expect(mockAxios.history.post[1].url).toBe("/project/");
-            done();
-        });
+        await flushPromises();
+        expect(dispatch).toHaveBeenCalledTimes(1)
+        expect(mockAxios.history.post.length).toBe(2);
+        expect(mockAxios.history.post[0].url).toBe("/project/1/version/version-id/state/");
+        expect(mockAxios.history.post[1].url).toBe("/project/");
     });
 
-    it("gets projects and sets error on unsuccessful response",  (done) => {
+    it("gets projects and sets error on unsuccessful response",  async () => {
         mockAxios.onGet("/projects/")
             .reply(500, mockFailure("TestError"));
 
@@ -208,18 +199,16 @@ describe("Projects actions", () => {
 
         actions.getProjects({commit, state, rootState} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
     });
 
-    it("gets current project and sets error on unsuccessful response",  (done) => {
+    it("gets current project and sets error on unsuccessful response",  async () => {
         mockAxios.onGet("/project/current")
             .reply(500, mockFailure("TestError"));
 
@@ -229,29 +218,30 @@ describe("Projects actions", () => {
 
         actions.getCurrentProject({commit, state, rootState, rootGetters} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            expect(commit.mock.calls[2][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: false});
-            done();
+        await flushPromises();
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
+        expect(commit.mock.calls[2][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: false});
     });
 
-    it("queueVersionStateUpload does nothing if no current version",  (done) => {
+    it("queueVersionStateUpload does nothing if no current version",  async () => {
         const commit = vi.fn();
         const state = mockProjectsState();
 
+        vi.useFakeTimers();
+
         actions.queueVersionStateUpload({commit, state, rootState} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls.length).toBe(0);
-            expect(mockAxios.history.post.length).toBe(0);
-            done();
-        }, 2500);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
+
+        expect(commit.mock.calls.length).toBe(0);
+        expect(mockAxios.history.post.length).toBe(0);
+        vi.useRealTimers();
     });
 
     it("queued upload will not run while version upload is already in progress",  () => {
@@ -279,7 +269,7 @@ describe("Projects actions", () => {
         expect(mockAxios.history.post.length).toBe(0);
     });
 
-    it("queued upload will run if no version upload is in progress", (done) => {
+    it("queued upload will run if no version upload is in progress", async () => {
         const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
@@ -324,25 +314,23 @@ describe("Projects actions", () => {
 
         vi.useRealTimers();
 
-        setTimeout(() => {
-            expect(commit.mock.calls.length).toBe(6);
-            expect(commit.mock.calls[4][0]).toStrictEqual({
-                type: ProjectsMutations.VersionUploadSuccess,
-                payload: "OK"
-            });
-            expect(commit.mock.calls[5][0]).toStrictEqual({
-                type: ProjectsMutations.SetVersionUploadInProgress,
-                payload: false
-            });
-            expect(mockAxios.history.post.length).toBe(1);
-            expect(mockAxios.history.post[0].url).toBe(url);
-            const posted = mockAxios.history.post[0].data;
-            expect(JSON.parse(posted)).toStrictEqual(serialiseState(rootState));
-            done();
-        })
+        await flushPromises();
+        expect(commit.mock.calls.length).toBe(6);
+        expect(commit.mock.calls[4][0]).toStrictEqual({
+            type: ProjectsMutations.VersionUploadSuccess,
+            payload: "OK"
+        });
+        expect(commit.mock.calls[5][0]).toStrictEqual({
+            type: ProjectsMutations.SetVersionUploadInProgress,
+            payload: false
+        });
+        expect(mockAxios.history.post.length).toBe(1);
+        expect(mockAxios.history.post[0].url).toBe(url);
+        const posted = mockAxios.history.post[0].data;
+        expect(JSON.parse(posted)).toStrictEqual(serialiseState(rootState));
     });
 
-    it("uploadVersionState commits ErrorAdded on error response and unsets in progress upload",  (done) => {
+    it("uploadVersionState commits ErrorAdded on error response and unsets in progress upload",  async () => {
         const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
@@ -365,15 +353,13 @@ describe("Projects actions", () => {
         vi.advanceTimersByTime(2001);
         vi.useRealTimers();
 
-        setTimeout(() => {
-            expect(commit.mock.calls.length).toBe(6);
-            expect(commit.mock.calls[4][0]["type"]).toBe("errors/ErrorAdded");
-            expect(commit.mock.calls[5][0]).toStrictEqual({
-                type: ProjectsMutations.SetVersionUploadInProgress,
-                payload: false
-            });
-            done();
-        })
+        await flushPromises();
+        expect(commit.mock.calls.length).toBe(6);
+        expect(commit.mock.calls[4][0]["type"]).toBe("errors/ErrorAdded");
+        expect(commit.mock.calls[5][0]).toStrictEqual({
+            type: ProjectsMutations.SetVersionUploadInProgress,
+            payload: false
+        });
     });
 
     it("newVersion uploads current version state then requests new version, commits VersionCreated", async () => {
@@ -464,7 +450,7 @@ describe("Projects actions", () => {
         expect(commit.mock.calls[3][1]).toStrictEqual({root: true});
     });
 
-    it("loadVersion fetches version details and invokes load state action",  (done) => {
+    it("loadVersion fetches version details and invokes load state action",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {error: null};
@@ -473,17 +459,15 @@ describe("Projects actions", () => {
             .reply(200, mockSuccess(mockVersionDetails));
 
         actions.loadVersion({commit, dispatch, state, rootState} as any, {projectId: 1, versionId: "testVersion"});
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
-            expect(commit.mock.calls[1][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            expect(dispatch.mock.calls[0][0]).toBe("load/loadFromVersion");
-            expect(dispatch.mock.calls[0][1]).toStrictEqual(mockVersionDetails);
-            expect(dispatch.mock.calls[0][2]).toStrictEqual({root: true});
-            done();
-        });
+        await flushPromises();
+        expect(commit.mock.calls[0][0]).toStrictEqual({type: "downloadResults/ResetIds"});
+        expect(commit.mock.calls[1][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        expect(dispatch.mock.calls[0][0]).toBe("load/loadFromVersion");
+        expect(dispatch.mock.calls[0][1]).toStrictEqual(mockVersionDetails);
+        expect(dispatch.mock.calls[0][2]).toStrictEqual({root: true});
     });
 
-    it("loadVersion commits error if cannot fetch version details",  (done) => {
+    it("loadVersion commits error if cannot fetch version details",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {error: "test error"};
@@ -491,18 +475,16 @@ describe("Projects actions", () => {
             .reply(500, mockFailure("test error"));
 
         actions.loadVersion({commit, dispatch, state, rootState} as any, {projectId: 1, versionId: "testVersion"});
-        setTimeout(() => {
-            expect(commit.mock.calls[1][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
-            const expectedError = {detail: "test error", error: "OTHER_ERROR"};
-            expect(commit.mock.calls[2][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        expect(commit.mock.calls[1][0]).toStrictEqual({type: ProjectsMutations.SetLoading, payload: true});
+        const expectedError = {detail: "test error", error: "OTHER_ERROR"};
+        expect(commit.mock.calls[2][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
     });
 
-    it("deleteProject dispatches getProjects action",  (done) => {
+    it("deleteProject dispatches getProjects action",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
@@ -510,27 +492,23 @@ describe("Projects actions", () => {
             .reply(200, mockSuccess("OK"));
 
         actions.deleteProject({commit, dispatch, state, rootState} as any, 1);
-        setTimeout(() => {
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            expect(commit.mock.calls.length).toBe(0);
-            done();
-        });
+        await flushPromises();
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
+        expect(commit.mock.calls.length).toBe(0);
     });
 
-    it("deleteProject commits ProjectError on failure",  (done) => {
+    it("deleteProject commits ProjectError on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1")
             .reply(500, mockFailure("TEST ERROR"));
         actions.deleteProject({commit, dispatch, state, rootState} as any, 1);
-        setTimeout(() => {
-            const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
     });
 
@@ -545,7 +523,7 @@ describe("Projects actions", () => {
         expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.ClearCurrentVersion});
     });
 
-    it("deleteVersion dispatches getProjects action",  (done) => {
+    it("deleteVersion dispatches getProjects action",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
@@ -553,27 +531,23 @@ describe("Projects actions", () => {
             .reply(200, mockSuccess("OK"));
 
         actions.deleteVersion({commit, dispatch, state, rootState} as any, {projectId: 1, versionId: "testVersion"});
-        setTimeout(() => {
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            expect(commit.mock.calls.length).toBe(0);
-            done();
-        });
+        await flushPromises();
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
+        expect(commit.mock.calls.length).toBe(0);
     });
 
-    it("deleteVersion commits ProjectError on failure",  (done) => {
+    it("deleteVersion commits ProjectError on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1/version/testVersion")
             .reply(500, mockFailure("TEST ERROR"));
         actions.deleteVersion({commit, dispatch, state, rootState} as any, {projectId: 1, versionId: "testVersion"});
-        setTimeout(() => {
-            const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: ProjectsMutations.ProjectError,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: ProjectsMutations.ProjectError,
+            payload: expectedError
         });
     });
 
@@ -588,7 +562,7 @@ describe("Projects actions", () => {
         expect(commit.mock.calls[0][0]).toStrictEqual({type: ProjectsMutations.ClearCurrentVersion});
     });
 
-    it("promoteVersion creates new project containing replicated version",  (done) => {
+    it("promoteVersion creates new project containing replicated version",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = mockProjectsState({
@@ -607,17 +581,15 @@ describe("Projects actions", () => {
         }
         actions.promoteVersion({commit, state, rootState, dispatch} as any, versionPayload);
 
-        setTimeout(() => {
-            const posted = mockAxios.history.post[0].data;
-            expect(posted).toEqual("name=newProject&note=test");
+        await flushPromises();
+        const posted = mockAxios.history.post[0].data;
+        expect(posted).toEqual("name=newProject&note=test");
 
-            expect(commit.mock.calls.length).toBe(1);
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            done();
-        });
+        expect(commit.mock.calls.length).toBe(1);
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
     });
 
-    it("promoteVersion commits ErrorAdded on failure",  (done) => {
+    it("promoteVersion commits ErrorAdded on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
@@ -630,17 +602,15 @@ describe("Projects actions", () => {
             note: "new editable note"
         }
         actions.promoteVersion({commit, dispatch, state, rootState} as any, versionPayload);
-        setTimeout(() => {
-            const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: `errors/${ErrorsMutation.ErrorAdded}`,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: `errors/${ErrorsMutation.ErrorAdded}`,
+            payload: expectedError
         });
     });
 
-    it("updateVersionNote action adds/edits a project's note",  (done) => {
+    it("updateVersionNote action adds/edits a project's note",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const testProjects = [{id: 1, name: "v1", versions: []}];
@@ -657,16 +627,14 @@ describe("Projects actions", () => {
 
         actions.updateVersionNote({commit, dispatch, state, rootState} as any, versionPayload);
 
-        setTimeout(() => {
-            const posted = mockAxios.history.post[0].data;
-            expect(posted).toEqual("note=edit%20version%20note");
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            expect(dispatch.mock.calls.length).toBe(1);
-            done();
-        });
+        await flushPromises();
+        const posted = mockAxios.history.post[0].data;
+        expect(posted).toEqual("note=edit%20version%20note");
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
+        expect(dispatch.mock.calls.length).toBe(1);
     });
 
-    it("can update project notes",  (done) => {
+    it("can update project notes",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const testProjects = [{id: 1, name: "v1", versions: []}];
@@ -681,16 +649,14 @@ describe("Projects actions", () => {
             note: "test project note"
         }
         actions.updateProjectNote({commit, dispatch, state, rootState} as any, projectPayload);
-        setTimeout(() => {
-            const posted = mockAxios.history.post[0].data;
-            expect(posted).toEqual("note=test%20project%20note");
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            expect(dispatch.mock.calls.length).toBe(1);
-            done();
-        });
+        await flushPromises();
+        const posted = mockAxios.history.post[0].data;
+        expect(posted).toEqual("note=test%20project%20note");
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
+        expect(dispatch.mock.calls.length).toBe(1);
     });
 
-    it("update project notes commits Project Error on failure",  (done) => {
+    it("update project notes commits Project Error on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = mockProjectsState({error: "TEST ERROR" as any});
@@ -704,17 +670,15 @@ describe("Projects actions", () => {
             note: "test project note"
         }
         actions.updateProjectNote({commit, dispatch, state, rootState} as any, projectPayload);
-        setTimeout(() => {
-            const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: `errors/${ErrorsMutation.ErrorAdded}`,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: `errors/${ErrorsMutation.ErrorAdded}`,
+            payload: expectedError
         });
     });
 
-    it("update version notes commits Project Error on failure",  (done) => {
+    it("update version notes commits Project Error on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = mockProjectsState({error: "TEST ERROR" as any});
@@ -730,13 +694,11 @@ describe("Projects actions", () => {
 
         actions.updateVersionNote({commit, dispatch, state, rootState} as any, versionPayload);
 
-        setTimeout(() => {
-            const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: `errors/${ErrorsMutation.ErrorAdded}`,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {error: "OTHER_ERROR", detail: "TestError"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: `errors/${ErrorsMutation.ErrorAdded}`,
+            payload: expectedError
         });
     });
 
@@ -767,7 +729,7 @@ describe("Projects actions", () => {
         expect(dispatch.mock.calls.length).toBe(2);
     });
 
-    it("renameProject does not dispatch getCurrentProject if currentProject is not being renamed",  (done) => {
+    it("renameProject does not dispatch getCurrentProject if currentProject is not being renamed",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = mockProjectsState({
@@ -785,16 +747,14 @@ describe("Projects actions", () => {
         }
         actions.renameProject({commit, state, rootState, dispatch} as any, projectPayload);
 
-        setTimeout(() => {
-            const posted = mockAxios.history.post[0].data;
-            expect(posted).toEqual("name=renamedProject");
-            expect(dispatch.mock.calls[0][0]).toBe("getProjects");
-            expect(dispatch.mock.calls.length).toBe(1);
-            done();
-        });
+        await flushPromises();
+        const posted = mockAxios.history.post[0].data;
+        expect(posted).toEqual("name=renamedProject");
+        expect(dispatch.mock.calls[0][0]).toBe("getProjects");
+        expect(dispatch.mock.calls.length).toBe(1);
     });
 
-    it("renameProject commits ErrorAdded on failure",  (done) => {
+    it("renameProject commits ErrorAdded on failure",  async () => {
         const commit = vi.fn();
         const dispatch = vi.fn();
         const state = {};
@@ -806,13 +766,11 @@ describe("Projects actions", () => {
             name: "renamedProject"
         }
         actions.renameProject({commit, dispatch, state, rootState} as any, projectPayload);
-        setTimeout(() => {
-            const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
-            expect(commit.mock.calls[0][0]).toStrictEqual({
-                type: `errors/${ErrorsMutation.ErrorAdded}`,
-                payload: expectedError
-            });
-            done();
+        await flushPromises();
+        const expectedError = {detail: "TEST ERROR", error: "OTHER_ERROR"};
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: `errors/${ErrorsMutation.ErrorAdded}`,
+            payload: expectedError
         });
     });
 

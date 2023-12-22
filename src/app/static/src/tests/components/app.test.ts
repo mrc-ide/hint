@@ -83,24 +83,21 @@ describe("App", () => {
         return new Vuex.Store<RootState>(localStoreOptions);
     };
 
-    it("loads input data on mount", (done) => {
+    it("loads input data on mount", async () => {
         const store = getStore();
         mount(Hint, {
             global: {
                 plugins: [store]
             }
         });
-
-        setTimeout(() => {
-            expect(baselineActions.getBaselineData).toHaveBeenCalled();
-            expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
-            expect(modelRunActions.getResult).toHaveBeenCalled();
-            expect(modelCalibrateActions.getResult).toHaveBeenCalled();
-            expect(adrActions.getSchemas).toHaveBeenCalled();
-            expect(projectsActions.getCurrentProject).toHaveBeenCalled();
-            expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
-            done();
-        });
+        await nextTick();
+        expect(baselineActions.getBaselineData).toHaveBeenCalled();
+        expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
+        expect(modelRunActions.getResult).toHaveBeenCalled();
+        expect(modelCalibrateActions.getResult).toHaveBeenCalled();
+        expect(adrActions.getSchemas).toHaveBeenCalled();
+        expect(projectsActions.getCurrentProject).toHaveBeenCalled();
+        expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
     });
 
     it("gets language from state", () => {

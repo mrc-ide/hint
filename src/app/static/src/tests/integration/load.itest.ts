@@ -15,6 +15,7 @@ import {emptyState} from "../../app/root";
 import {localStorageManager} from "../../app/localStorageManager";
 import {currentHintVersion} from "../../app/hintVersion";
 import {getFormData} from "./helpers";
+import { flushPromises } from "@vue/test-utils";
 
 describe("load actions", () => {
 
@@ -22,6 +23,7 @@ describe("load actions", () => {
     const realLocation = window.location;
 
     beforeAll(async () => {
+        vi.useFakeTimers();
         await login();
         const commit = vi.fn();
         const formData = getFormData("../testdata/malawi.geojson");
@@ -36,6 +38,7 @@ describe("load actions", () => {
 
     afterAll(() => {
         window.location = realLocation;
+        vi.useRealTimers();
     });
 
     it("can set files as guest user", async () => {
@@ -181,20 +184,20 @@ describe("load actions", () => {
         expect(commit.mock.calls[1][0].payload).not.toBeNull();
     });
 
-    it("can poll model output ZIP status", (done) => {
+    it("can poll model output ZIP status", async () => {
         const commit = vi.fn();
         const dispatch = vi.fn()
         const state = {rehydrateId: "1"}
 
         actions.pollRehydrate({commit, dispatch, state, rootState} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls.length).toBe(2)
-            expect(commit.mock.calls[0][0].type).toBe("RehydratePollingStarted");
-            expect(commit.mock.calls[0][0].payload).toBeGreaterThan(-1);
-            expect(commit.mock.calls[1][0].type).toBe("RehydrateStatusUpdated");
-            expect(commit.mock.calls[1][0]["payload"].status).toBe("MISSING");
-            done();
-        }, 3100)
+        vi.advanceTimersByTime(3000);
+        await flushPromises();
+
+        expect(commit.mock.calls.length).toBe(2)
+        expect(commit.mock.calls[0][0].type).toBe("RehydratePollingStarted");
+        expect(commit.mock.calls[0][0].payload).toBeGreaterThan(-1);
+        expect(commit.mock.calls[1][0].type).toBe("RehydrateStatusUpdated");
+        expect(commit.mock.calls[1][0]["payload"].status).toBe("MISSING");
     });
 });

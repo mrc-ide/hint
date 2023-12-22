@@ -6,6 +6,7 @@ import {mockFile, mockRootState} from "../../mocks";
 import {emptyState, RootState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {getters} from "../../../app/store/root/getters";
+import { nextTick } from "vue";
 
 describe("File upload component", () => {
 
@@ -65,7 +66,7 @@ describe("File upload component", () => {
         expect(uploadConfirmationModal(wrapper).props("open")).toBe(true);
     });
 
-    it("uploads file if user confirms edit", (done) => {
+    it("uploads file if user confirms edit", async () => {
         const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader
@@ -79,15 +80,12 @@ describe("File upload component", () => {
 
         (wrapper.vm as any).handleFileSelect();
         uploadConfirmationModal(wrapper).find(".btn-red").trigger("click");
-
-        setTimeout(() => {
-            expect(uploader.mock.calls.length).toBe(1);
-            expect(uploadConfirmationModal(wrapper).props("open")).toBe(false);
-            done();
-        });
+        await nextTick();
+        expect(uploader.mock.calls.length).toBe(1);
+        expect(uploadConfirmationModal(wrapper).props("open")).toBe(false);
     });
 
-    it("does not upload file if user cancels edit", (done) => {
+    it("does not upload file if user cancels edit", async () => {
         const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader
@@ -99,12 +97,9 @@ describe("File upload component", () => {
 
         (wrapper.vm as any).handleFileSelect();
         uploadConfirmationModal(wrapper).find(".btn-white").trigger("click");
-
-        setTimeout(() => {
-            expect(uploader.mock.calls.length).toBe(0);
-            expect(uploadConfirmationModal(wrapper).props("open")).toBe(false);
-            done();
-        });
+        await nextTick();
+        expect(uploader.mock.calls.length).toBe(0);
+        expect(uploadConfirmationModal(wrapper).props("open")).toBe(false);
     });
 
 });

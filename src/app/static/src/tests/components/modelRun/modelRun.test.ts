@@ -1,4 +1,4 @@
-import {shallowMount} from '@vue/test-utils';
+import {flushPromises, shallowMount} from '@vue/test-utils';
 import Vuex, {Store} from 'vuex';
 import { nextTick } from 'vue';
 import {
@@ -82,7 +82,14 @@ describe("Model run component", () => {
         mockAxios.reset();
     });
 
-    it("run models and polls for status", (done) => {
+    beforeAll(() => {
+        vi.useFakeTimers();
+    });
+    afterAll(() => {
+        vi.useRealTimers();
+    });
+
+    it("run models and polls for status", async () => {
 
         const store = createStore();
         const wrapper = shallowMountWithTranslate(ModelRun, store, {
@@ -92,27 +99,24 @@ describe("Model run component", () => {
         });
         const button = wrapper.find("button");
         expect(button.text()).toBe("Fit model");
-        button.trigger("click");
+        await button.trigger("click");
+        expect(wrapper.find("button").attributes().disabled).toBe("");
+        expect(store.state.modelRun.status).toStrictEqual({id: "1234"});
+        expect(store.state.modelRun.modelRunId).toBe("1234");
+        expect(store.state.modelRun.statusPollId).not.toBe(-1);
+        expect(wrapper.findComponent(Modal).props().open).toBe(true);
 
-        setTimeout(() => {
-            expect(wrapper.find("button").attributes().disabled).toBe("");
-            expect(store.state.modelRun.status).toStrictEqual({id: "1234"});
-            expect(store.state.modelRun.modelRunId).toBe("1234");
-            expect(store.state.modelRun.statusPollId).not.toBe(-1);
-            expect(wrapper.findComponent(Modal).props().open).toBe(true);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            setTimeout(() => {
-                expect(wrapper.find("button").attributes().disabled).toBeUndefined();
-                expect(store.state.modelRun.status).toStrictEqual(mockStatus);
-                expect(store.state.modelRun.modelRunId).toBe("1234");
-                expect(store.state.modelRun.statusPollId).toBe(-1);
-                expect(wrapper.findComponent(Modal).props().open).toBe(false);
-                done();
-            }, 2500);
-        });
+        expect(wrapper.find("button").attributes().disabled).toBeUndefined();
+        expect(store.state.modelRun.status).toStrictEqual(mockStatus);
+        expect(store.state.modelRun.modelRunId).toBe("1234");
+        expect(store.state.modelRun.statusPollId).toBe(-1);
+        expect(wrapper.findComponent(Modal).props().open).toBe(false);
     });
 
-    it("does not immediately run model if edits require confirmation", (done) => {
+    it("does not immediately run model if edits require confirmation", async () => {
 
         const store = createStore({}, {}, {...stepperGetters, editsRequireConfirmation: () => true});
         const wrapper = shallowMountWithTranslate(ModelRun, store, {
@@ -122,20 +126,17 @@ describe("Model run component", () => {
         });
         const button = wrapper.find("button");
         expect(button.text()).toBe("Fit model");
-        button.trigger("click");
+        await button.trigger("click");
 
-        setTimeout(() => {
-            expect((wrapper.vm as any).$data.showReRunConfirmation).toStrictEqual(true);
-            expect(wrapper.find("button").attributes().disabled).toBeUndefined();
-            expect(store.state.modelRun.status).toStrictEqual({});
-            expect(store.state.modelRun.modelRunId).toBe("");
-            expect(store.state.modelRun.statusPollId).toBe(-1);
-            expect(wrapper.findComponent(Modal).props().open).toBe(false);
-            done();
-        });
+        expect((wrapper.vm as any).$data.showReRunConfirmation).toStrictEqual(true);
+        expect(wrapper.find("button").attributes().disabled).toBeUndefined();
+        expect(store.state.modelRun.status).toStrictEqual({});
+        expect(store.state.modelRun.modelRunId).toBe("");
+        expect(store.state.modelRun.statusPollId).toBe(-1);
+        expect(wrapper.findComponent(Modal).props().open).toBe(false);
     });
 
-    it("polls for status if runId already exists, pollId does not, and still running", (done) => {
+    it("polls for status if runId already exists, pollId does not, and still running", async () => {
         const store = createStore({
             modelRunId: "1234",
             status: {
@@ -153,19 +154,19 @@ describe("Model run component", () => {
             }
         });
 
-        setTimeout(() => {
-            expect(mockAxios.history.get[0].url).toBe(`/model/status/1234`);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            expect(wrapper.find("button").attributes().disabled).toBeUndefined();
-            expect(store.state.modelRun.status).toStrictEqual(mockStatus);
-            expect(store.state.modelRun.modelRunId).toBe("1234");
-            expect(store.state.modelRun.statusPollId).toBe(-1);
-            expect(wrapper.findComponent(Modal).props().open).toBe(false);
-            done();
-        }, 2500);
+        expect(mockAxios.history.get[0].url).toBe(`/model/status/1234`);
+
+        expect(wrapper.find("button").attributes().disabled).toBeUndefined();
+        expect(store.state.modelRun.status).toStrictEqual(mockStatus);
+        expect(store.state.modelRun.modelRunId).toBe("1234");
+        expect(store.state.modelRun.statusPollId).toBe(-1);
+        expect(wrapper.findComponent(Modal).props().open).toBe(false);
     });
 
-    it("does not poll for status if runId exists, pollId does not, and run completed successfully", (done) => {
+    it("does not poll for status if runId exists, pollId does not, and run completed successfully", async () => {
         const store = createStore({
             modelRunId: "1234",
             status: {
@@ -182,16 +183,16 @@ describe("Model run component", () => {
             }
         });
 
-        setTimeout(() => {
-            expect(mockAxios.history.get.length).toBe(0);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            expect(wrapper.find("button").attributes().disabled).toBeUndefined();
-            expect(wrapper.findComponent(Modal).props().open).toBe(false);
-            done();
-        }, 2500);
+        expect(mockAxios.history.get.length).toBe(0);
+
+        expect(wrapper.find("button").attributes().disabled).toBeUndefined();
+        expect(wrapper.findComponent(Modal).props().open).toBe(false);
     });
 
-    it("does not poll for status if runId exists, pollId does not, and run failed", (done) => {
+    it("does not poll for status if runId exists, pollId does not, and run failed", async () => {
         const store = createStore({
             modelRunId: "1234",
             status: {
@@ -208,17 +209,17 @@ describe("Model run component", () => {
             }
         });
 
-        setTimeout(() => {
-            expect(mockAxios.history.get.length).toBe(0);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            expect(wrapper.find("button").attributes().disabled).toBeUndefined();
-            expect(wrapper.findComponent(Modal).props().open).toBe(false);
-            done();
-        }, 2500);
+        expect(mockAxios.history.get.length).toBe(0);
+
+        expect(wrapper.find("button").attributes().disabled).toBeUndefined();
+        expect(wrapper.findComponent(Modal).props().open).toBe(false);
     });
 
 
-    it("modal does not close until run result fetched", (done) => {
+    it("modal does not close until run result fetched", async () => {
         const getResultMock = vi.fn();
         const store = createStore({}, {...actions, getResult: getResultMock});
         const wrapper = shallowMountWithTranslate(ModelRun, store, {
@@ -226,35 +227,33 @@ describe("Model run component", () => {
                 plugins: [store]
             }
         });
-        wrapper.find("button").trigger("click");
+        await wrapper.find("button").trigger("click");
 
-        setTimeout(() => {
-            expect(wrapper.find("button").attributes().disabled).toBe("");
-            expect(store.state.modelRun.status).toStrictEqual({id: "1234"});
-            expect(store.state.modelRun.modelRunId).toBe("1234");
-            expect(store.state.modelRun.statusPollId).not.toBe(-1);
-            expect(wrapper.findComponent(Modal).props().open).toBe(true);
+        expect(wrapper.find("button").attributes().disabled).toBe("");
+        expect(store.state.modelRun.status).toStrictEqual({id: "1234"});
+        expect(store.state.modelRun.modelRunId).toBe("1234");
+        expect(store.state.modelRun.statusPollId).not.toBe(-1);
+        expect(wrapper.findComponent(Modal).props().open).toBe(true);
 
-            setTimeout(() => {
-                // it should still be open because the result is missing
-                expect(wrapper.find("button").attributes().disabled).toBe("");
-                expect(store.state.modelRun.result).toBe(null);
-                expect(store.state.modelRun.status.success).toBe(true);
-                expect(wrapper.findComponent(Modal).props().open).toBe(true);
-                clearInterval(store.state.modelRun.statusPollId);
-                done();
-            }, 2500);
-        });
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
+
+        // it should still be open because the result is missing
+        expect(wrapper.find("button").attributes().disabled).toBe("");
+        expect(store.state.modelRun.result).toBe(null);
+        expect(store.state.modelRun.status.success).toBe(true);
+        expect(wrapper.findComponent(Modal).props().open).toBe(true);
+        clearInterval(store.state.modelRun.statusPollId);
     });
 
-    it("does not start polling on created if pollId already exists", (done) => {
+    it("does not start polling on created if pollId already exists", async () => {
         const store = createStore({modelRunId: "1234", statusPollId: 1});
         shallowMount(ModelRun, {global: {plugins: [store]}});
 
-        setTimeout(() => {
-            expect(mockAxios.history.get.length).toBe(0);
-            done();
-        }, 2500);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
+
+        expect(mockAxios.history.get.length).toBe(0);
     });
 
     it("button is disabled and modal shown if status is started", () => {

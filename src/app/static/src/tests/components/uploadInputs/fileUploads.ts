@@ -13,6 +13,7 @@ import {
 import UploadInputs from "../../../app/components/uploadInputs/UploadInputs.vue";
 import { shallowMountWithTranslate } from '../../testHelpers';
 import { Mocked } from 'vitest';
+import { nextTick } from 'vue';
 
 export function testUploadComponent(name: string, position: number) {
 
@@ -149,7 +150,7 @@ export function testUploadComponent(name: string, position: number) {
         expect(wrapper.findAllComponents(ManageFile)[position].props().error).toStrictEqual(mockError("File upload went wrong"));
     });
 
-    it(`upload ${name} dispatches surveyAndProgram/upload${name}`, (done) => {
+    it(`upload ${name} dispatches surveyAndProgram/upload${name}`, async () => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {
@@ -158,13 +159,11 @@ export function testUploadComponent(name: string, position: number) {
         });
 
         wrapper.findAllComponents(ManageFile)[position].props().upload({name: "TEST"});
-        setTimeout(() => {
-            expect(expectedUploadAction.mock.calls[0][1]).toStrictEqual({name: "TEST"});
-            done();
-        });
+        await nextTick();
+        expect(expectedUploadAction.mock.calls[0][1]).toStrictEqual({name: "TEST"});
     });
 
-    it(`delete ${name} dispatches surveyAndProgram/delete${name}`, (done) => {
+    it(`delete ${name} dispatches surveyAndProgram/delete${name}`, async () => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {
@@ -173,10 +172,8 @@ export function testUploadComponent(name: string, position: number) {
         });
 
         wrapper.findAllComponents(ManageFile)[position].props().deleteFile();
-        setTimeout(() => {
-            expect(expectedDeleteAction.mock.calls.length).toBe(1);
-            done();
-        });
+        await nextTick();
+        expect(expectedDeleteAction.mock.calls.length).toBe(1);
     });
 }
 

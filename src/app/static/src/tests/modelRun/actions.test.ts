@@ -13,6 +13,7 @@ import {expectEqualsFrozen} from "../testHelpers";
 import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {freezer} from "../../app/utils";
 import { Mock } from "vitest";
+import { flushPromises } from "@vue/test-utils";
 
 const rootState = mockRootState();
 
@@ -28,6 +29,13 @@ describe("Model run actions", () => {
     afterEach(() => {
         (console.log as Mock).mockClear();
         (console.info as Mock).mockClear();
+    });
+
+    beforeAll(() => {
+        vi.useFakeTimers();
+    });
+    afterAll(() => {
+        vi.useRealTimers();
     });
 
     it("passes model options and version from state", async () => {
@@ -94,7 +102,7 @@ describe("Model run actions", () => {
         });
     });
 
-    it("fetches model run result after polling when status is done", (done) => {
+    it("fetches model run result after polling when status is done", async () => {
 
         mockAxios.onGet(`/model/status/1234`)
             .reply(200, mockSuccess({}));
@@ -107,14 +115,14 @@ describe("Model run actions", () => {
 
         actions.poll({commit, state, dispatch, rootState} as any, "1234");
 
-        setInterval(() => {
-            expect(dispatch.mock.calls[0][0]).toStrictEqual("getResult");
-            expect(dispatch.mock.calls[0][1]).toStrictEqual("1234");
-            done();
-        }, 2100);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
+
+        expect(dispatch.mock.calls[0][0]).toStrictEqual("getResult");
+        expect(dispatch.mock.calls[0][1]).toStrictEqual("1234");
     });
 
-    it("does not fetch model run result after polling if done is not true", (done) => {
+    it("does not fetch model run result after polling if done is not true", async () => {
 
         mockAxios.onGet(`/model/status/1234`)
             .reply(200, mockSuccess({}));
@@ -127,14 +135,13 @@ describe("Model run actions", () => {
 
         actions.poll({commit, state, dispatch, rootState} as any, "1234");
 
-        setInterval(() => {
-            expect(dispatch.mock.calls.length).toEqual(0);
-            done();
-        }, 2100);
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
+        expect(dispatch.mock.calls.length).toEqual(0);
     });
 
-    it("poll commits status when successfully fetched",  (done) => {
+    it("poll commits status when successfully fetched", async () => {
         mockAxios.onGet(`/model/status/1234`)
             .reply(200, mockSuccess("TEST DATA"));
         mockAxios.onGet(`/model/result/1234`)
@@ -145,19 +152,18 @@ describe("Model run actions", () => {
 
         actions.poll({commit, state, rootState} as any, "1234");
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0].type).toBe("PollingForStatusStarted");
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: "RunStatusUpdated",
-                payload: "TEST DATA"
-            });
+        expect(commit.mock.calls[0][0].type).toBe("PollingForStatusStarted");
 
-            done();
-        }, 2100);
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: "RunStatusUpdated",
+            payload: "TEST DATA"
+        });
     });
 
-    it("poll commits error when unsuccessful fetch", (done) => {
+    it("poll commits error when unsuccessful fetch", async () => {
         mockAxios.onGet(`/model/status/1234`)
             .reply(500, mockFailure("Test Error"));
 
@@ -166,16 +172,15 @@ describe("Model run actions", () => {
 
         actions.poll({commit, state, rootState} as any, "1234");
 
-        setTimeout(() => {
-            expect(commit.mock.calls[0][0].type).toBe("PollingForStatusStarted");
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-            expect(commit.mock.calls[1][0]).toStrictEqual({
-                type: "RunStatusError",
-                payload: mockError("Test Error")
-            });
+        expect(commit.mock.calls[0][0].type).toBe("PollingForStatusStarted");
 
-            done();
-        }, 2100);
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: "RunStatusError",
+            payload: mockError("Test Error")
+        });
     });
 
     it("getResult commits result and warnings when successfully fetched", async () => {

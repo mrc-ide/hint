@@ -6,11 +6,13 @@ import {ModelRunState} from "../../app/store/modelRun/modelRun";
 import {api} from "../../app/apiService";
 import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {Language} from "../../app/store/translations/locales";
+import { flushPromises } from "@vue/test-utils";
 
 describe("Model run actions", () => {
 
     let runId = "";
     beforeAll(async () => {
+        vi.useFakeTimers();
         await login();
         const commit = vi.fn();
         const mockState = {
@@ -23,6 +25,10 @@ describe("Model run actions", () => {
 
         await actions.run({commit, rootState: mockState, state: {statusPollId: -1}} as any);
         runId = (commit.mock.calls[0][0]["payload"] as ModelSubmitResponse).id;
+    });
+
+    afterAll(() => {
+        vi.useRealTimers();
     });
 
     it("can trigger model run", async () => {
@@ -46,23 +52,17 @@ describe("Model run actions", () => {
         expect(commit.mock.calls[1][0]["payload"]["error"]).toBe("INVALID_INPUT");
     });
 
-    it("can get model run status", (done) => {
+    it("can get model run status", async () => {
         const commit = vi.fn();
         const mockState = {status: {done: true}} as ModelRunState;
 
         actions.poll({commit, state: mockState, dispatch: vi.fn(), rootState} as any, runId);
         expect(commit.mock.calls[0][0]["type"]).toBe("PollingForStatusStarted");
-        const pollingInterval = (commit.mock.calls[0][0]["payload"]);
 
-        const testInterval = setInterval(() => {
-            if (commit.mock.calls.length == 2) {
-                expect(commit.mock.calls[1][0]["type"]).toBe("RunStatusUpdated");
-                clearInterval(pollingInterval);
-                clearInterval(testInterval);
-                done();
-            }
+        vi.advanceTimersByTime(2000);
+        await flushPromises();
 
-        })
+        expect(commit.mock.calls[1][0]["type"]).toBe("RunStatusUpdated");
     });
 
     it("can get model run result", async () => {
