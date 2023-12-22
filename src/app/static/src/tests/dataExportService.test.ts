@@ -1,14 +1,14 @@
 import {mockDownloadIndicatorData} from "./mocks";
 import {exportService} from "../app/dataExportService";
 
-const mockJsonToSheet = jest.fn().mockImplementation((data) => ({ data, type: "json" }));
-const mockBookNew = jest.fn().mockImplementation(() => ({ sheets: [] } as any));
-const mockBookAppendSheet = jest.fn().mockImplementation((workbook: any, worksheet: any, name: string) => {
+const mockJsonToSheet = vi.fn().mockImplementation((data) => ({ data, type: "json" }));
+const mockBookNew = vi.fn().mockImplementation(() => ({ sheets: [] } as any));
+const mockBookAppendSheet = vi.fn().mockImplementation((workbook: any, worksheet: any, name: string) => {
     (workbook as any).sheets.push({ ...worksheet, name });
 });
-const mockWriteFile = jest.fn();
+const mockWriteFile = vi.fn();
 
-jest.mock("xlsx", () => ({
+vi.mock("xlsx", () => ({
     writeFile: (data: any, fileName: string) => mockWriteFile(data, fileName),
     utils: {
         json_to_sheet: (data: any, options: any = undefined) => mockJsonToSheet(data, options),
@@ -20,7 +20,7 @@ jest.mock("xlsx", () => ({
 describe("data export service", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     const expectedFilteredData = {

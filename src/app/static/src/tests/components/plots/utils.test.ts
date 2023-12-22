@@ -10,14 +10,14 @@ import {Filter} from "../../../app/generated";
 
 describe("plot utils", () => {
 
-    const warnMock = jest.fn();
+    const warnMock = vi.fn();
 
     beforeEach(() => {
         console.warn = warnMock;
     });
 
     afterEach(() => {
-        (console.warn as jest.Mock).mockClear();
+        (console.warn as vi.Mock).mockClear();
     });
 
     it("colorFunctionFromName returns color function", () => {

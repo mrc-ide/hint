@@ -8,7 +8,7 @@
     "build": "rm -rf public && vue-tsc && vite build && npm run copy",
     "serve": "rm -rf public && VUE_CLI_SERVICE_CONFIG_PATH=$PWD/vue.config.js vue-cli-service serve ./src/app/index.ts",
     "copy": "cp -r ./templates/*.ftl ./public && cp -r ./assets/* ./public",
-    "test": "vue-cli-service test:unit -c jest.config.js --maxWorkers=30%",
+    "test": "vitest --run",
     "browser-test": "npx playwright test",
     "integration-test": "jest --testPathIgnorePatterns adr-dataset -c jest.integration.config.js",
     "adr-integration-test": "jest --testPathPattern adr-dataset -c jest.integration.adr.config.js",

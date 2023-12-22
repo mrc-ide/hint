@@ -15,10 +15,10 @@ import { Language } from "../../../app/store/translations/locales";
 
 describe("Model calibrate component", () => {
     const getStore = (state: Partial<ModelCalibrateState> = {},
-                      fetchAction = jest.fn(),
-                      submitAction = jest.fn(),
-                      resumeCalibrateAction = jest.fn(),
-                      updateMutation = jest.fn(),
+                      fetchAction = vi.fn(),
+                      submitAction = vi.fn(),
+                      resumeCalibrateAction = vi.fn(),
+                      updateMutation = vi.fn(),
                       rootState: Partial<RootState> = {}) => {
         const store = new Vuex.Store({
             state: mockRootState(rootState),
@@ -60,7 +60,7 @@ describe("Model calibrate component", () => {
     });
 
     it("invokes fetch options action on mount", () => {
-        const mockFetch = jest.fn();
+        const mockFetch = vi.fn();
         const store = getStore({}, mockFetch);
         getWrapper(store);
         expect(mockFetch.mock.calls.length).toBe(1);
@@ -91,7 +91,7 @@ describe("Model calibrate component", () => {
     });
 
     it("translates required text", () => {
-        const store = getStore({}, jest.fn(), jest.fn(), jest.fn(), jest.fn(), {language: Language.fr});
+        const store = getStore({}, vi.fn(), vi.fn(), vi.fn(), vi.fn(), {language: Language.fr});
         const wrapper = shallowMountWithTranslate(ModelCalibrate, store, {
             global: {
                 plugins: [store]
@@ -101,7 +101,7 @@ describe("Model calibrate component", () => {
     });
 
     it("translates select text", () => {
-        const store = getStore({}, jest.fn(), jest.fn(), jest.fn(), jest.fn(), {language: Language.fr});
+        const store = getStore({}, vi.fn(), vi.fn(), vi.fn(), vi.fn(), {language: Language.fr});
         const wrapper = shallowMountWithTranslate(ModelCalibrate, store, {
             global: {
                 plugins: [store]
@@ -149,8 +149,8 @@ describe("Model calibrate component", () => {
     });
 
     it("setting options value commits update mutation", async () => {
-        const mockUpdate = jest.fn();
-        const store = getStore({optionsFormMeta: mockOptionsFormMeta()}, jest.fn(), jest.fn(), jest.fn(), mockUpdate);
+        const mockUpdate = vi.fn();
+        const store = getStore({optionsFormMeta: mockOptionsFormMeta()}, vi.fn(), vi.fn(), vi.fn(), mockUpdate);
         const wrapper = mountWithTranslate(ModelCalibrate, store, {
             global: {
                 plugins: [store]
@@ -164,8 +164,8 @@ describe("Model calibrate component", () => {
     });
 
     it("clicking Calibrate button invokes submit calibrate action", async () => {
-        const mockSubmit = jest.fn();
-        const store = getStore({optionsFormMeta: mockOptionsFormMeta()}, jest.fn(), mockSubmit);
+        const mockSubmit = vi.fn();
+        const store = getStore({optionsFormMeta: mockOptionsFormMeta()}, vi.fn(), mockSubmit);
         const wrapper = mountWithTranslate(ModelCalibrate, store, {
             global: {
                 plugins: [store]
@@ -200,8 +200,8 @@ describe("Model calibrate component", () => {
     });
 
     it("calls resume calibrate on mount", () => {
-        const mockResumeCalibrate = jest.fn();
-        const store = getStore({}, jest.fn(), jest.fn(), mockResumeCalibrate, jest.fn());
+        const mockResumeCalibrate = vi.fn();
+        const store = getStore({}, vi.fn(), vi.fn(), mockResumeCalibrate, vi.fn());
         getWrapper(store);
         expect(mockResumeCalibrate.mock.calls.length).toBe(1);
     });

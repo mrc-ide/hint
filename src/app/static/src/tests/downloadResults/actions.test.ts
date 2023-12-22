@@ -31,13 +31,13 @@ describe(`download Results actions`, () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
     it("prepare summary commits download id and starts polling for status", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const partialDownloadResultsState = mockDownloadResultsDependency({downloadId: "1"});
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"})
@@ -63,7 +63,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare summary does not do anything if downloadId is already present", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency({downloadId: "1"})
         });
@@ -74,7 +74,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare summary does not do anything if fetchingDownloadId is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency({fetchingDownloadId: true})
         });
@@ -85,8 +85,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can poll for summary status, get pollId and commit result", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const partialDownloadResultsState = {downloadId: "1", status: CompleteStatusResponse};
 
         const state = mockDownloadResultsState({
@@ -111,8 +111,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not poll for summary status when submission is unsuccessful", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -140,8 +140,8 @@ describe(`download Results actions`, () => {
     });
 
     it("gets adr upload metadata if summary status is done", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency({downloadId: "1"})
@@ -163,8 +163,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does get adr upload metadata error for summary if metadata request is successful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency(
@@ -191,8 +191,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can get adr upload metadata error for summary if metadata request is unsuccessful", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency(
@@ -225,8 +225,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not continue to poll summary status when unsuccessful", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const partialDownloadResultsState = mockDownloadResultsDependency({downloadId: "1"});
 
         const state = mockDownloadResultsState({
@@ -254,8 +254,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can submit spectrum download request, commits and starts polling", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const downloadId = {downloadId: "1"};
 
         const root = mockRootState({
@@ -285,7 +285,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare spectrum does not do anything if downloadId is already present", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({downloadId: "1"})
         });
@@ -296,7 +296,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare spectrum does not do anything if fetchingDownloadId is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({fetchingDownloadId: true})
         });
@@ -307,8 +307,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can invoke spectrum poll action, gets pollId, commits PollingStatusStarted",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -337,8 +337,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can poll for spectrum output status", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({downloadId: "1"})
@@ -370,8 +370,8 @@ describe(`download Results actions`, () => {
     });
 
     it("gets adr upload metadata if spectrum status is done",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({downloadId: "1"})
@@ -393,8 +393,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does get adr upload metadata error for spectrum if metadata request is successful", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency(
@@ -421,8 +421,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can get adr upload metadata error for spectrum if metadata request is unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency(
@@ -455,8 +455,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not start polling for spectrum output status when submission is unsuccessful", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -478,8 +478,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not continue to poll spectrum status when unsuccessful", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({downloadId: "1"})
@@ -508,8 +508,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can prepare coarse output, commits and starts polling", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const downloadId = {downloadId: "1"};
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -535,7 +535,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare coarse output does not do anything if downloadId is already present", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({downloadId: "1"})
         });
@@ -546,7 +546,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare coarse output does not do anything if fetchingDownloadId is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({fetchingDownloadId: true})
         });
@@ -557,8 +557,8 @@ describe(`download Results actions`, () => {
     });
 
     it("gets adr upload metadata if coarse output status is done",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({downloadId: "1"})
@@ -589,8 +589,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does get adr upload metadata error for coarseOutput if metadata request is successful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency(
@@ -617,8 +617,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can get adr upload metadata error for coarseOutput if metadata request is unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency(
@@ -651,8 +651,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can invoke coarse output poll action, get pollId and commit PollingStatusStarted",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({downloadId: "1"})
@@ -676,8 +676,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can get coarse output status results",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({downloadId: "1"})
@@ -702,8 +702,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not poll for coarse output status when submission is unsuccessful", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
         });
@@ -722,8 +722,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not continue to poll coarse output status when unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const partialDownloadResultsState = mockDownloadResultsDependency({downloadId: "1"});
 
         const state = mockDownloadResultsState({
@@ -751,8 +751,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can submit comparison download request, commits and starts polling", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const downloadId = {downloadId: "1"};
 
         const root = mockRootState({
@@ -779,7 +779,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare comparison does not do anything if downloadId is already present", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({downloadId: "1"})
         });
@@ -798,7 +798,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare comparison does not do anything if fetchingDownloadId is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({fetchingDownloadId: true})
         });
@@ -809,8 +809,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can invoke comparison poll action, gets pollId, commits PollingStatusStarted",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -839,8 +839,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can poll for comparison output status", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({downloadId: "1"})
@@ -864,8 +864,8 @@ describe(`download Results actions`, () => {
     });
 
     it("gets adr upload metadata if comparison status is done",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({downloadId: "1"})
@@ -888,8 +888,8 @@ describe(`download Results actions`, () => {
 
 
     it("does get adr upload metadata error for comparison if metadata request is successful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency(
@@ -916,8 +916,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can get adr upload metadata error for comparison if metadata request is unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency(
@@ -950,8 +950,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not start polling for comparison output status when submission is unsuccessful", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -971,8 +971,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not continue to poll comparison status when unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({downloadId: "1"})
@@ -1001,8 +1001,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can submit AGYW download request, commits and starts polling", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const downloadId = {downloadId: "1"};
 
         const root = mockRootState({
@@ -1029,7 +1029,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare AGYW does not do anything if downloadId is already present", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             agyw: mockDownloadResultsDependency({downloadId: "1"})
         });
@@ -1048,7 +1048,7 @@ describe(`download Results actions`, () => {
     });
 
     it("prepare AGYW does not do anything if fetchingDownloadId is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockDownloadResultsState({
             agyw: mockDownloadResultsDependency({fetchingDownloadId: true})
         });
@@ -1059,8 +1059,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can invoke AGYW poll action, gets pollId, commits PollingStatusStarted",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -1089,8 +1089,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not start polling for AGYW download status when submission is unsuccessful", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const root = mockRootState({
             modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),
@@ -1110,8 +1110,8 @@ describe(`download Results actions`, () => {
     });
 
     it("does not continue to poll AGYW status when unsuccessful",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = mockDownloadResultsState({
             agyw: mockDownloadResultsDependency({downloadId: "1"})
@@ -1140,8 +1140,8 @@ describe(`download Results actions`, () => {
     });
 
     it("can prepare all outputs and optionally AGYW", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         switches.agywDownload = false;
         actions.prepareOutputs({commit, dispatch} as any);
@@ -1166,17 +1166,17 @@ describe(`download Results actions`, () => {
 
 const downloadReportAsExpected = async (action: Function, mutationType: string) => {
 
-    window.URL.createObjectURL = jest.fn().mockReturnValueOnce("test");
-    window.URL.revokeObjectURL = jest.fn();
-    document.body.appendChild = jest.fn()
+    window.URL.createObjectURL = vi.fn().mockReturnValueOnce("test");
+    window.URL.revokeObjectURL = vi.fn();
+    document.body.appendChild = vi.fn()
 
     const data = new Blob(["test"], {type: "text/html"});
 
-    const mockClick = jest.fn()
-    const mockHref = jest.fn()
-    const mockAttr = jest.fn()
+    const mockClick = vi.fn()
+    const mockHref = vi.fn()
+    const mockAttr = vi.fn()
 
-    document.createElement = jest.fn().mockImplementation(() => {
+    document.createElement = vi.fn().mockImplementation(() => {
         return {
             setAttribute: mockAttr,
             href: mockHref,
@@ -1235,7 +1235,7 @@ const rendersDownloadErrorAsExpected = async (action: Function, mutationType: st
 }
 
 const downloadContext = () => {
-    const commit = jest.fn();
+    const commit = vi.fn();
 
     const root = mockRootState({
         modelCalibrate: mockModelCalibrateState({calibrateId: "calibrate1"}),

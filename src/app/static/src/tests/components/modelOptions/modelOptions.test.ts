@@ -19,16 +19,16 @@ import {Language} from "../../../app/store/translations/locales";
 describe("Model options component", () => {
 
     const mockActions = {
-        fetchModelRunOptions: jest.fn(),
-        validateModelOptions: jest.fn()
+        fetchModelRunOptions: vi.fn(),
+        validateModelOptions: vi.fn()
     };
     const mockMutations = {
-        [ModelOptionsMutation.Update]: jest.fn(),
-        [ModelOptionsMutation.Validate]: jest.fn(),
-        [ModelOptionsMutation.ModelOptionsFetched]: jest.fn(),
-        [ModelOptionsMutation.FetchingModelOptions]: jest.fn(),
-        [ModelOptionsMutation.Validating]: jest.fn(),
-        [ModelOptionsMutation.ModelOptionsError]: jest.fn()
+        [ModelOptionsMutation.Update]: vi.fn(),
+        [ModelOptionsMutation.Validate]: vi.fn(),
+        [ModelOptionsMutation.ModelOptionsFetched]: vi.fn(),
+        [ModelOptionsMutation.FetchingModelOptions]: vi.fn(),
+        [ModelOptionsMutation.Validating]: vi.fn(),
+        [ModelOptionsMutation.ModelOptionsError]: vi.fn()
     };
 
     const mockGetters = {
@@ -181,7 +181,7 @@ describe("Model options component", () => {
     })
 
     it("triggers update mutation when dynamic form changes", async () => {
-        const updateMock = jest.fn();
+        const updateMock = vi.fn();
         const oldControlSection: DynamicControlSection = {
             label: "label 1",
             controlGroups: []
@@ -215,7 +215,7 @@ describe("Model options component", () => {
     });
 
     it("dispatches fetch run option event when form submit event is fired", () => {
-        const fetchMock = jest.fn();
+        const fetchMock = vi.fn();
         const store = createStore({}, mockMutations, {
 
             ...mockActions,
@@ -232,7 +232,7 @@ describe("Model options component", () => {
     });
 
     it("dispatches validation event when form submit event is fired", async () => {
-        const validateMock = jest.fn();
+        const validateMock = vi.fn();
         const options = {"area_scope": "MWI"}
         const store = createStore({}, mockMutations, {
 
@@ -253,7 +253,7 @@ describe("Model options component", () => {
     });
 
     it("does not dispatch validation when form submit event does not have options", async () => {
-        const validateMock = jest.fn();
+        const validateMock = vi.fn();
         const store = createStore({}, mockMutations, {
 
             ...mockActions,

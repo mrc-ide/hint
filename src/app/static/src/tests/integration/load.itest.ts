@@ -23,13 +23,13 @@ describe("load actions", () => {
 
     beforeAll(async () => {
         await login();
-        const commit = jest.fn();
+        const commit = vi.fn();
         const formData = getFormData("../testdata/malawi.geojson");
 
-        await baselineActions.uploadShape({commit, dispatch: jest.fn(), rootState} as any, formData);
+        await baselineActions.uploadShape({commit, dispatch: vi.fn(), rootState} as any, formData);
         shape = (commit.mock.calls[1][0]["payload"] as ShapeResponse);
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location;
         window.location = {reload: mockLocationReload} as any;
     });
@@ -39,8 +39,8 @@ describe("load actions", () => {
     });
 
     it("can set files as guest user", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const fakeState = JSON.stringify({
             files: {"shape": shape},
             state: {
@@ -101,7 +101,7 @@ describe("load actions", () => {
     });
 
     it("can create project and set files as logged in user when uploading JSON file", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const fakeState = JSON.stringify({
             files: {"shape": shape},
             state: {
@@ -143,7 +143,7 @@ describe("load actions", () => {
             }
         });
 
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
         const dispatch = ((store as any)._modulesNamespaceMap["load/"] as any).context.dispatch;
@@ -169,8 +169,8 @@ describe("load actions", () => {
     });
 
     it("can submit model output ZIP file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const formData = getFormData("output.zip");
         const state = {rehydrateId: "1"}
 
@@ -182,8 +182,8 @@ describe("load actions", () => {
     });
 
     it("can poll model output ZIP status", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const state = {rehydrateId: "1"}
 
         actions.pollRehydrate({commit, dispatch, state, rootState} as any);

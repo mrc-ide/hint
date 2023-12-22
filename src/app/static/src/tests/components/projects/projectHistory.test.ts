@@ -15,7 +15,7 @@ import { flushPromises } from "@vue/test-utils";
 describe("Project history component", () => {
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     const isoDates = ["2020-07-30T15:00:00.000000",
@@ -23,13 +23,13 @@ describe("Project history component", () => {
         "2020-07-31T10:00:00.000000",
         "2020-08-01T11:00:00.000000"];
 
-    const mockDeleteProject = jest.fn();
-    const mockDeleteVersion = jest.fn();
-    const mockLoad = jest.fn();
-    const mockPromoteVersion = jest.fn();
-    const mockRenameProject = jest.fn();
-    const mockUpdateVersion = jest.fn();
-    const mockUpdateProjectNote = jest.fn();
+    const mockDeleteProject = vi.fn();
+    const mockDeleteVersion = vi.fn();
+    const mockLoad = vi.fn();
+    const mockPromoteVersion = vi.fn();
+    const mockRenameProject = vi.fn();
+    const mockUpdateVersion = vi.fn();
+    const mockUpdateProjectNote = vi.fn();
 
     function createStore(projects: Project[] = testProjects) {
         const store = new Vuex.Store({
@@ -143,7 +143,7 @@ describe("Project history component", () => {
     });
 
     it("can render tooltips without an error", () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore(testProjects)
         mountWithTranslate(ProjectHistory, store, {
             global: {
@@ -163,7 +163,7 @@ describe("Project history component", () => {
     });
 
     it("does not render tooltips if project length > 25", () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore(testProjectsLong(25))
         mountWithTranslate(ProjectHistory, store, {
             global: {
@@ -191,7 +191,7 @@ describe("Project history component", () => {
     });
 
     it("can render tooltips in french without an error", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore(testProjects)
         store.state.language = Language.fr;
         await nextTick();
@@ -213,7 +213,7 @@ describe("Project history component", () => {
     });
 
     it("can render tooltips in Portuguese without an error", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore(testProjects)
         store.state.language = Language.pt;
         await nextTick();
@@ -510,7 +510,7 @@ describe("Project history component", () => {
 
     it("methods for rename and cancel rename work regardless of feature switch", async () => {
         const wrapper = getWrapper();
-        const mockPreventDefault = jest.fn()
+        const mockPreventDefault = vi.fn()
         const mockEvent = {preventDefault: mockPreventDefault}
         await wrapper.setData({projectToRename: null})
         const vm = wrapper.vm as any

@@ -14,21 +14,21 @@ import LoadingSpinner from "../../../app/components/LoadingSpinner.vue";
 describe("uploadNewProject", () => {
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
     const mockMutations = {
-        RehydrateCancel: jest.fn(),
-        SetProjectName: jest.fn()
+        RehydrateCancel: vi.fn(),
+        SetProjectName: vi.fn()
     }
 
     const mockActions = {
-        clearLoadState: jest.fn()
+        clearLoadState: vi.fn()
     }
 
-    const mockSubmitFunction = jest.fn()
-    const mockCancelFunction = jest.fn()
-    const mockGetProjects = jest.fn()
+    const mockSubmitFunction = vi.fn()
+    const mockCancelFunction = vi.fn()
+    const mockGetProjects = vi.fn()
 
     const testProjects = [{id: 2, name: "proj1", versions: []}];
 

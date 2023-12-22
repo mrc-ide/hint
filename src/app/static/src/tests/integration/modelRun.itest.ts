@@ -12,7 +12,7 @@ describe("Model run actions", () => {
     let runId = "";
     beforeAll(async () => {
         await login();
-        const commit = jest.fn();
+        const commit = vi.fn();
         const mockState = {
             language: Language.en,
             modelOptions: {
@@ -26,7 +26,7 @@ describe("Model run actions", () => {
     });
 
     it("can trigger model run", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const mockRootState = {
             language: Language.en,
             modelOptions: {
@@ -47,10 +47,10 @@ describe("Model run actions", () => {
     });
 
     it("can get model run status", (done) => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const mockState = {status: {done: true}} as ModelRunState;
 
-        actions.poll({commit, state: mockState, dispatch: jest.fn(), rootState} as any, runId);
+        actions.poll({commit, state: mockState, dispatch: vi.fn(), rootState} as any, runId);
         expect(commit.mock.calls[0][0]["type"]).toBe("PollingForStatusStarted");
         const pollingInterval = (commit.mock.calls[0][0]["payload"]);
 
@@ -66,7 +66,7 @@ describe("Model run actions", () => {
     });
 
     it("can get model run result", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const mockState = {
             modelRunId: "1234",
             status: {
@@ -89,7 +89,7 @@ describe("Model run actions", () => {
     });
 
     it("makeCancelRunRequest makes call to API", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const apiService = api<ModelRunMutation, ModelRunMutation>({commit, rootState} as any)
             .withError("ExpectedPostFailure" as ModelRunMutation);

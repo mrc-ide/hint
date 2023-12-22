@@ -12,8 +12,8 @@ describe("Baseline actions", () => {
     const state = {iso3: "Malawi"}
 
     it("can upload PJNZ file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {country: "Malawi"} as any;
         const formData = getFormData("Botswana2018.PJNZ");
 
@@ -25,8 +25,8 @@ describe("Baseline actions", () => {
     });
 
     it("can get baseline data", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         await actions.getBaselineData({commit, dispatch, rootState, state} as any);
 
         const calls = commit.mock.calls.map((callArgs) => callArgs[0]["type"]);
@@ -36,8 +36,8 @@ describe("Baseline actions", () => {
     });
 
     it("can upload shape file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const formData = getFormData("malawi.geojson");
         await actions.uploadShape({commit, dispatch, rootState} as any, formData);
 
@@ -48,8 +48,8 @@ describe("Baseline actions", () => {
     }, 10000);
 
     it("can upload population file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const formData = getFormData("population.csv");
         await actions.uploadPopulation({commit, dispatch, rootState} as any, formData);
 
@@ -59,8 +59,8 @@ describe("Baseline actions", () => {
     });
 
     it("can validate baseline data", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         await actions.validate({commit, dispatch, rootState} as any);
         expect(commit.mock.calls[1][0]["type"]).toBe(BaselineMutation.BaselineError);
@@ -68,8 +68,8 @@ describe("Baseline actions", () => {
     });
 
     it("can delete PJNZ", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const formData = getFormData("Botswana2018.PJNZ");
 
         // upload
@@ -89,8 +89,8 @@ describe("Baseline actions", () => {
     });
 
     it("can delete shape", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const formData = getFormData("malawi.geojson");
 
         // upload
@@ -110,8 +110,8 @@ describe("Baseline actions", () => {
     });
 
     it("can delete population", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const formData = getFormData("population.csv");
 
         // upload

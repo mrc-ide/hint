@@ -7,8 +7,8 @@ import GenericChart from "../../../app/components/genericChart/GenericChart.vue"
 import DataSource from "../../../app/components/genericChart/dataSelectors/DataSource.vue";
 import FiltersComp from "../../../app/components/plots/Filters.vue";
 // Mock the import of plotly to avoid import failures in non-browser context
-jest.mock("plotly.js-basic-dist", () => ({
-    newPlot: jest.fn()
+vi.mock("plotly.js-basic-dist", () => ({
+    newPlot: vi.fn()
 }));
 import Plotly from "../../../app/components/genericChart/Plotly.vue";
 import {mockGenericChartState, mockSuccess} from "../../mocks";
@@ -166,7 +166,7 @@ describe("GenericChart component", () => {
 
     beforeEach(() => {
         mockAxios.reset();
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     const data = {

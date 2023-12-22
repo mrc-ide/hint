@@ -15,7 +15,7 @@ describe(`download`, () => {
         button: "download"
     }
 
-    const mockDirective = jest.fn()
+    const mockDirective = vi.fn()
 
     const defaultProps = {
         file: downloadSummary,

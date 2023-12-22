@@ -8,11 +8,11 @@ import { nextTick } from "vue";
 describe("translate directive", () => {
 
     beforeAll(() => {
-        console.warn = jest.fn();
+        console.warn = vi.fn();
     });
 
     afterAll(() => {
-        (console.warn as jest.Mock).mockClear();
+        (console.warn as vi.Mock).mockClear();
     });
 
     const TranslateAttributeTest = {
@@ -190,7 +190,7 @@ describe("translate directive", () => {
             }, 
         });
         expect(rendered.find("h4").text()).toBe("");
-        expect((console.warn as jest.Mock).mock.calls[0][0])
+        expect((console.warn as vi.Mock).mock.calls[0][0])
             .toBe("v-translate directive declared without a value");
     });
 

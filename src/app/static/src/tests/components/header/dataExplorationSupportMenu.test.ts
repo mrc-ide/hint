@@ -17,10 +17,10 @@ const router = createRouter({
 describe("Data exploration online support menu", () => {
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
-    const mockGenerateErrorReport = jest.fn()
+    const mockGenerateErrorReport = vi.fn()
 
     const createStore = () => {
         const store = new Vuex.Store({

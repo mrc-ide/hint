@@ -42,7 +42,7 @@ describe("File upload component", () => {
                 plugins: [store]
             },
             props: {
-                upload: jest.fn(),
+                upload: vi.fn(),
                 name: "pjnz",
                 accept: "csv",
                 ...props
@@ -66,7 +66,7 @@ describe("File upload component", () => {
     });
 
     it("uploads file if user confirms edit", (done) => {
-        const uploader = jest.fn();
+        const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader
         }, {
@@ -88,7 +88,7 @@ describe("File upload component", () => {
     });
 
     it("does not upload file if user cancels edit", (done) => {
-        const uploader = jest.fn();
+        const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader
         });

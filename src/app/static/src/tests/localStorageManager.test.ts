@@ -35,7 +35,7 @@ declare const currentUser: string; // set in jest config, or on the index page w
 describe("LocalStorageManager", () => {
 
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     })
 
     const modelCalibrateResponse = {
@@ -193,7 +193,7 @@ describe("LocalStorageManager", () => {
     });
 
     it("saves to local storage", () => {
-        const spy = jest.spyOn(Storage.prototype, "setItem");
+        const spy = vi.spyOn(Storage.prototype, "setItem");
         const testState = {baseline: mockBaselineState()};
         localStorageManager.savePartialState(testState, false);
 
@@ -202,7 +202,7 @@ describe("LocalStorageManager", () => {
     });
 
     it("saves to local storage in Data Exploration mode", () => {
-        const spy = jest.spyOn(Storage.prototype, "setItem");
+        const spy = vi.spyOn(Storage.prototype, "setItem");
         const testState = {baseline: mockBaselineState()};
         localStorageManager.savePartialState(testState, true);
 
@@ -211,7 +211,7 @@ describe("LocalStorageManager", () => {
     });
 
     it("can set and get language from local storage", () => {
-        const spy = jest.spyOn(Storage.prototype, "setItem");
+        const spy = vi.spyOn(Storage.prototype, "setItem");
 
         localStorageManager.saveLanguage(Language.pt);
 
@@ -232,7 +232,7 @@ describe("LocalStorageManager", () => {
     it("can get from local storage", () => {
         const testState = {baseline: mockBaselineState(), language: Language.pt};
         localStorageManager.savePartialState(testState, false);
-        const spy = jest.spyOn(Storage.prototype, "getItem");
+        const spy = vi.spyOn(Storage.prototype, "getItem");
 
         const result = localStorageManager.getState(false);
         expect(result).toStrictEqual(testState);
@@ -242,7 +242,7 @@ describe("LocalStorageManager", () => {
     it("can get from local storage in Data Exploration mode", () => {
         const testState = {baseline: mockBaselineState(), language: Language.pt}
         localStorageManager.savePartialState(testState, true);
-        const spy = jest.spyOn(Storage.prototype, "getItem");
+        const spy = vi.spyOn(Storage.prototype, "getItem");
 
         const result = localStorageManager.getState(true);
         expect(result).toStrictEqual(testState);
@@ -252,7 +252,7 @@ describe("LocalStorageManager", () => {
     it("can delete state", () => {
         const testState = {baseline: mockBaselineState()};
         localStorageManager.savePartialState(testState, false);
-        const spy = jest.spyOn(Storage.prototype, "removeItem");
+        const spy = vi.spyOn(Storage.prototype, "removeItem");
 
         localStorageManager.deleteState(false);
         expect(spy.mock.calls[0][0]).toBe(`hintAppState_v${currentHintVersion}`);
@@ -263,7 +263,7 @@ describe("LocalStorageManager", () => {
     it("can delete state in data exploration mode", () => {
         const testState = {baseline: mockBaselineState()};
         localStorageManager.savePartialState(testState, true);
-        const spy = jest.spyOn(Storage.prototype, "removeItem");
+        const spy = vi.spyOn(Storage.prototype, "removeItem");
 
         localStorageManager.deleteState(true);
         expect(spy.mock.calls[0][0]).toBe(`hintAppState_explore_v${currentHintVersion}`);

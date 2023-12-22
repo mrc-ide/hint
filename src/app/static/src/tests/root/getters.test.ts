@@ -466,7 +466,7 @@ describe("root getters", () => {
 
         const millis = Date.UTC(2023, 1, 23, 17, 35, 19)
 
-        const mockDate = jest.spyOn(Date, 'UTC').mockImplementation(() => millis)
+        const mockDate = vi.spyOn(Date, 'UTC').mockImplementation(() => millis)
 
         const result = getters.projectState(rootState, null, projectStates() as any, null)
 

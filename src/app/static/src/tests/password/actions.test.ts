@@ -9,12 +9,12 @@ describe("Password actions", () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
     });
 
 
@@ -23,7 +23,7 @@ describe("Password actions", () => {
         mockAxios.onPost(`/password/request-reset-link/`)
             .reply(200, mockSuccess(true));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.requestResetLink({commit, rootState} as any, "test@email.com");
 
         expect(commit.mock.calls[0][0]).toStrictEqual({
@@ -37,7 +37,7 @@ describe("Password actions", () => {
         mockAxios.onPost(`/password/request-reset-link/`)
             .reply(500, mockFailure("test error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.requestResetLink({commit, rootState} as any, "test@email.com");
 
         expect(commit.mock.calls[0][0]).toStrictEqual({
@@ -51,7 +51,7 @@ describe("Password actions", () => {
         mockAxios.onPost(`/password/reset-password/`)
             .reply(200, mockSuccess(true));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.resetPassword({commit, rootState} as any, {"token": "testToken", "password": "new_password"});
 
         expect(commit.mock.calls[0][0]).toStrictEqual({
@@ -65,7 +65,7 @@ describe("Password actions", () => {
         mockAxios.onPost(`/password/reset-password/`)
             .reply(500, mockFailure("test error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.resetPassword({commit, rootState} as any, {"token": "testToken", "password": "new_password"});
 
         expect(commit.mock.calls[0][0]).toStrictEqual({
@@ -75,7 +75,7 @@ describe("Password actions", () => {
     });
 
     it("changes language", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.changeLanguage({commit} as any, Language.fr);
         expect(commit.mock.calls[0][0]).toStrictEqual({
             type: LanguageMutation.ChangeLanguage,

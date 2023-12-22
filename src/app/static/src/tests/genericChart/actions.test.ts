@@ -6,13 +6,13 @@ import {freezer} from "../../app/utils";
 describe("genericChart actions", () => {
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
     });
 
     const rootState = mockRootState();
@@ -21,8 +21,8 @@ describe("genericChart actions", () => {
         const mockResponse = mockSuccess("TEST METADATA");
         mockAxios.onGet("/meta/generic-chart")
             .reply(200, mockResponse);
-        const commit = jest.fn();
-        const deepFreeze = jest.spyOn(freezer, "deepFreeze");
+        const commit = vi.fn();
+        const deepFreeze = vi.spyOn(freezer, "deepFreeze");
         await actions.getGenericChartMetadata({commit, rootState} as any);
         expect(commit.mock.calls.length).toEqual(1);
         expect(commit.mock.calls[0][0]["type"]).toBe("GenericChartMetadataFetched");
@@ -33,7 +33,7 @@ describe("genericChart actions", () => {
     it("generic chart metadata action ignores errors",  async () => {
         mockAxios.onGet("/meta/generic-chart")
             .reply(500, mockFailure("TEST ERROR"));
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.getGenericChartMetadata({commit, rootState} as any);
         expect(commit.mock.calls.length).toEqual(0);
     });
@@ -43,9 +43,9 @@ describe("genericChart actions", () => {
         const mockResponse = mockSuccess(response);
         mockAxios.onGet("/dataset1")
             .reply(200, mockResponse);
-        const commit = jest.fn();
+        const commit = vi.fn();
         const payload = {datasetId: "dataset1", url: "/dataset1"};
-        const deepFreeze = jest.spyOn(freezer, "deepFreeze");
+        const deepFreeze = vi.spyOn(freezer, "deepFreeze");
         await actions.getDataset({commit, rootState} as any, payload);
         expect(commit.mock.calls.length).toEqual(3);
         expect(commit.mock.calls[0][0]["type"]).toBe(GenericChartMutation.SetError);
@@ -60,7 +60,7 @@ describe("genericChart actions", () => {
     it("sets error on get dataset", async () => {
         mockAxios.onGet("/dataset1")
             .reply(500, mockFailure("TEST ERROR"));
-        const commit = jest.fn();
+        const commit = vi.fn();
         const payload = {datasetId: "dataset1", url: "/dataset1"};
         await actions.getDataset({commit, rootState} as any, payload);
         expect(commit.mock.calls.length).toEqual(2);
@@ -71,7 +71,7 @@ describe("genericChart actions", () => {
     });
 
     it("refreshes datasets", async () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const genericChartMetadata = {
             chart1: {
                 datasets: [
@@ -105,7 +105,7 @@ describe("genericChart actions", () => {
     });
 
     it("refreshDatasets does nothing if no metadata", async () => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const state = mockGenericChartState();
         await actions.refreshDatasets({dispatch, state} as any);
         expect(dispatch.mock.calls.length).toBe(0);

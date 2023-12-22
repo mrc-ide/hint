@@ -48,7 +48,7 @@ describe("Error report component", () => {
     };
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     const rootSectionSlot = {
@@ -384,7 +384,7 @@ describe("Error report component", () => {
 
     it("translates button tooltip", async () => {
         const store = createStore({}, {}, {}, true);
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         mountWithTranslate(ErrorReport, store, {
             props: {
                 open: true

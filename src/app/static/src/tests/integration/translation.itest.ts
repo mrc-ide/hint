@@ -10,8 +10,8 @@ describe("hintr translations", () => {
     });
 
     it("can get error message back in french", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = {language: "fr"};
 
         const state = {country: "Malawi"} as any;

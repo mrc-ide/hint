@@ -8,7 +8,7 @@ describe("download button", () => {
         name: "downloadIndicator",
         disabled: false
     }
-    const mockTranslate = jest.fn()
+    const mockTranslate = vi.fn()
     const getWrapper = (props = downloadProps) => {
         return shallowMount(DownloadButton, {
             global: {

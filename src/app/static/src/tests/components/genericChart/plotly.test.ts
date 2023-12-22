@@ -2,9 +2,9 @@
 // before importing Plotly
 import Vuex from "vuex";
 
-jest.mock("plotly.js-basic-dist", () => ({
-    newPlot: jest.fn(),
-    react: jest.fn()
+vi.mock("plotly.js-basic-dist", () => ({
+    newPlot: vi.fn(),
+    react: vi.fn()
 }));
 import * as plotly from "plotly.js-basic-dist";
 import Vue, { nextTick } from "vue";
@@ -225,13 +225,13 @@ const expectedConfig = {
 };
 
 describe("Plotly", () => {
-    const mockPlotlyReact = jest.spyOn(plotly, "react");
-    const mockPlotlyNewPlot = jest.spyOn(plotly, "newPlot");
+    const mockPlotlyReact = vi.spyOn(plotly, "react");
+    const mockPlotlyNewPlot = vi.spyOn(plotly, "newPlot");
     const store = new Vuex.Store({state: emptyState()});
     registerTranslations(store);
 
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     const expectPlotlyParams = (plotlyParams: any[], rows = 2) => {

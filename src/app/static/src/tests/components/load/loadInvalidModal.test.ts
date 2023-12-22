@@ -9,8 +9,8 @@ import {getters as stepperGetters} from "../../../app/store/stepper/getters";
 import { nextTick } from "vue";
 import translate from "../../../app/directives/translate";
 
-const mockRollbackInvalidState = jest.fn();
-const mockLoadVersion = jest.fn();
+const mockRollbackInvalidState = vi.fn();
+const mockLoadVersion = vi.fn();
 const stubs = {
     RouterLink: RouterLinkStub
 };
@@ -55,8 +55,8 @@ const getStore = (invalidSteps: number[], isGuest: boolean) => {
 
 describe("loadInvalidModal", () => {
 
-    const mockTranslate = jest.fn();
-    const mockLocationReload = jest.fn();
+    const mockTranslate = vi.fn();
+    const mockLocationReload = vi.fn();
 
     const win = window as any;
     const realLocation = win.location;
@@ -71,7 +71,7 @@ describe("loadInvalidModal", () => {
     });
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
     const getWrapper = (invalidSteps: number[] = [], isGuest: boolean = false) => {
@@ -162,7 +162,7 @@ describe("loadInvalidModal", () => {
 });
 
 describe("loadInvalidModal translations", () => {
-    const mockTranslate = jest.fn();
+    const mockTranslate = vi.fn();
     const getWrapper = (invalidSteps: number[] = [], isGuest: boolean = false)  => {
         const store = getStore(invalidSteps, isGuest);
         return mountWithTranslate(LoadInvalidModal, store, {

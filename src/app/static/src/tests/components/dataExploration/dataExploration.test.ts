@@ -21,10 +21,10 @@ import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 import StepperNavigation from "../../../app/components/StepperNavigation.vue";
 
 describe(`data exploration component`, () => {
-    let actions: jest.Mocked<BaselineActions>;
+    let actions: vi.Mocked<BaselineActions>;
     let mutations = {};
 
-    let sapActions: jest.Mocked<SurveyAndProgramActions>;
+    let sapActions: vi.Mocked<SurveyAndProgramActions>;
     let sapMutations = {};
 
     const defaultBaselineState = {ready: true};
@@ -32,24 +32,24 @@ describe(`data exploration component`, () => {
 
     const createStore = (baselineState: Partial<BaselineState> = defaultBaselineState,
                          surveyAndProgramState: Partial<SurveyAndProgramState> = defaultSAPState,
-                         plottingMetadataMock = jest.fn(),
+                         plottingMetadataMock = vi.fn(),
                          stepperState: Partial<StepperState> = {},
                          dataExplorationState: Partial<DataExplorationState> = {}) => {
 
         actions = {
-            refreshDatasetMetadata: jest.fn(),
-            importPJNZ: jest.fn(),
-            importPopulation: jest.fn(),
-            importShape: jest.fn(),
-            getBaselineData: jest.fn(),
-            uploadPJNZ: jest.fn(),
-            uploadShape: jest.fn(),
-            uploadPopulation: jest.fn(),
-            deletePJNZ: jest.fn(),
-            deleteShape: jest.fn(),
-            deletePopulation: jest.fn(),
-            deleteAll: jest.fn(),
-            validate: jest.fn()
+            refreshDatasetMetadata: vi.fn(),
+            importPJNZ: vi.fn(),
+            importPopulation: vi.fn(),
+            importShape: vi.fn(),
+            getBaselineData: vi.fn(),
+            uploadPJNZ: vi.fn(),
+            uploadShape: vi.fn(),
+            uploadPopulation: vi.fn(),
+            deletePJNZ: vi.fn(),
+            deleteShape: vi.fn(),
+            deletePopulation: vi.fn(),
+            deleteAll: vi.fn(),
+            validate: vi.fn()
         };
 
         const store = new Vuex.Store({
@@ -143,7 +143,7 @@ describe(`data exploration component`, () => {
         const store = createStore(
             {...defaultBaselineState, shape: mockShapeResponse()},
             {...defaultBaselineState, survey: mockSurveyResponse()},
-            jest.fn(),
+            vi.fn(),
             {activeStep: 2}
         );
         const wrapper = shallowMountWithTranslate(DataExploration, store, {
@@ -170,7 +170,7 @@ describe(`data exploration component`, () => {
     })
 
     it(`can navigate to uploadInputs`, async () => {
-        const store = createStore(defaultBaselineState, defaultSAPState, jest.fn(), {activeStep: 2});
+        const store = createStore(defaultBaselineState, defaultSAPState, vi.fn(), {activeStep: 2});
         const wrapper = shallowMountWithTranslate(DataExploration, store, {
             global: {
                 plugins: [store]
@@ -184,7 +184,7 @@ describe(`data exploration component`, () => {
     });
 
     it("requests plotting metadata on mount", () => {
-        const metadataMock = jest.fn();
+        const metadataMock = vi.fn();
         const store = createStore({}, {}, metadataMock)
         const wrapper = shallowMountWithTranslate(DataExploration, store, {
             global: {
@@ -228,7 +228,7 @@ describe(`data exploration component`, () => {
 
     it("shows loading spinner and disabled navigation when updating language", () => {
         const dataExplorationState = {updatingLanguage: true};
-        const store = createStore(defaultBaselineState, defaultSAPState, jest.fn(), {},
+        const store = createStore(defaultBaselineState, defaultSAPState, vi.fn(), {},
             dataExplorationState);
         const wrapper = shallowMountWithTranslate(DataExploration, store, {
             global: {

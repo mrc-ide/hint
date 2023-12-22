@@ -22,23 +22,23 @@ describe("Download Results component", () => {
 
     const error = {error: "ERR", detail: "download report error"}
 
-    const mockPrepareOutputs = jest.fn();
-    const mockDownloadComparisonReport = jest.fn()
-    const mockDownloadSpectrumReport = jest.fn()
-    const mockDownloadCoarseReport = jest.fn()
-    const mockDownloadSummaryReport = jest.fn()
-    const mockDownloadAgywTool = jest.fn()
+    const mockPrepareOutputs = vi.fn();
+    const mockDownloadComparisonReport = vi.fn()
+    const mockDownloadSpectrumReport = vi.fn()
+    const mockDownloadCoarseReport = vi.fn()
+    const mockDownloadSummaryReport = vi.fn()
+    const mockDownloadAgywTool = vi.fn()
 
     afterEach(() => {
-        jest.useRealTimers();
-        jest.resetAllMocks();
+        vi.useRealTimers();
+        vi.resetAllMocks();
     })
 
     const createStore = (adr: Partial<ADRState> = {userCanUpload: true},
-                         getUserCanUpload = jest.fn(),
+                         getUserCanUpload = vi.fn(),
                          adrUploadState: Partial<ADRUploadState> = {},
                          downloadResults?: Partial<DownloadResultsState>,
-                         clearStatus = jest.fn()) => {
+                         clearStatus = vi.fn()) => {
         const store = new Vuex.Store({
             state: emptyState(),
             modules: {
@@ -61,7 +61,7 @@ describe("Download Results component", () => {
                         totalFilesUploading: 2
                     }),
                     actions: {
-                        getUploadFiles: jest.fn()
+                        getUploadFiles: vi.fn()
                     },
                     mutations: {
                         ClearStatus: clearStatus
@@ -152,7 +152,7 @@ describe("Download Results component", () => {
     })
 
     it("invokes getUserCanUpload on mounted", async () => {
-        const mockGetUserCanUpload = jest.fn();
+        const mockGetUserCanUpload = vi.fn();
         const store = createStore({userCanUpload: true}, mockGetUserCanUpload);
         shallowMount(DownloadResults, {
             global: {
@@ -181,7 +181,7 @@ describe("Download Results component", () => {
     });
 
     it("does not render status messages or error alerts without appropriate states", () => {
-        const store = createStore({userCanUpload: true}, jest.fn());
+        const store = createStore({userCanUpload: true}, vi.fn());
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -194,7 +194,7 @@ describe("Download Results component", () => {
     });
 
     it("renders uploading status messages as expected and disables upload button", () => {
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploading: true});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploading: true});
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -212,7 +212,7 @@ describe("Download Results component", () => {
     });
 
     it("renders upload complete and release created status messages as expected", () => {
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploadComplete: true, releaseCreated: true});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploadComplete: true, releaseCreated: true});
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -234,7 +234,7 @@ describe("Download Results component", () => {
     });
 
     it("renders release not created status messages as expected", () => {
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploadComplete: true, releaseFailed: true});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploadComplete: true, releaseFailed: true});
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -252,7 +252,7 @@ describe("Download Results component", () => {
 
     it("renders upload error alert as expected", () => {
         const error = {error: "ERR", detail: "there was an error"}
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploadError: error});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploadError: error});
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -268,7 +268,7 @@ describe("Download Results component", () => {
     });
 
     it("disables upload button when upload in progress", () => {
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploading: true});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploading: true});
         const wrapper = shallowMountWithTranslate(DownloadResults, store, {
             global: {
                 plugins: [store]
@@ -281,7 +281,7 @@ describe("Download Results component", () => {
     });
 
     it("disables download buttons when upload in progress", () => {
-        const store = createStore({userCanUpload: true}, jest.fn(), {uploading: true});
+        const store = createStore({userCanUpload: true}, vi.fn(), {uploading: true});
         const wrapper = shallowMount(DownloadResults, {
             global: {
                 plugins: [store]
@@ -312,7 +312,7 @@ describe("Download Results component", () => {
     });
 
     it("cannot download spectrum output while preparing", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             spectrum: mockDownloadResultsDependency({
                 preparing: true,
                 downloadId: "1"
@@ -343,7 +343,7 @@ describe("Download Results component", () => {
     });
 
     it("can download spectrum file once prepared", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             spectrum: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -364,7 +364,7 @@ describe("Download Results component", () => {
     });
 
     it("cannot download summary report while preparing", () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             summary: mockDownloadResultsDependency({
                 preparing: true,
                 downloadId: "1"
@@ -395,7 +395,7 @@ describe("Download Results component", () => {
     });
 
     it("can download summary report once prepared", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             summary: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -416,7 +416,7 @@ describe("Download Results component", () => {
     });
 
     it("cannot download coarse output while preparing", () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             coarseOutput: mockDownloadResultsDependency({
                 preparing: true,
                 downloadId: "1"
@@ -447,7 +447,7 @@ describe("Download Results component", () => {
     });
 
     it("can download coarseOutput file once prepared", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             coarseOutput: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -468,7 +468,7 @@ describe("Download Results component", () => {
     });
 
     it("cannot download comparison output while preparing", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             comparison: mockDownloadResultsDependency({
                 preparing: true,
                 downloadId: "1"
@@ -512,7 +512,7 @@ describe("Download Results component", () => {
     });
 
     it("can download comparison file once prepared", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             comparison: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -540,7 +540,7 @@ describe("Download Results component", () => {
 
     it("can display error message for comparison download file when errored", async () => {
         const error = {error: "ERR", detail: "comparison error"}
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             comparison: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -567,8 +567,8 @@ describe("Download Results component", () => {
     });
 
     it("calls clear status mutation before mount", () => {
-        const spy = jest.fn()
-        const store = createStore({}, jest.fn(), {}, {}, spy);
+        const spy = vi.fn()
+        const store = createStore({}, vi.fn(), {}, {}, spy);
         shallowMount(DownloadResults, {
             global: {
                 plugins: [store]
@@ -578,7 +578,7 @@ describe("Download Results component", () => {
     });
 
     it("can display error message for summary download file when errored", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             summary: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -591,7 +591,7 @@ describe("Download Results component", () => {
     });
 
     it("can display error message for spectrum download file when errored", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             spectrum: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -604,7 +604,7 @@ describe("Download Results component", () => {
     });
 
     it("can display error message for summary download file when errored", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             coarseOutput: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -617,7 +617,7 @@ describe("Download Results component", () => {
     });
 
     it("cannot download AGYW output while preparing", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             agyw: mockDownloadResultsDependency({
                 preparing: true,
                 downloadId: "1"
@@ -661,7 +661,7 @@ describe("Download Results component", () => {
     });
 
     it("can download AGYW file once prepared", async () => {
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             agyw: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,
@@ -689,7 +689,7 @@ describe("Download Results component", () => {
 
     it("can display error message for agyw download file when errored", async () => {
         const error = {error: "ERR", detail: "agyw error"}
-        const store = createStore({}, jest.fn(), {}, {
+        const store = createStore({}, vi.fn(), {}, {
             agyw: mockDownloadResultsDependency({
                 preparing: false,
                 complete: true,

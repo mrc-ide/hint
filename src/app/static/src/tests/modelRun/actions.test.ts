@@ -19,14 +19,14 @@ describe("Model run actions", () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
-        console.info = jest.fn();
+        console.log = vi.fn();
+        console.info = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.info as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
+        (console.info as vi.Mock).mockClear();
     });
 
     it("passes model options and version from state", async () => {
@@ -34,7 +34,7 @@ describe("Model run actions", () => {
         mockAxios.onPost(`/model/run/`)
             .reply(200, mockSuccess({id: "12345"}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const rootState = mockRootState({
             modelOptions: mockModelOptionsState({
                 options: {1: "TEST"},
@@ -60,7 +60,7 @@ describe("Model run actions", () => {
             statusPollId: -1
         };
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.run({commit, rootState, state} as any);
         expect(commit.mock.calls[0][0]).toStrictEqual({
             type: "StartedRunning",
@@ -80,7 +80,7 @@ describe("Model run actions", () => {
             statusPollId: 9876
         };
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.run({commit, rootState, state} as any);
         expect(commit.mock.calls[0][0]).toStrictEqual({
             type: "StartedRunning",
@@ -101,8 +101,8 @@ describe("Model run actions", () => {
             .reply(200, mockSuccess({}));
 
         const state = mockModelRunState({status: {done: true} as ModelStatusResponse});
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         actions.poll({commit, state, dispatch, rootState} as any, "1234");
 
@@ -121,8 +121,8 @@ describe("Model run actions", () => {
             .reply(200, mockSuccess({}));
 
         const state = mockModelRunState({status: {done: false} as ModelStatusResponse});
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         actions.poll({commit, state, dispatch, rootState} as any, "1234");
 
@@ -139,7 +139,7 @@ describe("Model run actions", () => {
         mockAxios.onGet(`/model/result/1234`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockModelRunState();
 
         actions.poll({commit, state, rootState} as any, "1234");
@@ -160,7 +160,7 @@ describe("Model run actions", () => {
         mockAxios.onGet(`/model/status/1234`)
             .reply(500, mockFailure("Test Error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockModelRunState();
 
         actions.poll({commit, state, rootState} as any, "1234");
@@ -185,8 +185,8 @@ describe("Model run actions", () => {
         mockAxios.onGet(`/model/result/1234`)
             .reply(200, mockResponse);
 
-        const commit = jest.fn();
-        const spy = jest.spyOn(freezer, "deepFreeze");
+        const commit = vi.fn();
+        const spy = vi.spyOn(freezer, "deepFreeze");
         const state = mockModelRunState({
             modelRunId: "1234",
             status: {done: true} as ModelStatusResponse
@@ -217,7 +217,7 @@ describe("Model run actions", () => {
         mockAxios.onGet(`/model/result/1234`)
             .reply(500, mockFailure("Test Error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockModelRunState({modelRunId: "1234", status: {done: true, id: "1234"} as ModelStatusResponse});
 
         await actions.getResult({commit, state, rootState} as any);
@@ -241,7 +241,7 @@ describe("Model run actions", () => {
         mockAxios.onGet(`/model/result/1234`)
             .reply(200, mockSuccess("TEST DATA"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockModelRunState({modelRunId: "1234", status: {done: false, id: "1234"} as ModelStatusResponse});
 
         await actions.getResult({commit, state, rootState} as any);
@@ -254,7 +254,7 @@ describe("Model run actions", () => {
     });
 
     it("cancel run calls endpoint and commits mutation", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockModelRunState({modelRunId: "123"});
 
         await actions.cancelRun({commit, state, rootState} as any);

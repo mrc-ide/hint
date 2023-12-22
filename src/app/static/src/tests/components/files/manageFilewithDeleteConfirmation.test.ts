@@ -50,8 +50,8 @@ describe("File upload component", () => {
                 error: null,
                 label: "PJNZ",
                 valid: true,
-                upload: jest.fn(),
-                deleteFile: jest.fn(),
+                upload: vi.fn(),
+                deleteFile: vi.fn(),
                 name: "pjnz",
                 accept: "csv",
                 ...props
@@ -67,7 +67,7 @@ describe("File upload component", () => {
     }
 
     it("opens confirmation modal when remove is clicked", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const wrapper = createSut({
             existingFileName: "test.pjnz",
             deleteFile: removeHandler
@@ -79,7 +79,7 @@ describe("File upload component", () => {
     });
 
     it("deletes file if user confirms edit", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const wrapper = createSut({
             existingFileName: "test.pjnz",
             deleteFile: removeHandler
@@ -95,7 +95,7 @@ describe("File upload component", () => {
     });
 
     it("does not delete file if user cancels edit", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const wrapper = createSut({
             existingFileName: "test.pjnz",
             deleteFile: removeHandler

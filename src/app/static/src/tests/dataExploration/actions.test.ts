@@ -21,8 +21,8 @@ describe("data exploration actions", () => {
     });
 
     it("changeLanguage fetches plotting metadata and calibrate result", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockDataExplorationState({
             baseline: mockBaselineState({iso3: "MWI"})
         });
@@ -36,8 +36,8 @@ describe("data exploration actions", () => {
     });
 
     it("changeLanguage does not fetch plotting metadata if country code is empty", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockDataExplorationState();
         await actions.changeLanguage({commit, dispatch, rootState} as any, Language.fr);
 
@@ -47,8 +47,8 @@ describe("data exploration actions", () => {
     });
 
     it("changeLanguage refreshes genericChart datasets, if any", async() => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockDataExplorationState(
             {
                 baseline: mockBaselineState({iso3: "MWI"}),
@@ -64,8 +64,8 @@ describe("data exploration actions", () => {
     });
 
     it("changeLanguage fetches nothing if no relevant metadata to fetch", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockDataExplorationState({baseline: {iso3: ""} as any})
         await actions.changeLanguage({commit, dispatch, rootState} as any, Language.fr);
 
@@ -75,8 +75,8 @@ describe("data exploration actions", () => {
     });
 
     it("changeLanguage does nothing if new language is the same as current language", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockDataExplorationState(
             {
                 language: Language.fr,
@@ -112,7 +112,7 @@ describe("data exploration actions", () => {
         const getters = {
             errors: [err]
         }
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const payload: ErrorReportManualDetails = {
             email: "test@example.com",
@@ -194,7 +194,7 @@ describe("data exploration actions", () => {
         const getters = {
             errors: [err]
         }
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const payload: ErrorReportManualDetails = {
             email: "test@example.com",
@@ -255,7 +255,7 @@ describe("data exploration actions", () => {
 
         const rootState = mockRootState();
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const getters = {
             errors: []

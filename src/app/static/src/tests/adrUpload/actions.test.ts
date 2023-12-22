@@ -21,16 +21,16 @@ describe("ADR upload actions", () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
     });
 
     it("getUploadFiles does nothing if no selected dataset", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState(),
             projects: mockProjectsState({currentProject: {id: 1} as any})
@@ -43,7 +43,7 @@ describe("ADR upload actions", () => {
     });
 
     it("getUploadFiles does nothing if no current project", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState({selectedDataset: {id: 1} as any}),
             projects: mockProjectsState()
@@ -56,7 +56,7 @@ describe("ADR upload actions", () => {
     });
 
     it("getUploadFiles commits error on error response", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         mockAxios.onGet(`/adr/datasets/test-dataset`)
             .reply(500, mockFailure("test error"));
@@ -83,7 +83,7 @@ describe("ADR upload actions", () => {
     });
 
     it("getUploadFiles takes release into account", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const root = mockRootState({
             baseline: mockBaselineState({selectedDataset: {id: "test-dataset", release: "2.0"} as any}),
@@ -96,7 +96,7 @@ describe("ADR upload actions", () => {
     });
 
     const testGetUploadFilesInputs = async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const datasetWithResources = {
             resources: [
                 {
@@ -221,8 +221,8 @@ describe("ADR upload actions", () => {
     });
 
     it("uploadFilesToADR uploads files sequentially to adr and commits complete on upload of final file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -317,8 +317,8 @@ describe("ADR upload actions", () => {
     });
 
     it("uploadFilesToADR dispatches createRelease on upload of final file if instructed to", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -387,8 +387,8 @@ describe("ADR upload actions", () => {
     });
 
     it("uploadFilesToADR does not dispatch createRelease on upload fail", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -445,8 +445,8 @@ describe("ADR upload actions", () => {
     });
 
     it("uploadFilesToADR sets upload failure and prevents subsequent uploads", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -522,8 +522,8 @@ describe("ADR upload actions", () => {
     });
 
     it("uploadFilesToADR uploads files and static description sequentially to adr", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -611,7 +611,7 @@ describe("ADR upload actions", () => {
         mockAxios.onGet(`adr/datasets/datasetId`)
             .reply(200, mockSuccess({id: "datasetId", resources: [], organization: {id: null}, title: "datasetTitle"}));
 
-        const getUploadFiles = jest.fn();
+        const getUploadFiles = vi.fn();
 
         const store = new Vuex.Store<RootState>({
             state: mockRootState({
@@ -680,7 +680,7 @@ describe("ADR upload actions", () => {
     });
 
     it("createRelease posts release name to releases endpoint", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],
@@ -722,7 +722,7 @@ describe("ADR upload actions", () => {
     });
 
     it("createRelease commits release not created on failure", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             adr: mockADRState({
                 datasets: [],

@@ -9,8 +9,8 @@ describe("Stepper navigation component", () => {
     beforeEach(() => registerTranslations(new Vuex.Store({state: mockRootState()})));
 
     it("enables links and invokes callbacks", async () => {
-        const back = jest.fn();
-        const next = jest.fn();
+        const back = vi.fn();
+        const next = vi.fn();
         const wrapper = shallowMount(StepperNavigation, {
             props: {
                 backDisabled: false, back,
@@ -30,8 +30,8 @@ describe("Stepper navigation component", () => {
     });
 
     it("disables links", async () => {
-        const back = jest.fn();
-        const next = jest.fn();
+        const back = vi.fn();
+        const next = vi.fn();
         const wrapper = shallowMount(StepperNavigation, {
             props: {
                 backDisabled: true, back,

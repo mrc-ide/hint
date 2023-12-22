@@ -10,14 +10,14 @@ describe("Projects actions", () => {
     beforeEach(() => {
         mockAxios.reset();
         // stop apiService logging to console
-        console.log = jest.fn();
-        console.info = jest.fn();
+        console.log = vi.fn();
+        console.info = vi.fn();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.info as jest.Mock).mockClear();
-        jest.useRealTimers();
+        (console.log as vi.Mock).mockClear();
+        (console.info as vi.Mock).mockClear();
+        vi.useRealTimers();
     });
 
     const rootState = mockRootState();
@@ -29,7 +29,7 @@ describe("Projects actions", () => {
     };
 
     it("updates CloningProject on successful clone", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         mockAxios.onPost(`/project/123/clone`)
             .reply(200, mockSuccess(null));
 
@@ -41,7 +41,7 @@ describe("Projects actions", () => {
     });
 
     it("sets CloneProjectError on failed clone", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         mockAxios.onPost(`/project/123/clone`)
             .reply(500, mockFailure("error"));
 
@@ -80,8 +80,8 @@ describe("Projects actions", () => {
         mockAxios.onPost(`/project/`)
             .reply(500, mockFailure("TestError"));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({error: "TEST ERROR" as any});
 
         actions.createProject({commit, dispatch, state, rootState} as any, {name: "newProject"});
@@ -106,8 +106,8 @@ describe("Projects actions", () => {
         mockAxios.onPost(`/project/`)
             .reply(200, mockSuccess("TestProject"));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState();
 
         actions.createProject({commit, dispatch, state, rootState} as any, {name: "newProject"});
@@ -132,7 +132,7 @@ describe("Projects actions", () => {
         mockAxios.onGet("/projects/")
             .reply(200, mockSuccess(testProjects));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState();
 
         actions.getProjects({commit, state, rootState} as any);
@@ -152,7 +152,7 @@ describe("Projects actions", () => {
         mockAxios.onGet("/project/current")
             .reply(200, mockSuccess(testProjects));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState();
         const rootGetters = {isGuest: false}
 
@@ -175,8 +175,8 @@ describe("Projects actions", () => {
         mockAxios.onPost("/project/1/version/version-id/state/")
             .reply(200, mockSuccess("ok"));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0],
@@ -202,7 +202,7 @@ describe("Projects actions", () => {
         mockAxios.onGet("/projects/")
             .reply(500, mockFailure("TestError"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState();
 
         actions.getProjects({commit, state, rootState} as any);
@@ -222,7 +222,7 @@ describe("Projects actions", () => {
         mockAxios.onGet("/project/current")
             .reply(500, mockFailure("TestError"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState();
         const rootGetters = {isGuest: false}
 
@@ -241,7 +241,7 @@ describe("Projects actions", () => {
     });
 
     it("queueVersionStateUpload does nothing if no current version",  (done) => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState();
 
         actions.queueVersionStateUpload({commit, state, rootState} as any);
@@ -254,21 +254,21 @@ describe("Projects actions", () => {
     });
 
     it("queued upload will not run while version upload is already in progress",  () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0],
             versionUploadInProgress: true
         });
 
-        jest.useFakeTimers();
-        jest.spyOn(window, "setInterval");
+        vi.useFakeTimers();
+        vi.spyOn(window, "setInterval");
 
         actions.queueVersionStateUpload({commit, state, rootState} as any);
 
         expect(setInterval).toHaveBeenCalledTimes(1);
 
-        jest.advanceTimersByTime(2001);
+        vi.advanceTimersByTime(2001);
 
         expect(commit.mock.calls.length).toBe(2);
         expect(commit.mock.calls[0][0]).toStrictEqual(
@@ -279,7 +279,7 @@ describe("Projects actions", () => {
     });
 
     it("queued upload will run if no version upload is in progress", (done) => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0],
@@ -294,8 +294,8 @@ describe("Projects actions", () => {
         mockAxios.onPost(url)
             .reply(200, mockSuccess("OK"));
 
-        jest.useFakeTimers();
-        jest.spyOn(window, "setInterval");
+        vi.useFakeTimers();
+        vi.spyOn(window, "setInterval");
 
         actions.queueVersionStateUpload({commit, state, rootState} as any);
 
@@ -306,11 +306,11 @@ describe("Projects actions", () => {
         expect(commit.mock.calls[1][0]["type"]).toBe(ProjectsMutations.SetQueuedVersionUpload);
 
         // will not yet have run because versionUploadInProgress is true
-        jest.advanceTimersByTime(2001);
+        vi.advanceTimersByTime(2001);
         expect(commit.mock.calls.length).toBe(2);
 
         state.versionUploadInProgress = false;
-        jest.advanceTimersByTime(2001);
+        vi.advanceTimersByTime(2001);
 
         // now should have run
         expect(commit.mock.calls.length).toBe(4);
@@ -321,7 +321,7 @@ describe("Projects actions", () => {
             payload: true
         });
 
-        jest.useRealTimers();
+        vi.useRealTimers();
 
         setTimeout(() => {
             expect(commit.mock.calls.length).toBe(6);
@@ -342,7 +342,7 @@ describe("Projects actions", () => {
     });
 
     it("uploadVersionState commits ErrorAdded on error response and unsets in progress upload",  (done) => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0],
@@ -357,12 +357,12 @@ describe("Projects actions", () => {
         mockAxios.onPost(url)
             .reply(500, mockFailure("ERR"));
 
-        jest.useFakeTimers();
+        vi.useFakeTimers();
 
         actions.queueVersionStateUpload({commit, state, rootState} as any);
 
-        jest.advanceTimersByTime(2001);
-        jest.useRealTimers();
+        vi.advanceTimersByTime(2001);
+        vi.useRealTimers();
 
         setTimeout(() => {
             expect(commit.mock.calls.length).toBe(6);
@@ -376,7 +376,7 @@ describe("Projects actions", () => {
     });
 
     it("newVersion uploads current version state then requests new version, commits VersionCreated", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0]
@@ -423,7 +423,7 @@ describe("Projects actions", () => {
     });
 
     it("newVersion adds error on error response", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0]
@@ -464,8 +464,8 @@ describe("Projects actions", () => {
     });
 
     it("loadVersion fetches version details and invokes load state action",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {error: null};
         const mockVersionDetails = {state: "{}", files: "files"};
         mockAxios.onGet("project/1/version/testVersion")
@@ -483,8 +483,8 @@ describe("Projects actions", () => {
     });
 
     it("loadVersion commits error if cannot fetch version details",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {error: "test error"};
         mockAxios.onGet("project/1/version/testVersion")
             .reply(500, mockFailure("test error"));
@@ -502,8 +502,8 @@ describe("Projects actions", () => {
     });
 
     it("deleteProject dispatches getProjects action",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1")
             .reply(200, mockSuccess("OK"));
@@ -517,8 +517,8 @@ describe("Projects actions", () => {
     });
 
     it("deleteProject commits ProjectError on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1")
             .reply(500, mockFailure("TEST ERROR"));
@@ -534,9 +534,9 @@ describe("Projects actions", () => {
     });
 
     it("deleteProject clears current version if it is being deleted", () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = {currentVersion: {id: "testVersion"}, currentProject: {id: 1}};
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         mockAxios.onDelete("project/1")
             .reply(200, mockSuccess("OK"));
@@ -545,8 +545,8 @@ describe("Projects actions", () => {
     });
 
     it("deleteVersion dispatches getProjects action",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1/version/testVersion")
             .reply(200, mockSuccess("OK"));
@@ -560,8 +560,8 @@ describe("Projects actions", () => {
     });
 
     it("deleteVersion commits ProjectError on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onDelete("project/1/version/testVersion")
             .reply(500, mockFailure("TEST ERROR"));
@@ -577,9 +577,9 @@ describe("Projects actions", () => {
     });
 
     it("deleteVersion clears current version if it is being deleted", () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = {currentVersion: {id: "testVersion"}, currentProject: {id: 1}};
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         mockAxios.onDelete("project/1")
             .reply(200, mockSuccess("OK"));
@@ -588,8 +588,8 @@ describe("Projects actions", () => {
     });
 
     it("promoteVersion creates new project containing replicated version",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0]
@@ -617,8 +617,8 @@ describe("Projects actions", () => {
     });
 
     it("promoteVersion commits ErrorAdded on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onPost("project/1/version/testVersion/promote")
             .reply(500, mockFailure("TEST ERROR"));
@@ -640,8 +640,8 @@ describe("Projects actions", () => {
     });
 
     it("updateVersionNote action adds/edits a project's note",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const testProjects = [{id: 1, name: "v1", versions: []}];
         const state = mockProjectsState()
 
@@ -666,8 +666,8 @@ describe("Projects actions", () => {
     });
 
     it("can update project notes",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const testProjects = [{id: 1, name: "v1", versions: []}];
         const state = mockProjectsState();
 
@@ -690,8 +690,8 @@ describe("Projects actions", () => {
     });
 
     it("update project notes commits Project Error on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({error: "TEST ERROR" as any});
 
         const stateUrl = "project/1/note";
@@ -714,8 +714,8 @@ describe("Projects actions", () => {
     });
 
     it("update version notes commits Project Error on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({error: "TEST ERROR" as any});
 
         const stateUrl = "/project/1/version/version-id/note";
@@ -740,8 +740,8 @@ describe("Projects actions", () => {
     });
 
     it("renameProject changes a project's name", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({
             currentProject: mockProject,
             currentVersion: mockProject.versions[0]
@@ -767,8 +767,8 @@ describe("Projects actions", () => {
     });
 
     it("renameProject does not dispatch getCurrentProject if currentProject is not being renamed",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockProjectsState({
             currentProject: null,
             currentVersion: null
@@ -794,8 +794,8 @@ describe("Projects actions", () => {
     });
 
     it("renameProject commits ErrorAdded on failure",  (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {};
         mockAxios.onPost("project/1/rename")
             .reply(500, mockFailure("TEST ERROR"));

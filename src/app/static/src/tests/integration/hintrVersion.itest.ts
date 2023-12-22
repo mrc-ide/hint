@@ -10,7 +10,7 @@ describe("HintrVersion actions", () => {
 
     it("can get hintr version numbers", async () => {
  
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getHintrVersion({commit, rootState} as any);
         expect(commit.mock.calls[0][0]["type"]).toBe("HintrVersionFetched");

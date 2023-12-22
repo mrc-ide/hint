@@ -24,10 +24,10 @@ import { nextTick } from "vue";
 
 describe("adr integration", () => {
 
-    const fetchKeyStub = jest.fn();
-    const getDataStub = jest.fn();
-    const getUserCanUploadStub = jest.fn();
-    const ssoLoginMethodStud = jest.fn();
+    const fetchKeyStub = vi.fn();
+    const getDataStub = vi.fn();
+    const getUserCanUploadStub = vi.fn();
+    const ssoLoginMethodStud = vi.fn();
 
     const fakeDataset = {
         id: "id1",
@@ -79,7 +79,7 @@ describe("adr integration", () => {
     }
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("does not render if not logged in", () => {
@@ -211,7 +211,7 @@ describe("adr integration", () => {
     });
 
     it("renders adr-access text for writers as expected", () => {
-        const mockTooltip = jest.fn()
+        const mockTooltip = vi.fn()
         const store = createStore("123", null, {}, true, {selectedDataset: fakeDataset});
         const renders = shallowMountWithTranslate(ADRIntegration, store,
             {
@@ -229,7 +229,7 @@ describe("adr integration", () => {
     });
 
     it("renders adr-access text for readers as expected", () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore("123", null, {}, false, {selectedDataset: fakeDataset});
         const renders = shallowMountWithTranslate(ADRIntegration, store,
             {
@@ -249,7 +249,7 @@ describe("adr integration", () => {
     it("renders Tooltip text for writers as expected in French", () => {
         const store = createStore("123", null, {}, true, {selectedDataset: fakeDataset})
         store.state.language = Language.fr
-        const mockTooltip = jest.fn()
+        const mockTooltip = vi.fn()
         shallowMount(ADRIntegration,
             {
                 global: {
@@ -263,7 +263,7 @@ describe("adr integration", () => {
     it("renders Tooltip text for readers as expected in French", () => {
         const store = createStore("123", null, {}, false, {selectedDataset: fakeDataset})
         store.state.language = Language.fr
-        const mockTooltip = jest.fn()
+        const mockTooltip = vi.fn()
         shallowMount(ADRIntegration,
             {
                 global: {
@@ -277,7 +277,7 @@ describe("adr integration", () => {
     it("renders Tooltip text for writers as expected in Portuguese", () => {
         const store = createStore("123", null, {}, true, {selectedDataset: fakeDataset})
         store.state.language = Language.pt
-        const mockTooltip = jest.fn()
+        const mockTooltip = vi.fn()
         shallowMount(ADRIntegration,
             {
                 global: {
@@ -291,7 +291,7 @@ describe("adr integration", () => {
     it("renders Tooltip text for readers as expected in Portuguese", () => {
         const store = createStore("123", null, {}, false, {selectedDataset: fakeDataset})
         store.state.language = Language.pt
-        const mockTooltip = jest.fn()
+        const mockTooltip = vi.fn()
         shallowMount(ADRIntegration,
             {
                 global: {

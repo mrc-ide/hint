@@ -24,17 +24,17 @@ describe("Load actions", () => {
     beforeEach(() => {
         mockAxios.reset();
         // stop apiService logging to console
-        console.log = jest.fn();
-        console.info = jest.fn();
+        console.log = vi.fn();
+        console.info = vi.fn();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.info as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
+        (console.info as vi.Mock).mockClear();
     });
 
     it("load reads blob and dispatches setFiles action", (done) => {
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const file = new File(["Test File Contents"], "testFile")
         actions.load({dispatch, rootState} as any, file);
 
@@ -49,7 +49,7 @@ describe("Load actions", () => {
     });
 
     it("clears loading state", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.clearLoadState({commit, rootState} as any);
         expect(commit.mock.calls[0][0]).toStrictEqual({type: "LoadStateCleared", payload: null});
     });
@@ -57,11 +57,11 @@ describe("Load actions", () => {
     it("loadVersion sets files and updates store state",  (done) => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
 
-        const routerSpy = jest.spyOn(router, "push");
+        const routerSpy = vi.spyOn(router, "push");
 
         actions.loadFromVersion({commit, dispatch, state, rootState} as any, {
             files: "files",
@@ -119,11 +119,11 @@ describe("Load actions", () => {
     it("loadVersion pushes home route if not already there", async () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
 
-        const routerSpy = jest.spyOn(router, "push");
+        const routerSpy = vi.spyOn(router, "push");
         await router.push("/projects");
 
         actions.loadFromVersion({commit, dispatch, state, rootState} as any, {
@@ -140,9 +140,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootGetters = {isGuest: true};
         const fileContents = addCheckSum(JSON.stringify({files: "TEST FILES", state: {"version": currentHintVersion, stepper: {}}}));
         await actions.setFiles({commit, state, dispatch, rootState, rootGetters} as any,
@@ -195,9 +195,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState, projectName: "new project"});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const testRootState = {
             version: currentHintVersion,
             projects: {
@@ -272,9 +272,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(400, mockFailure("Test error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.NotLoading});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const fileContents = '["badchecksum", {"files": "TEST FILES", "state": "TEST STATE"}]';
         await actions.setFiles({commit, state, dispatch, rootState} as any,
             {savedFileContents: fileContents}
@@ -295,9 +295,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(400, mockFailure("Test error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.LoadFailed});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootGetters = {isGuest: true};
         const fileContents = addCheckSum(JSON.stringify({files: "TEST FILES", state: {version: currentHintVersion, stepper: {}}}));
         await actions.setFiles({commit, state, dispatch, rootState, rootGetters} as any,
@@ -315,9 +315,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootGetters = {isGuest: true};
         const fileContents = addCheckSum(JSON.stringify({files: "TEST FILES", state: {"version": "0.0.0"}}));
         await actions.setFiles({commit, state, dispatch, rootState, rootGetters} as any,
@@ -336,9 +336,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootGetters = {isGuest: true};
         const fileContents = addCheckSum(JSON.stringify({files: "TEST FILES", state: {}}));
         await actions.setFiles({commit, state, dispatch, rootState, rootGetters} as any,
@@ -358,9 +358,9 @@ describe("Load actions", () => {
         mockAxios.onPost(`/session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockLoadState({loadingState: LoadingState.UpdatingState});
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootGetters = {isGuest: true};
         const fileContents = addCheckSum(JSON.stringify({
             files: "TEST FILES",
@@ -412,10 +412,10 @@ describe("Load actions", () => {
 
 
     it("updateStoreState saves file state to local storage and reloads page", async () => {
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location
         delete (window as any).location
         window.location = {reload: mockLocationReload} as any;
@@ -428,10 +428,10 @@ describe("Load actions", () => {
     });
 
     it("extracts calibrate options from dynamicFormMeta and saves and loads file state", async () => {
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location
         window.location = {reload: mockLocationReload} as any;
 
@@ -475,10 +475,10 @@ describe("Load actions", () => {
     });
 
     it("does not extracts calibrate options from dynamicFormMeta if model has not been calibrated", async () => {
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location
         window.location = {reload: mockLocationReload} as any;
 
@@ -521,10 +521,10 @@ describe("Load actions", () => {
     });
 
     it("calibrate options returns empty object if no options to extract from dynamic form meta", async () => {
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location
         window.location = {reload: mockLocationReload} as any;
 
@@ -551,8 +551,8 @@ describe("Load actions", () => {
         const fomData = new FormData()
         fomData.append("file", file)
 
-        const dispatch = jest.fn();
-        const commit = jest.fn();
+        const dispatch = vi.fn();
+        const commit = vi.fn();
         actions.preparingRehydrate({dispatch, commit, rootState} as any, fomData);
 
         const interval = setInterval(() => {
@@ -655,8 +655,8 @@ describe("Load actions", () => {
             }
         }
 
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const rootGetters = {isGuest: false}
         const state = mockLoadState({rehydrateId: "1", projectName: "testProject"} as any)
         actions.pollRehydrate({commit, dispatch, rootState, state, rootGetters} as any);
@@ -734,8 +734,8 @@ describe("Load actions", () => {
         mockAxios.onPost(`session/files/`)
             .reply(200, mockSuccess({}));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const rootGetters = {isGuest: true}
         const state = mockLoadState({rehydrateId: "1"} as any)
         actions.pollRehydrate({commit, dispatch, rootState, state, rootGetters} as any);
@@ -756,8 +756,8 @@ describe("Load actions", () => {
         mockAxios.onGet(`rehydrate/status/1`)
             .reply(500, mockFailure("ERROR"));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const state = mockLoadState({rehydrateId: "1"} as any)
         actions.pollRehydrate({commit, rootState, state, dispatch} as any);
 

@@ -1,4 +1,4 @@
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", () => {
     const LControl = {
         template: "<div id='l-control-mock'><slot></slot></div>"
     }

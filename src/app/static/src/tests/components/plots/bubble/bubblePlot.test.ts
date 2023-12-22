@@ -18,7 +18,7 @@ import ResetMap from "../../../../app/components/plots/ResetMap.vue";
 import { mountWithTranslate } from "../../../testHelpers";
 import { nextTick } from "vue";
 
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", () => {
     const LMap = {
         template: "<div id='l-map-mock'><slot></slot></div>"
     }
@@ -572,8 +572,8 @@ describe("BubblePlot component", () => {
 
     it("updateBounds updates bounds of map from features geojson", async () => {
         const wrapper = getWrapper();
-        const mockMapFitBounds = jest.fn();
-        const mockMapAddLayer = jest.fn();
+        const mockMapFitBounds = vi.fn();
+        const mockMapAddLayer = vi.fn();
 
         const vm = wrapper.vm as any;
         vm.$refs.map.leafletObject = {
@@ -587,8 +587,8 @@ describe("BubblePlot component", () => {
 
     it("clicking reset view button updates bounds of map from features geojson", () => {
         const wrapper = getWrapper();
-        const mockMapFitBounds = jest.fn();
-        const mockMapAddLayer = jest.fn();
+        const mockMapFitBounds = vi.fn();
+        const mockMapAddLayer = vi.fn();
 
         const vm = wrapper.vm as any;
         vm.$refs.map.leafletObject = {
@@ -709,7 +709,7 @@ describe("BubblePlot component", () => {
     });
 
     it("updates bounds when becomes initialised", async () => {
-        const mockUpdateBounds = jest.fn();
+        const mockUpdateBounds = vi.fn();
         const wrapper = getWrapper({ //this cannot initialise
             features: [...props.features],
             featureLevels: [...props.featureLevels],

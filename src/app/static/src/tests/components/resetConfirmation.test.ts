@@ -12,7 +12,7 @@ import {expectTranslated, mountWithTranslate} from "../testHelpers";
 import {Step} from "../../app/types";
 import { nextTick } from "vue";
 
-const createStore = (newVersion = jest.fn(), partialRootState: Partial<RootState> = {}, partialStepperGetters = {}) => {
+const createStore = (newVersion = vi.fn(), partialRootState: Partial<RootState> = {}, partialStepperGetters = {}) => {
     const store = new Vuex.Store({
         state: mockRootState(partialRootState),
         getters: getters,
@@ -49,11 +49,11 @@ const createStore = (newVersion = jest.fn(), partialRootState: Partial<RootState
 describe("Reset confirmation modal", () => {
 
     it("renders as expected for guest user", async () => {
-        const store = createStore(jest.fn(), {currentUser: 'guest'});
+        const store = createStore(vi.fn(), {currentUser: 'guest'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
-                cancelEditing: jest.fn()
+                continueEditing: vi.fn(),
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -88,8 +88,8 @@ describe("Reset confirmation modal", () => {
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
-                cancelEditing: jest.fn()
+                continueEditing: vi.fn(),
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -122,11 +122,11 @@ describe("Reset confirmation modal", () => {
         const stepperGetter = {
             changesToRelevantSteps: () => [
                 {number: 4, textKey: "fitModel"}]}
-        const store = createStore(jest.fn(), {}, stepperGetter);
+        const store = createStore(vi.fn(), {}, stepperGetter);
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
-                cancelEditing: jest.fn()
+                continueEditing: vi.fn(),
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -143,11 +143,11 @@ describe("Reset confirmation modal", () => {
                 {number: 4, textKey: "fitModel"}
             ]
         }
-        const store = createStore(jest.fn(), {}, stepperGetter);
+        const store = createStore(vi.fn(), {}, stepperGetter);
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
-                cancelEditing: jest.fn(),
+                continueEditing: vi.fn(),
+                cancelEditing: vi.fn(),
                 discardStepWarning: Step.ModelOptions
             },
             global: {
@@ -159,11 +159,11 @@ describe("Reset confirmation modal", () => {
     });
 
     it("cancel edit button invokes cancelEditing", async () => {
-        const mockCancelEdit = jest.fn();
+        const mockCancelEdit = vi.fn();
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
+                continueEditing: vi.fn(),
                 cancelEditing: mockCancelEdit
             },
             global: {
@@ -176,12 +176,12 @@ describe("Reset confirmation modal", () => {
     });
 
     it("continue button invokes continueEditing for guest user", async () => {
-        const mockContinueEdit = jest.fn();
-        const store = createStore(jest.fn(), {currentUser: 'guest'});
+        const mockContinueEdit = vi.fn();
+        const store = createStore(vi.fn(), {currentUser: 'guest'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEdit,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -194,13 +194,13 @@ describe("Reset confirmation modal", () => {
 
     it("can render translated version note label", async () => {
 
-        const mockContinueEdit = jest.fn();
-        const mockNewVersion = jest.fn();
+        const mockContinueEdit = vi.fn();
+        const mockNewVersion = vi.fn();
         const store = createStore(mockNewVersion, {currentUser: 'test.user@example.com'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEdit,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -215,13 +215,13 @@ describe("Reset confirmation modal", () => {
 
     it("can set and get note value", async () => {
 
-        const mockContinueEdit = jest.fn();
-        const mockNewVersion = jest.fn();
+        const mockContinueEdit = vi.fn();
+        const mockNewVersion = vi.fn();
         const store = createStore(mockNewVersion, {currentUser: 'test.user@example.com'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEdit,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -234,13 +234,13 @@ describe("Reset confirmation modal", () => {
     });
 
     it("can set note value and invokes newVersion action for logged in user", async () => {
-        const mockContinueEdit = jest.fn();
-        const mockNewVersion = jest.fn();
+        const mockContinueEdit = vi.fn();
+        const mockNewVersion = vi.fn();
         const store = createStore(mockNewVersion, {currentUser: 'test.user@example.com'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEdit,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -258,13 +258,13 @@ describe("Reset confirmation modal", () => {
 
     it("continue button sets waitingForVersion to true and invokes newVersion action for logged in user", async () => {
 
-        const mockContinueEdit = jest.fn();
-        const mockNewVersion = jest.fn();
+        const mockContinueEdit = vi.fn();
+        const mockNewVersion = vi.fn();
         const store = createStore(mockNewVersion, {currentUser: 'test.user@example.com'});
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEdit,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -281,7 +281,7 @@ describe("Reset confirmation modal", () => {
     });
 
     it("when currentVersion changes, sets waitingForVersion to false and invokes continue editing, if waitingForVersion is true", async () => {
-        const mockContinueEditing = jest.fn();
+        const mockContinueEditing = vi.fn();
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             data() {
@@ -291,7 +291,7 @@ describe("Reset confirmation modal", () => {
             },
             props: {
                 continueEditing: mockContinueEditing,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -306,7 +306,7 @@ describe("Reset confirmation modal", () => {
     });
 
     it("when error added, sets waitingForVersion to false and invokes cancel editing, if waitingForVersion is true", async () => {
-        const mockCancelEditing = jest.fn();
+        const mockCancelEditing = vi.fn();
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             data() {
@@ -315,7 +315,7 @@ describe("Reset confirmation modal", () => {
                 };
             },
             props: {
-                continueEditing: jest.fn(),
+                continueEditing: vi.fn(),
                 cancelEditing: mockCancelEditing
             },
             global: {
@@ -331,12 +331,12 @@ describe("Reset confirmation modal", () => {
     });
 
     it("when currentVersion changes, does nothing if waitingForVersion is false", async () => {
-        const mockContinueEditing = jest.fn();
+        const mockContinueEditing = vi.fn();
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
                 continueEditing: mockContinueEditing,
-                cancelEditing: jest.fn()
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]
@@ -351,11 +351,11 @@ describe("Reset confirmation modal", () => {
     });
 
     it("when errorAdded, does nothing if waitingForVersion is false", async () => {
-        const mockCancelEditing = jest.fn();
+        const mockCancelEditing = vi.fn();
         const store = createStore();
         const rendered = mountWithTranslate(ResetConfirmation, store, {
             props: {
-                continueEditing: jest.fn(),
+                continueEditing: vi.fn(),
                 cancelEditing: mockCancelEditing
             },
             global: {
@@ -379,8 +379,8 @@ describe("Reset confirmation modal", () => {
                 };
             },
             props: {
-                continueEditing: jest.fn(),
-                cancelEditing: jest.fn()
+                continueEditing: vi.fn(),
+                cancelEditing: vi.fn()
             },
             global: {
                 plugins: [store]

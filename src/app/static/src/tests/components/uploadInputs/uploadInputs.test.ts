@@ -24,10 +24,10 @@ import {testUploadComponent} from "./fileUploads";
 
 describe("UploadInputs upload component", () => {
 
-    let actions: jest.Mocked<BaselineActions>;
+    let actions: vi.Mocked<BaselineActions>;
     let mutations = {};
 
-    let sapActions: jest.Mocked<SurveyAndProgramActions>;
+    let sapActions: vi.Mocked<SurveyAndProgramActions>;
     let sapMutations = {};
 
     testUploadComponent("surveys", 3);
@@ -40,19 +40,19 @@ describe("UploadInputs upload component", () => {
                        isDataExploration = true) => {
 
         actions = {
-            refreshDatasetMetadata: jest.fn(),
-            importPJNZ: jest.fn(),
-            importPopulation: jest.fn(),
-            importShape: jest.fn(),
-            getBaselineData: jest.fn(),
-            uploadPJNZ: jest.fn(),
-            uploadShape: jest.fn(),
-            uploadPopulation: jest.fn(),
-            deletePJNZ: jest.fn(),
-            deleteShape: jest.fn(),
-            deletePopulation: jest.fn(),
-            deleteAll: jest.fn(),
-            validate: jest.fn()
+            refreshDatasetMetadata: vi.fn(),
+            importPJNZ: vi.fn(),
+            importPopulation: vi.fn(),
+            importShape: vi.fn(),
+            getBaselineData: vi.fn(),
+            uploadPJNZ: vi.fn(),
+            uploadShape: vi.fn(),
+            uploadPopulation: vi.fn(),
+            deletePJNZ: vi.fn(),
+            deleteShape: vi.fn(),
+            deletePopulation: vi.fn(),
+            deleteAll: vi.fn(),
+            validate: vi.fn()
         };
 
         const store = new Vuex.Store({
@@ -582,8 +582,8 @@ describe("UploadInputs upload component", () => {
     });
 
     const expectUploadToDispatchAction = (index: number,
-                                          action: () => jest.MockInstance<any, any>,
-                                          done: jest.DoneCallback) => {
+                                          action: () => vi.MockInstance<any, any>,
+                                          done: vi.DoneCallback) => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {
@@ -599,8 +599,8 @@ describe("UploadInputs upload component", () => {
     };
 
     const expectDeleteToDispatchAction = (index: number,
-                                          action: () => jest.MockInstance<any, any>,
-                                          done: jest.DoneCallback) => {
+                                          action: () => vi.MockInstance<any, any>,
+                                          done: vi.DoneCallback) => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {

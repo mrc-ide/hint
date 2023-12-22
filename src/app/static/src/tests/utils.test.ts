@@ -23,7 +23,7 @@ import {AxiosResponse} from "axios";
 describe("utils", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
     })
 
     const file = new Blob(["data"], {type: "application/octet-stream"});
@@ -55,15 +55,15 @@ describe("utils", () => {
 
     it("it can read and download blob content", () => {
         const mObjectURL = "blob:https://naomi.unaids.org/download/test";
-        window.URL.createObjectURL = jest.fn().mockReturnValueOnce(mObjectURL);
-        window.URL.revokeObjectURL = jest.fn();
-        document.body.appendChild = jest.fn()
+        window.URL.createObjectURL = vi.fn().mockReturnValueOnce(mObjectURL);
+        window.URL.revokeObjectURL = vi.fn();
+        document.body.appendChild = vi.fn()
 
-        const mockClick = jest.fn()
-        const mockHref = jest.fn()
-        const mockAttr = jest.fn()
+        const mockClick = vi.fn()
+        const mockHref = vi.fn()
+        const mockAttr = vi.fn()
 
-        document.createElement = jest.fn().mockImplementation(() => {
+        document.createElement = vi.fn().mockImplementation(() => {
             return {
                 setAttribute: mockAttr,
                 href: mockHref,

@@ -34,7 +34,7 @@ const mockFilters = [
 describe("Output Table display table tests", () => {
     const createStore = (rowId: string) => new Vuex.Store({
         getters: {
-            ["modelOutput/tableFilters"]: jest.fn().mockReturnValue(mockFilters)
+            ["modelOutput/tableFilters"]: vi.fn().mockReturnValue(mockFilters)
         },
         modules: {
             modelCalibrate: {

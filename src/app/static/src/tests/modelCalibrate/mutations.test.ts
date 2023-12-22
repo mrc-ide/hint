@@ -11,7 +11,7 @@ import {DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
 
 describe("ModelCalibrate mutations", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("all mutation types are defined", () => {
@@ -80,7 +80,7 @@ describe("ModelCalibrate mutations", () => {
     it("CalibrateStatusUpdate stops polling if status is done", () => {
         const state = mockModelCalibrateState({statusPollId: 99});
         const payload = {done: true} as any;
-        const spy = jest.spyOn(window, "clearInterval");
+        const spy = vi.spyOn(window, "clearInterval");
 
         mutations[ModelCalibrateMutation.CalibrateStatusUpdated](state, {payload});
         expect(state.statusPollId).toBe(-1);
@@ -125,7 +125,7 @@ describe("ModelCalibrate mutations", () => {
     it("SetError stops polling", () => {
         const state = mockModelCalibrateState({statusPollId: 99});
         const error = mockError("TEST ERROR");
-        const spy = jest.spyOn(window, "clearInterval");
+        const spy = vi.spyOn(window, "clearInterval");
 
         mutations[ModelCalibrateMutation.SetError](state, {payload: error});
         expect(state.statusPollId).toBe(-1);

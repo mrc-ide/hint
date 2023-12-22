@@ -9,22 +9,22 @@ import Hint from "../app/components/Hint.vue";
 // Mock the actions before import the router as the app will call
 // these actions on import
 const baselineActions = {
-    getBaselineData: jest.fn()
+    getBaselineData: vi.fn()
 };
 const surveyAndProgramActions = {
-    getSurveyAndProgramData: jest.fn()
+    getSurveyAndProgramData: vi.fn()
 };
 const modelRunActions = {
-    getResult: jest.fn()
+    getResult: vi.fn()
 };
 const projectActions = {
-    getCurrentProject: jest.fn()
+    getCurrentProject: vi.fn()
 };
 const genericChartActions = {
-    getGenericChartMetadata: jest.fn()
+    getGenericChartMetadata: vi.fn()
 };
 const actions = {
-    getADRSchemas: jest.fn()
+    getADRSchemas: vi.fn()
 };
 
 storeOptions.modules!!.baseline!!.actions = baselineActions;
@@ -34,16 +34,16 @@ storeOptions.modules!!.projects!!.actions = projectActions;
 storeOptions.modules!!.genericChart!!.actions = genericChartActions;
 storeOptions.actions = actions
 
-console.error = jest.fn();
+console.error = vi.fn();
 
 // Mock the components before we import the rooter as the app will call these components
 // on import of the router
-jest.mock("../app/components/Stepper.vue", () => ({
+vi.mock("../app/components/Stepper.vue", () => ({
     name: "Stepper",
     template: "<div id='stepper-stub'/>"
 }))
 
-jest.mock("../app/components/projects/Projects.vue", () => ({
+vi.mock("../app/components/projects/Projects.vue", () => ({
     name: "Projects",
     template: "<div id='projects-stub'/>"
 }))
@@ -53,14 +53,14 @@ import {router, beforeEnter} from '../app/router';
 describe("Router", () => {
 
     afterAll(() => {
-        (console.error as jest.Mock).mockClear();
+        (console.error as vi.Mock).mockClear();
     });
 
     it("has expected properties", async () => {
         const store = new Vuex.Store({
             state: mockRootState()
         })
-        const mockTranslate = jest.fn()
+        const mockTranslate = vi.fn()
         const wrapper = mount(Hint, {
             global: {
                 plugins: [router, store],
@@ -95,10 +95,10 @@ describe("Router", () => {
     it("doesn't redirect returning guest to login page", () => {
         const realLocation = window.location
         delete (window as any).location
-        window.location = {...realLocation, assign: jest.fn()};
+        window.location = {...realLocation, assign: vi.fn()};
 
         store.state.currentUser = "guest";
-        Storage.prototype.getItem = jest.fn((key) => key === "asGuest" ? "continueAsGuest" : null);
+        Storage.prototype.getItem = vi.fn((key) => key === "asGuest" ? "continueAsGuest" : null);
 
         beforeEnter({} as RouteLocationNormalized, {} as RouteLocationNormalized);
 
@@ -110,10 +110,10 @@ describe("Router", () => {
     it("redirects to login page if user is not a returning guest", () => {
         const realLocation = window.location
         delete (window as any).location
-        window.location = {...realLocation, assign: jest.fn()};
+        window.location = {...realLocation, assign: vi.fn()};
 
         store.state.currentUser = "guest";
-        Storage.prototype.getItem = jest.fn();
+        Storage.prototype.getItem = vi.fn();
 
         beforeEnter({} as RouteLocationNormalized, {} as RouteLocationNormalized);
 
@@ -126,7 +126,7 @@ describe("Router", () => {
     it("does not redirect to login page for authenticated user", () => {
         const realLocation = window.location
         delete (window as any).location
-        window.location = {...realLocation, assign: jest.fn()};
+        window.location = {...realLocation, assign: vi.fn()};
 
         store.state.currentUser = "test.user@example.com";
 

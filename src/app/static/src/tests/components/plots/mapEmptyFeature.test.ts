@@ -4,7 +4,7 @@ import registerTranslations from "../../../app/store/translations/registerTransl
 import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
 import Vuex from "vuex";
 
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", () => {
     const LControl = {
         template: "<div id='l-control-mock'><slot></slot></div>"
     }

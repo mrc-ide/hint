@@ -8,8 +8,8 @@ import { ModelOutputTabs } from "../../app/types";
 describe("PlottingSelection actions", () => {
 
     it("updateBarchartSelections dispatches data action and commits mutation", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const barchartSelections = {
             indicatorId: "test-indicator",
             xAxisId: "age",
@@ -31,8 +31,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateChoroplethSelections dispatches data action and commits mutation", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const choroplethSelections = {
             indicatorId: "test-indicator",
         } as Partial<ChoroplethSelections>;
@@ -49,8 +49,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateChoroplethSelections doesn't dispatch action if indicator not in update", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const choroplethSelections = {
             selectedFilterOptions: {
                 testFilter: []
@@ -67,8 +67,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateTableSelection dispatches data action and commits mutation", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const tableSelections = {
             indicator: "test-indicator",
         } as Partial<TableSelections>;
@@ -85,8 +85,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateTableSelection doesn't dispatch action if indicator not in update", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const tableSelections = {
             selectedFilterOptions: {
                 testFilter: []
@@ -103,8 +103,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateBubblePlotSelections dispatches data action and commits mutation", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const bubbleSelections = {
             colorIndicatorId: "colour-indicator",
             sizeIndicatorId: "size-indicator"
@@ -124,8 +124,8 @@ describe("PlottingSelection actions", () => {
     });
 
     it("updateBubblePlotSelections doesn't dispatch action if indicator not in update", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const bubbleSelections = {
             selectedFilterOptions: {
                 testFilter: []

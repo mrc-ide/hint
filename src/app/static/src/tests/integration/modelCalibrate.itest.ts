@@ -6,7 +6,7 @@ import { isDynamicFormMeta } from "@reside-ic/vue-next-dynamic-form";
 describe("model calibrate actions integration", () => {
 
     it("can get model calibrate options", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const root = {
             ...rootState,
@@ -23,7 +23,7 @@ describe("model calibrate actions integration", () => {
     });
 
     it("can submit calibrate", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const testState = {
             version: {hintr: "0.1.3", naomi: "1.0.4", rrq: "0.2.7"}
         };
@@ -45,7 +45,7 @@ describe("model calibrate actions integration", () => {
 
 
     it("can get calibrate status", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = {calibrateId: "123"} as any;
         await getCalibrateStatus({commit, state, rootState} as any);
 
@@ -55,8 +55,8 @@ describe("model calibrate actions integration", () => {
     });
 
     it("can get calibrate result", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = {
             calibrateId: "123",
             status: {
@@ -77,7 +77,7 @@ describe("model calibrate actions integration", () => {
     });
 
     it("can get calibrate plot", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = {
             calibrateId: "123",
             status: {
@@ -94,7 +94,7 @@ describe("model calibrate actions integration", () => {
     });
 
     it("can get comparison plot", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = {
             calibrateId: "123",
             status: {

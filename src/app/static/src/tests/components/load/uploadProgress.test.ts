@@ -3,11 +3,11 @@ import UploadProgress from "../../../app/components/load/UploadProgress.vue"
 import LoadingSpinner from "../../../app/components/LoadingSpinner.vue";
 
 describe('upload Progress', function () {
-    const mockTranslate = jest.fn()
-    const mockFunction = jest.fn()
+    const mockTranslate = vi.fn()
+    const mockFunction = vi.fn()
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
     const getWrapper = (props = {}) => {

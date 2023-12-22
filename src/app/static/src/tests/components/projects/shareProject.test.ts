@@ -18,8 +18,8 @@ currentUser = "test.user@example.com"
 
 describe("ShareProject", () => {
 
-    const createStore = (userExists = jest.fn(),
-                         cloneProject = jest.fn(),
+    const createStore = (userExists = vi.fn(),
+                         cloneProject = vi.fn(),
                          state: ProjectsState = mockProjectsState()) => {
         const store = new Vuex.Store({
             state: emptyState(),
@@ -108,7 +108,7 @@ describe("ShareProject", () => {
     });
 
     it("if email is invalid, validation feedback is shown and button disabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(false))
+        const store = createStore(vi.fn().mockResolvedValue(false))
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -138,7 +138,7 @@ describe("ShareProject", () => {
     });
 
     it("if email is same as user's email, it is invalid, appropriate validation feedback is shown, and button is disabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(false))
+        const store = createStore(vi.fn().mockResolvedValue(false))
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -167,7 +167,7 @@ describe("ShareProject", () => {
     });
 
     it("if email is same as user's email but cased differently, it is invalid, appropriate validation feedback is shown, and button is disabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(false))
+        const store = createStore(vi.fn().mockResolvedValue(false))
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -196,7 +196,7 @@ describe("ShareProject", () => {
     });
 
     it("if a valid email is entered twice, it is invalid, appropriate validation feedback is shown, and button is disabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(true))
+        const store = createStore(vi.fn().mockResolvedValue(true))
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -233,7 +233,7 @@ describe("ShareProject", () => {
     });
 
     it("if a valid email is entered twice but cased differently, it is invalid, appropriate validation feedback is shown, and button is disabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(true))
+        const store = createStore(vi.fn().mockResolvedValue(true))
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -270,7 +270,7 @@ describe("ShareProject", () => {
     });
 
     it("if email is valid, validation feedback is not shown and button enabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(true));
+        const store = createStore(vi.fn().mockResolvedValue(true));
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -294,7 +294,7 @@ describe("ShareProject", () => {
     });
 
     it("if email is valid but cased differently, validation feedback is not shown and button enabled", async () => {
-        const store = createStore(jest.fn().mockResolvedValue(true));
+        const store = createStore(vi.fn().mockResolvedValue(true));
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -318,7 +318,7 @@ describe("ShareProject", () => {
     });
 
     it("user validation fires on blur if value is provided", async () => {
-        const userExists = jest.fn();
+        const userExists = vi.fn();
         const store = createStore(userExists);
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
@@ -339,7 +339,7 @@ describe("ShareProject", () => {
     });
 
     it("user validation does not fire on blur if no value is provided", async () => {
-        const userExists = jest.fn();
+        const userExists = vi.fn();
         const store = createStore(userExists);
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
@@ -426,7 +426,7 @@ describe("ShareProject", () => {
 
     it("if email is deleted , input is removed from list and validation message refreshed",
         async () => {
-            const store = createStore(jest.fn().mockResolvedValue(false));
+            const store = createStore(vi.fn().mockResolvedValue(false));
             const wrapper = mountWithTranslate(ShareProject, store, {
                 props: {
                     project: {id: 1, name: "p1"}
@@ -512,8 +512,8 @@ describe("ShareProject", () => {
     });
 
     it("can share project", async () => {
-        const cloneProject = jest.fn();
-        const store = createStore(jest.fn().mockResolvedValue(true), cloneProject);
+        const cloneProject = vi.fn();
+        const store = createStore(vi.fn().mockResolvedValue(true), cloneProject);
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -534,7 +534,7 @@ describe("ShareProject", () => {
     });
 
     it("shows loading spinner when cloningProject is true", async () => {
-        const store = createStore(jest.fn(), jest.fn(), mockProjectsState({cloningProject: true}));
+        const store = createStore(vi.fn(), vi.fn(), mockProjectsState({cloningProject: true}));
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -550,7 +550,7 @@ describe("ShareProject", () => {
     });
 
     it("does not show loading spinner when cloningProject is false", async () => {
-        const store = createStore(jest.fn(), jest.fn());
+        const store = createStore(vi.fn(), vi.fn());
         const wrapper = mountWithTranslate(ShareProject, store, {
             props: {
                 project: {id: 1, name: "p1"}
@@ -567,7 +567,7 @@ describe("ShareProject", () => {
 
     it("closes modal when cloningProject changes from true to false, if there is not an error",
          async () => {
-            const store = createStore(jest.fn(), jest.fn(), mockProjectsState({cloningProject: true}));
+            const store = createStore(vi.fn(), vi.fn(), mockProjectsState({cloningProject: true}));
             const wrapper = shallowMountWithTranslate(ShareProject, store, {
                 props: {
                     project: {id: 1, name: "p1"}
@@ -587,8 +587,8 @@ describe("ShareProject", () => {
 
     it("does not close modal when cloningProject changes from true to false if there is an error",
          async () => {
-            const store = createStore(jest.fn(),
-                jest.fn(),
+            const store = createStore(vi.fn(),
+                vi.fn(),
                 mockProjectsState({cloningProject: true}));
 
             const wrapper = mountWithTranslate(ShareProject, store, {
@@ -696,7 +696,7 @@ describe("ShareProject", () => {
     });
 
     it("can render tooltips without an error", () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore();
         const wrapper = shallowMountWithTranslate(ShareProject, store, {
             props: {
@@ -713,7 +713,7 @@ describe("ShareProject", () => {
     });
 
     it("can render share project tooltips without an error", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = createStore()
         store.state.language = Language.fr
         await nextTick();

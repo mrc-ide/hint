@@ -14,8 +14,8 @@ import { mountWithTranslate, shallowMountWithTranslate } from "../../testHelpers
 
 describe("ADR Key", function () {
 
-    const saveStub = jest.fn();
-    const deleteStub = jest.fn();
+    const saveStub = vi.fn();
+    const deleteStub = vi.fn();
 
     const createStore = (key: string = "", error: Error | null = null) => {
         const store = new Vuex.Store({
@@ -37,7 +37,7 @@ describe("ADR Key", function () {
     };
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("shows title", () => {
@@ -97,7 +97,7 @@ describe("ADR Key", function () {
     });
 
     it("shows button to ADR with tooltip if key does not exist", () => {
-        const mockTooltipDirective = jest.fn();
+        const mockTooltipDirective = vi.fn();
         const store = createStore()
         const rendered = shallowMountWithTranslate(ADRKey, store, {
             global: {

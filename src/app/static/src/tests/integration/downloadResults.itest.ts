@@ -6,8 +6,8 @@ import {formatToLocalISODateTime} from "../../app/utils";
 describe(`download results actions integration`, () => {
 
     it.skip(`can download comparison output report`, async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -24,8 +24,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can prepare summary report for download`, async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -44,8 +44,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can poll summary report for status update`, (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -69,8 +69,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can prepare spectrum output for download`, async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -128,8 +128,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can poll spectrum output for status update`, (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -153,8 +153,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can prepare coarse output for download`, async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -170,8 +170,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can poll coarseOutput for status update`, (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -195,8 +195,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can prepare comparison output for download`, async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -212,8 +212,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`can poll comparison output for status update`, (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}
@@ -237,8 +237,8 @@ describe(`download results actions integration`, () => {
     })
 
     it(`does not poll comparison output for status update when downloadId is empty`, (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             modelCalibrate: {calibrateId: "calibrate123"}

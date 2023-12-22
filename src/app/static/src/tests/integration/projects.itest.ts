@@ -21,9 +21,9 @@ describe("Projects actions", () => {
     });
 
     it("can clone project", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
-        await actions.createProject({commit: jest.fn(), dispatch, rootState, state: initialProjectsState()} as any, projectPayload);
+        const commit = vi.fn();
+        const dispatch = vi.fn();
+        await actions.createProject({commit: vi.fn(), dispatch, rootState, state: initialProjectsState()} as any, projectPayload);
         await actions.cloneProject({commit, rootState, state: initialProjectsState()} as any,
             {projectId: 1, emails: ["test.user@example.com"]});
 
@@ -37,8 +37,8 @@ describe("Projects actions", () => {
     });
 
     it("can create project", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         await actions.createProject({commit, dispatch, rootState, state: initialProjectsState()} as any, projectPayload);
 
         expect(commit.mock.calls.length).toBe(5);
@@ -57,8 +57,8 @@ describe("Projects actions", () => {
     });
 
     it("can save version", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const state = initialProjectsState();
         const rootState = {...emptyState(), projects: state}
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
@@ -82,8 +82,8 @@ describe("Projects actions", () => {
     });
 
     it("can create new version", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = initialProjectsState();
         const rootState = {...emptyState(), projects: state}
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
@@ -111,8 +111,8 @@ describe("Projects actions", () => {
     it("can load version", async () => {
         const state = initialProjectsState();
         const rootState = {...emptyState(), projects: state}
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
 
         const createdProject = commit.mock.calls[4][0]["payload"];
@@ -136,8 +136,8 @@ describe("Projects actions", () => {
 
     it("can delete project", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);
         expect(dispatch.mock.calls[0][0]).toBe("getProjects");
@@ -154,8 +154,8 @@ describe("Projects actions", () => {
 
     it("can delete version", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);
         expect(dispatch.mock.calls[0][0]).toBe("getProjects");
@@ -173,8 +173,8 @@ describe("Projects actions", () => {
 
     it("can promote version", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);
@@ -189,7 +189,7 @@ describe("Projects actions", () => {
             note: "new note"
         };
 
-        const newCommit = jest.fn();
+        const newCommit = vi.fn();
         await actions.promoteVersion({newCommit, dispatch, state, rootState} as any, versionPayload);
         expect(newCommit.mock.calls.length).toBe(0);
         expect(dispatch.mock.calls[1][0]).toBe("getProjects");
@@ -197,8 +197,8 @@ describe("Projects actions", () => {
 
     it("can update version note", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);
@@ -219,8 +219,8 @@ describe("Projects actions", () => {
 
     it("can update project note", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);
@@ -240,8 +240,8 @@ describe("Projects actions", () => {
 
     it("can rename project", async () => {
         const state = initialProjectsState();
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         await actions.createProject({commit, dispatch, rootState, state} as any, projectPayload);
         expect(commit.mock.calls.length).toBe(5);

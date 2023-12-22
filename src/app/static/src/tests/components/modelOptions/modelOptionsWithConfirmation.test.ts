@@ -19,16 +19,16 @@ currentUser = "guest";
 describe("Model options component when edit confirmation is required", () => {
 
     const mockActions = {
-        fetchModelRunOptions: jest.fn(),
-        validateModelOptions: jest.fn()
+        fetchModelRunOptions: vi.fn(),
+        validateModelOptions: vi.fn()
     };
 
     const mockMutations = {
-        [ModelOptionsMutation.UnValidate]: jest.fn(),
-        [ModelOptionsMutation.Update]: jest.fn(),
-        [ModelOptionsMutation.Validate]: jest.fn(),
-        [ModelOptionsMutation.ModelOptionsFetched]: jest.fn(),
-        [ModelOptionsMutation.FetchingModelOptions]: jest.fn()
+        [ModelOptionsMutation.UnValidate]: vi.fn(),
+        [ModelOptionsMutation.Update]: vi.fn(),
+        [ModelOptionsMutation.Validate]: vi.fn(),
+        [ModelOptionsMutation.ModelOptionsFetched]: vi.fn(),
+        [ModelOptionsMutation.FetchingModelOptions]: vi.fn()
     };
 
     const mockGetters = {
@@ -73,7 +73,7 @@ describe("Model options component when edit confirmation is required", () => {
     });
 
     beforeEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("opens modal when mousedown event fires", async () => {

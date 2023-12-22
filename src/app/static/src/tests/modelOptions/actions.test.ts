@@ -7,17 +7,17 @@ describe("model run options actions", () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
     });
 
     it("fetches and commits model run options and version", async () => {
         mockAxios.onGet("/model/options/").reply(200, mockSuccess("TEST", "v1"));
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.fetchModelRunOptions({commit, rootState} as any);
 
         expect(commit.mock.calls[0][0]).toStrictEqual("FetchingModelOptions");
@@ -34,7 +34,7 @@ describe("model run options actions", () => {
 
     it("can commits model run options when model failed", async () => {
         mockAxios.onGet("/model/options/").reply(400, mockFailure("Failure"));
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.fetchModelRunOptions({commit, rootState} as any);
 
         expect(commit.mock.calls[1][0]).toStrictEqual({
@@ -46,8 +46,8 @@ describe("model run options actions", () => {
 
     it("fetches validation options", async () => {
         mockAxios.onPost("/model/validate/options/").reply(200, mockSuccess("TEST", "v1"));
-        const commit = jest.fn();
-        const payload = jest.fn();
+        const commit = vi.fn();
+        const payload = vi.fn();
         await actions.validateModelOptions({commit, rootState} as any, payload as any);
 
         expect(commit.mock.calls[0][0]).toStrictEqual(ModelOptionsMutation.Validating);

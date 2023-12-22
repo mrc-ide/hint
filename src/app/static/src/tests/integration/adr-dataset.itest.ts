@@ -26,10 +26,10 @@ describe("ADR dataset-related actions", () => {
         await login();
         // this key is for a test user who has access to 1 fake dataset
         const adrKey = "4c69b103-4532-4b30-8a37-27a15e56c0bb"
-        await adrActions.saveKey({commit: jest.fn(), rootState} as any, adrKey)
+        await adrActions.saveKey({commit: vi.fn(), rootState} as any, adrKey)
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const formData = getFormData("malawi.geojson");
         await baselineActions.uploadShape({commit, dispatch, rootState} as any, formData);
@@ -40,7 +40,7 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can fetch ADR datasets", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await adrActions.getDatasets({commit, rootState} as any);
 
         expect(commit.mock.calls[0][0]["type"]).toBe(ADRMutation.SetFetchingDatasets);
@@ -57,8 +57,8 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can get dataset", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootStateWithSchemas = {
             ...rootState,
             adr: { schemas }
@@ -80,11 +80,11 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can get releases", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await adrActions.getDatasets({commit, rootState} as any);
 
-        jest.resetAllMocks();
+        vi.resetAllMocks();
 
         await adrActions.getReleases({commit, rootState} as any, "antarctica-country-estimates-2022-1");
         expect(commit.mock.calls[0][0].type).toBe(ADRMutation.SetReleases)
@@ -94,7 +94,7 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can get userCanUpload when selected dataset organisation is set", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         // 1. get datasets
         await adrActions.getDatasets({commit, rootState} as any);
@@ -123,7 +123,7 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can get dataset details on get userCanUpload when selected dataset organisation is not set", async () => {
-        const commit = jest.fn().mockImplementation((mutation, payload) => {
+        const commit = vi.fn().mockImplementation((mutation, payload) => {
             if (mutation === "baseline/SetDataset") {
                 root.baseline.selectedDataset = payload
             }
@@ -150,7 +150,7 @@ describe("ADR dataset-related actions", () => {
 
         // 4. check can upload
         commit.mockClear();
-        const dispatch = jest.fn().mockImplementation((type, payload) => {
+        const dispatch = vi.fn().mockImplementation((type, payload) => {
             if (type === "getDataset") {
                 root.baseline.selectedDataset = {
                     id: payload.id,
@@ -166,8 +166,8 @@ describe("ADR dataset-related actions", () => {
     });
 
     it("can import PJNZ file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = await getSelectedDatasetState()
 
@@ -180,8 +180,8 @@ describe("ADR dataset-related actions", () => {
     }, 10000);
 
     it("can import shape file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = await getSelectedDatasetState()
 
@@ -195,8 +195,8 @@ describe("ADR dataset-related actions", () => {
     }, 10000);
 
     it("can import population file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = await getSelectedDatasetState()
 
@@ -210,8 +210,8 @@ describe("ADR dataset-related actions", () => {
 
     it("can import survey", async () => {
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const state = await getSelectedDatasetState()
 
@@ -226,8 +226,8 @@ describe("ADR dataset-related actions", () => {
 
     it("can import programme", async () => {
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const state = await getSelectedDatasetState()
 
         await surveyAndProgramActions.importProgram({commit, dispatch, state, rootState} as any,
@@ -245,7 +245,7 @@ describe("ADR dataset-related actions", () => {
 
     it("can import anc", async () => {
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const state = await getSelectedDatasetState()
 
@@ -264,8 +264,8 @@ describe("ADR dataset-related actions", () => {
 
     it("hits upload files to adr endpoint and gets appropriate error", async () => {
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const root = {
             ...rootState,
             adr: {schemas, datasets: []},
@@ -308,7 +308,7 @@ describe("ADR dataset-related actions", () => {
     }, 10000);
 
     it("attempts to create release and gets appropriate error", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const root = {
             ...rootState,
@@ -342,7 +342,7 @@ describe("ADR dataset-related actions", () => {
 });
 
 const getSelectedDatasetState = async () => {
-    const commitDataset = jest.fn();
+    const commitDataset = vi.fn();
     await adrActions.getDatasets({commit: commitDataset, rootState} as any);
     const datasets = commitDataset.mock.calls[2][0]["payload"];
     return {

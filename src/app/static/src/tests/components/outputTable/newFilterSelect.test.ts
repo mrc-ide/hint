@@ -25,7 +25,7 @@ describe("FilterSelect component", () => {
     });
 
     it("renders tooltip if any options have descriptions", () => {
-        const tooltip = jest.fn();
+        const tooltip = vi.fn();
         const wrapper = shallowMountWithTranslate(FilterSelect, store, {
             global: {
                 plugins: [store],

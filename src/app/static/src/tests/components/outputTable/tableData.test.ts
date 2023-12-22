@@ -1,6 +1,6 @@
-const mockAddFilteredData = jest.fn();
-const mockDownload = jest.fn();
-const mockExportService = jest.fn().mockReturnValue({
+const mockAddFilteredData = vi.fn();
+const mockDownload = vi.fn();
+const mockExportService = vi.fn().mockReturnValue({
     addFilteredData: mockAddFilteredData.mockReturnValue({
         download: mockDownload
     })
@@ -13,7 +13,7 @@ import { mockBaselineState, mockModelCalibrateState, mockPlottingSelections } fr
 import TableReshapeData from "../../../app/components/outputTable/TableReshapeData.vue";
 import DownloadButton from "../../../app/components/downloadIndicator/DownloadButton.vue";
 
-jest.mock("../../../app/dataExportService", () => {
+vi.mock("../../../app/dataExportService", () => {
     return { exportService: mockExportService };
 });
 
@@ -35,7 +35,7 @@ const mockFilters = [
 describe("Output Table display table tests", () => {
     const createStore = (indicatorId: string, filterOptionId: string, areaLevel: number) => new Vuex.Store({
         getters: {
-            ["modelOutput/tableFilters"]: jest.fn().mockReturnValue(mockFilters)
+            ["modelOutput/tableFilters"]: vi.fn().mockReturnValue(mockFilters)
         },
         modules: {
             modelCalibrate: {

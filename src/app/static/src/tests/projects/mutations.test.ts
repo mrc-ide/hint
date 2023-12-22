@@ -6,12 +6,12 @@ describe("Projects mutations", () => {
     const testNow = Date.now();
 
     beforeAll(() => {
-        jest.useFakeTimers('modern');
-        jest.setSystemTime(testNow);
+        vi.useFakeTimers('modern');
+        vi.setSystemTime(testNow);
     });
 
     afterAll(() => {
-        jest.useRealTimers();
+        vi.useRealTimers();
     });
 
     const mockProject = {
@@ -20,14 +20,14 @@ describe("Projects mutations", () => {
         versions: [{id: "OLD VERSION", created: "old created time", updated: "old updated time", versionNumber: 1}]
     };
 
-    const consoleSpy = jest.fn();
+    const consoleSpy = vi.fn();
 
     beforeEach(() => {
         console.error = consoleSpy;
     });
 
     afterEach(() => {
-        (console.error as jest.Mock).mockClear();
+        (console.error as vi.Mock).mockClear();
     });
 
     it("sets cloningProject and resets error", () => {
@@ -91,8 +91,8 @@ describe("Projects mutations", () => {
     });
 
     it("clears interval of queued upload", () => {
-        jest.useFakeTimers();
-        jest.spyOn(window, "clearInterval")
+        vi.useFakeTimers();
+        vi.spyOn(window, "clearInterval")
         const state = mockProjectsState({queuedVersionUploadIntervalId: 123});
         mutations[ProjectsMutations.ClearQueuedVersionUpload](state);
         expect(state.queuedVersionUploadIntervalId).toBe(-1);
@@ -127,7 +127,7 @@ describe("Projects mutations", () => {
 
     it("pushes router to projects if logged in user and currentProject not set", () => {
         const state = mockProjectsState({currentProject: null, currentVersion: null});
-        const mockRouterPush = jest.fn();
+        const mockRouterPush = vi.fn();
         router.push = mockRouterPush;
         mutations[ProjectsMutations.SetCurrentProject](state, {payload: false})
 

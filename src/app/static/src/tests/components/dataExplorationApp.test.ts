@@ -3,19 +3,19 @@ import Vuex from 'vuex';
 import {DataExplorationState, storeOptions} from "../../app/store/dataExploration/dataExploration";
 
 const baselineActions = {
-    getBaselineData: jest.fn()
+    getBaselineData: vi.fn()
 };
 
 const surveyAndProgramActions = {
-    getSurveyAndProgramData: jest.fn()
+    getSurveyAndProgramData: vi.fn()
 };
 
 const adrActions = {
-    getSchemas: jest.fn()
+    getSchemas: vi.fn()
 };
 
 const genericChartActions = {
-    getGenericChartMetadata: jest.fn()
+    getGenericChartMetadata: vi.fn()
 };
 
 storeOptions.modules!!.baseline!!.actions = baselineActions;
@@ -23,7 +23,7 @@ storeOptions.modules!!.surveyAndProgram!!.actions = surveyAndProgramActions;
 storeOptions.modules!!.adr!!.actions = adrActions;
 storeOptions.modules!!.genericChart!!.actions = genericChartActions;
 
-console.error = jest.fn();
+console.error = vi.fn();
 
 // only import the app after we have replaced action with mocks
 // as the app will call these actions on import
@@ -35,13 +35,13 @@ import { nextTick } from 'vue';
 describe("Data Exploration App", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        console.log = jest.fn();
+        vi.clearAllMocks();
+        console.log = vi.fn();
     });
 
     afterAll(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.error as jest.Mock).mockClear();
+        (console.log as vi.Mock).mockClear();
+        (console.error as vi.Mock).mockClear();
     });
 
     const getStore = (ready: boolean = false) => {

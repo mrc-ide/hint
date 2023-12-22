@@ -14,13 +14,13 @@ import { nextTick } from "vue";
 
 describe("Forgot password component", () => {
 
-    let actions: jest.Mocked<PasswordActions>;
+    let actions: vi.Mocked<PasswordActions>;
 
     const createStore = (passwordState?: Partial<PasswordState>) => {
         actions = {
-            requestResetLink: jest.fn(),
-            resetPassword: jest.fn(),
-            changeLanguage: jest.fn()
+            requestResetLink: vi.fn(),
+            resetPassword: vi.fn(),
+            changeLanguage: vi.fn()
         };
 
         const store = new Vuex.Store({

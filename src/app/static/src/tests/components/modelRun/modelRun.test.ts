@@ -219,7 +219,7 @@ describe("Model run component", () => {
 
 
     it("modal does not close until run result fetched", (done) => {
-        const getResultMock = jest.fn();
+        const getResultMock = vi.fn();
         const store = createStore({}, {...actions, getResult: getResultMock});
         const wrapper = shallowMountWithTranslate(ModelRun, store, {
             global: {
@@ -482,7 +482,7 @@ describe("Model run component", () => {
     });
 
     it("confirmReRun clears and re-runs model and hides dialog", async () => {
-        const mockRun = jest.fn();
+        const mockRun = vi.fn();
         const store = createStore({result: ["TEST RESULT"] as any},  {run: mockRun});
         const wrapper = shallowMountWithTranslate(ModelRun, store, {
             global: {

@@ -23,7 +23,7 @@ describe(`download results mutations`, () => {
     }
 
     afterEach(() => {
-        jest.useRealTimers();
+        vi.useRealTimers();
     })
 
     it("sets summary download started on SummaryDownloadStarted", () => {
@@ -36,8 +36,8 @@ describe(`download results mutations`, () => {
     });
 
     it("sets summary download error, clears interval on SummaryError", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             summary: mockDownloadResultsDependency({statusPollId: 1})
         });
@@ -79,8 +79,8 @@ describe(`download results mutations`, () => {
     });
 
     it("set summary status to complete, clears interval on SummaryDownloadStatusUpdated", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             summary: {
                 preparing: true,
@@ -113,8 +113,8 @@ describe(`download results mutations`, () => {
     });
 
     it("sets spectrum download error on SpectrumError", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({statusPollId: 123})
         });
@@ -155,8 +155,8 @@ describe(`download results mutations`, () => {
     });
 
     it("set spectrum status to complete, clears interval on SpectrumDownloadStatusUpdated", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             spectrum: {
                 preparing: true,
@@ -189,8 +189,8 @@ describe(`download results mutations`, () => {
     });
 
     it("sets coarseOutput download error on CoarseOutputError", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             coarseOutput: mockDownloadResultsDependency({
                 statusPollId: 123
@@ -233,8 +233,8 @@ describe(`download results mutations`, () => {
     });
 
     it("set coarseOutput status to complete, clears interval on CoarseOutputDownloadStatusUpdated", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             coarseOutput: {
                 preparing: true,
@@ -267,8 +267,8 @@ describe(`download results mutations`, () => {
     });
 
     it("sets comparison download error on ComparisonError", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             comparison: mockDownloadResultsDependency({statusPollId: 123})
         });
@@ -308,8 +308,8 @@ describe(`download results mutations`, () => {
     });
 
     it("set comparison status to complete, clears interval on ComparisonDownloadStatusUpdated", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             comparison: {
                 preparing: true,
@@ -343,8 +343,8 @@ describe(`download results mutations`, () => {
     });
 
     it("sets AGYW download error on AgywError", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             agyw: mockDownloadResultsDependency({statusPollId: 123})
         });
@@ -379,8 +379,8 @@ describe(`download results mutations`, () => {
     });
 
     it("set AGYW status to complete, clears interval on AgywStatusUpdated", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
         const state = mockDownloadResultsState({
             agyw: {
                 preparing: true,
@@ -405,8 +405,8 @@ describe(`download results mutations`, () => {
     });
 
     it("resets download ids", () => {
-        jest.useFakeTimers();
-        const clearInterval = jest.spyOn(window, "clearInterval");
+        vi.useFakeTimers();
+        const clearInterval = vi.spyOn(window, "clearInterval");
 
         const state = mockDownloadResultsState({
             spectrum: mockDownloadResultsDependency({downloadId: "1", statusPollId: 1}),
