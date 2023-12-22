@@ -1,6 +1,7 @@
 import {mockProjectsState} from "../mocks";
 import {mutations, ProjectsMutations} from "../../app/store/projects/mutations";
 import {router} from "../../app/router";
+import { Mock } from "vitest";
 
 describe("Projects mutations", () => {
     const testNow = Date.now();
@@ -27,7 +28,7 @@ describe("Projects mutations", () => {
     });
 
     afterEach(() => {
-        (console.error as vi.Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     it("sets cloningProject and resets error", () => {

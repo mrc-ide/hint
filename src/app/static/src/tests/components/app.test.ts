@@ -55,6 +55,7 @@ import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
 import {LanguageMutation} from "../../app/store/language/mutations";
 import {Language} from "../../app/store/translations/locales";
 import { nextTick } from 'vue';
+import { Mock } from 'vitest';
 
 describe("App", () => {
 
@@ -64,8 +65,8 @@ describe("App", () => {
     });
 
     afterAll(() => {
-        (console.log as vi.Mock).mockClear();
-        (console.error as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     const getStore = (ready: boolean = false) => {

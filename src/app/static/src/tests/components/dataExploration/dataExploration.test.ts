@@ -19,12 +19,13 @@ import {actions as stepperActions} from "../../../app/store/stepper/actions";
 import LoadingSpinner from "../../../app/components/LoadingSpinner.vue";
 import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 import StepperNavigation from "../../../app/components/StepperNavigation.vue";
+import { Mocked } from "vitest";
 
 describe(`data exploration component`, () => {
-    let actions: vi.Mocked<BaselineActions>;
+    let actions: Mocked<BaselineActions>;
     let mutations = {};
 
-    let sapActions: vi.Mocked<SurveyAndProgramActions>;
+    let sapActions: Mocked<SurveyAndProgramActions>;
     let sapMutations = {};
 
     const defaultBaselineState = {ready: true};

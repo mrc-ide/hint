@@ -28,7 +28,7 @@ import {expectTranslatedWithStoreType, mountWithTranslate, shallowMountWithTrans
 import {ADRState} from "../../../app/store/adr/adr";
 import {getters} from "../../../app/store/dataExploration/getters"
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
-import Mock = vi.Mock;
+import { Mock } from "vitest";
 import { DataExplorationState } from "../../../app/store/dataExploration/dataExploration";
 import HintTreeSelect from "../../../app/components/HintTreeSelect.vue";
 

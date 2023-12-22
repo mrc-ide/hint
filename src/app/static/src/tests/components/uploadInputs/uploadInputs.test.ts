@@ -21,13 +21,14 @@ import {SurveyAndProgramActions} from "../../../app/store/surveyAndProgram/actio
 import {getters} from "../../../app/store/surveyAndProgram/getters";
 import {DataType, SurveyAndProgramState} from "../../../app/store/surveyAndProgram/surveyAndProgram";
 import {testUploadComponent} from "./fileUploads";
+import { DoneCallback, MockInstance, Mocked } from 'vitest';
 
 describe("UploadInputs upload component", () => {
 
-    let actions: vi.Mocked<BaselineActions>;
+    let actions: Mocked<BaselineActions>;
     let mutations = {};
 
-    let sapActions: vi.Mocked<SurveyAndProgramActions>;
+    let sapActions: Mocked<SurveyAndProgramActions>;
     let sapMutations = {};
 
     testUploadComponent("surveys", 3);
@@ -582,8 +583,8 @@ describe("UploadInputs upload component", () => {
     });
 
     const expectUploadToDispatchAction = (index: number,
-                                          action: () => vi.MockInstance<any, any>,
-                                          done: vi.DoneCallback) => {
+                                          action: () => MockInstance<any, any>,
+                                          done: DoneCallback) => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {
@@ -599,8 +600,8 @@ describe("UploadInputs upload component", () => {
     };
 
     const expectDeleteToDispatchAction = (index: number,
-                                          action: () => vi.MockInstance<any, any>,
-                                          done: vi.DoneCallback) => {
+                                          action: () => MockInstance<any, any>,
+                                          done: DoneCallback) => {
         const store = createSut();
         const wrapper = shallowMountWithTranslate(UploadInputs, store, {
             global: {

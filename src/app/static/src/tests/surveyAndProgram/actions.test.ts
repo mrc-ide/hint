@@ -13,7 +13,7 @@ import {
 import {SurveyAndProgramMutation} from "../../app/store/surveyAndProgram/mutations";
 import {expectEqualsFrozen} from "../testHelpers";
 import {DataType} from "../../app/store/surveyAndProgram/surveyAndProgram";
-import Mock = vi.Mock;
+import { Mock } from "vitest";
 import {expectValidAdrImportPayload} from "../baseline/actions.test";
 
 const rootState = mockRootState();
@@ -36,7 +36,7 @@ describe("Survey and programme actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("sets data after surveys file upload", async () => {

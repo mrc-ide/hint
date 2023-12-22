@@ -7,6 +7,7 @@ import {
 } from "../../../app/components/plots/utils";
 import {interpolateMagma, interpolateWarm} from "d3-scale-chromatic";
 import {Filter} from "../../../app/generated";
+import { Mock } from "vitest";
 
 describe("plot utils", () => {
 
@@ -17,7 +18,7 @@ describe("plot utils", () => {
     });
 
     afterEach(() => {
-        (console.warn as vi.Mock).mockClear();
+        (console.warn as Mock).mockClear();
     });
 
     it("colorFunctionFromName returns color function", () => {

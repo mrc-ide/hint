@@ -12,10 +12,11 @@ import {
 } from "../../mocks";
 import UploadInputs from "../../../app/components/uploadInputs/UploadInputs.vue";
 import { shallowMountWithTranslate } from '../../testHelpers';
+import { Mocked } from 'vitest';
 
 export function testUploadComponent(name: string, position: number) {
 
-    let actions: vi.Mocked<SurveyAndProgramActions>;
+    let actions: Mocked<SurveyAndProgramActions>;
     let mutations = {};
 
     let expectedUploadAction: any;

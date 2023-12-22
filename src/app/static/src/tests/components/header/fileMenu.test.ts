@@ -23,6 +23,7 @@ import UploadNewProject from "../../../app/components/load/UploadNewProject.vue"
 import {expectTranslated, mountWithTranslate} from "../../testHelpers";
 import {switches} from "../../../app/featureSwitches";
 import { nextTick } from "vue";
+import { Mock } from "vitest";
 
 // jsdom has only implemented navigate up to hashes, hence appending a hash here to the base url
 const mockCreateObjectUrl = vi.fn(() => "http://localhost#1234");
@@ -153,7 +154,7 @@ describe("File menu", () => {
         };
 
 
-        const actualBlob = (mockCreateObjectUrl as vi.Mock).mock.calls[0][0];
+        const actualBlob = (mockCreateObjectUrl as Mock).mock.calls[0][0];
         const reader = new FileReader();
 
         reader.addEventListener('loadend', function () {

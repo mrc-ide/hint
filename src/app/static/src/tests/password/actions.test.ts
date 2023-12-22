@@ -3,6 +3,7 @@ import {actions} from "../../app/store/password/actions";
 import {RootMutation} from "../../app/store/root/mutations";
 import {Language} from "../../app/store/translations/locales";
 import {LanguageMutation} from "../../app/store/language/mutations";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 describe("Password actions", () => {
@@ -14,7 +15,7 @@ describe("Password actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
 

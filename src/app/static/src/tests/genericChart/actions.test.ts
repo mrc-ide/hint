@@ -2,6 +2,7 @@ import {mockAxios, mockFailure, mockGenericChartState, mockRootState, mockSucces
 import {actions} from "../../app/store/genericChart/actions";
 import {GenericChartMutation} from "../../app/store/genericChart/mutations";
 import {freezer} from "../../app/utils";
+import { Mock } from "vitest";
 
 describe("genericChart actions", () => {
     beforeEach(() => {
@@ -12,7 +13,7 @@ describe("genericChart actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     const rootState = mockRootState();

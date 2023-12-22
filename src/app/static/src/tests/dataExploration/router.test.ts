@@ -35,6 +35,7 @@ import { storeDataExploration } from "../../app/main";
 import { RouteLocationNormalized } from "vue-router";
 import DataExploration from "../../app/components/dataExploration/DataExploration.vue";
 import Accessibility from "../../app/components/Accessibility.vue";
+import { Mock } from "vitest";
 
 // vi.mock("../../app/components/dataExploration/DataExploration.vue", () => ({
 //     name: "DataExploration",
@@ -51,7 +52,7 @@ import Accessibility from "../../app/components/Accessibility.vue";
 describe("Router", () => {
 
     afterAll(() => {
-        (console.error as vi.Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     it("has expected properties", async () => {

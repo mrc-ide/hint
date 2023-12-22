@@ -15,6 +15,7 @@ import {UploadFile} from "../../app/types";
 import Vuex from "vuex";
 import {RootState} from "../../app/root";
 import {mutations as baselineMutations} from "../../app/store/baseline/mutations";
+import { Mock } from "vitest";
 
 describe("ADR upload actions", () => {
     const state = mockADRUploadState();
@@ -26,7 +27,7 @@ describe("ADR upload actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("getUploadFiles does nothing if no selected dataset", async () => {

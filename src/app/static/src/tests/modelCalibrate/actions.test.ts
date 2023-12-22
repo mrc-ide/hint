@@ -16,6 +16,7 @@ import {switches} from "../../app/featureSwitches";
 import {DownloadResultsMutation} from "../../app/store/downloadResults/mutations";
 import { ModelOutputTabs } from "../../app/types";
 import { BarchartIndicator } from "../../app/generated";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 describe("ModelCalibrate actions", () => {
@@ -26,7 +27,7 @@ describe("ModelCalibrate actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("fetchModelCalibrateOptions fetches options and commits mutations", async () => {

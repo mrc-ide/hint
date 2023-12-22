@@ -5,6 +5,7 @@ import {
 } from "../mocks";
 import {actions} from "../../app/store/metadata/actions";
 import {MetadataMutations} from "../../app/store/metadata/mutations";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 describe("Metadata actions", () => {
@@ -16,7 +17,7 @@ describe("Metadata actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("commits metadata after successful fetch", async () => {

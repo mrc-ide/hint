@@ -1,6 +1,7 @@
 import {mockAxios, mockSuccess, mockFailure, mockRootState} from "../mocks";
 import {actions} from '../../app/store/hintrVersion/actions';
 import { HintrVersionMutation } from "../../app/store/hintrVersion/mutations";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 
@@ -13,7 +14,7 @@ describe("hintrVersion Actions ", ()=> {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("commits hintrVersion after successful fetch", async () => {

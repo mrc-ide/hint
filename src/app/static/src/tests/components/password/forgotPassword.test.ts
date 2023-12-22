@@ -11,10 +11,11 @@ import {expectTranslatedWithStoreType, shallowMountWithTranslate} from "../../te
 import {LanguageMutation, mutations} from "../../../app/store/language/mutations";
 import {Language} from "../../../app/store/translations/locales";
 import { nextTick } from "vue";
+import { Mocked } from "vitest";
 
 describe("Forgot password component", () => {
 
-    let actions: vi.Mocked<PasswordActions>;
+    let actions: Mocked<PasswordActions>;
 
     const createStore = (passwordState?: Partial<PasswordState>) => {
         actions = {

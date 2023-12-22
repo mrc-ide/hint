@@ -4,6 +4,7 @@ import registerTranslations from "../../app/store/translations/registerTranslati
 import {Language} from "../../app/store/translations/locales";
 import { mountWithTranslate, shallowMountWithTranslate } from "../testHelpers";
 import { nextTick } from "vue";
+import { Mock } from "vitest";
 
 describe("translate directive", () => {
 
@@ -12,7 +13,7 @@ describe("translate directive", () => {
     });
 
     afterAll(() => {
-        (console.warn as vi.Mock).mockClear();
+        (console.warn as Mock).mockClear();
     });
 
     const TranslateAttributeTest = {
@@ -190,7 +191,7 @@ describe("translate directive", () => {
             }, 
         });
         expect(rendered.find("h4").text()).toBe("");
-        expect((console.warn as vi.Mock).mock.calls[0][0])
+        expect((console.warn as Mock).mock.calls[0][0])
             .toBe("v-translate directive declared without a value");
     });
 

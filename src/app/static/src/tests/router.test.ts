@@ -49,11 +49,12 @@ vi.mock("../app/components/projects/Projects.vue", () => ({
 }))
 
 import {router, beforeEnter} from '../app/router';
+import { Mock } from "vitest";
 
 describe("Router", () => {
 
     afterAll(() => {
-        (console.error as vi.Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     it("has expected properties", async () => {

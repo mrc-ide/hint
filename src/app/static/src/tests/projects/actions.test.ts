@@ -5,6 +5,7 @@ import {RootMutation} from "../../app/store/root/mutations";
 import {ErrorsMutation} from "../../app/store/errors/mutations";
 import {Project} from "../../app/types";
 import {serialiseState} from "../../app/localStorageManager";
+import { Mock } from "vitest";
 
 describe("Projects actions", () => {
     beforeEach(() => {
@@ -15,8 +16,8 @@ describe("Projects actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
-        (console.info as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
+        (console.info as Mock).mockClear();
         vi.useRealTimers();
     });
 

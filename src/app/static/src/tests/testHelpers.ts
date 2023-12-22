@@ -11,7 +11,7 @@ import {VNode} from "vue";
 import { VueWrapper, mount, shallowMount } from "@vue/test-utils";
 import translate from "../app/directives/translate";
 import { nextTick } from "vue";
-import Mock = vi.Mock;
+import { Mock } from "vitest";
 
 export function expectEqualsFrozen(args: PayloadWithType<any>, expected: PayloadWithType<any>) {
     expect(Object.isFrozen(args["payload"])).toBe(true);

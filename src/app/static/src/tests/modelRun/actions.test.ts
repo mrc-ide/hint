@@ -12,6 +12,7 @@ import {ModelStatusResponse} from "../../app/generated";
 import {expectEqualsFrozen} from "../testHelpers";
 import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {freezer} from "../../app/utils";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 
@@ -25,8 +26,8 @@ describe("Model run actions", () => {
     });
 
     afterEach(() => {
-        (console.log as vi.Mock).mockClear();
-        (console.info as vi.Mock).mockClear();
+        (console.log as Mock).mockClear();
+        (console.info as Mock).mockClear();
     });
 
     it("passes model options and version from state", async () => {
