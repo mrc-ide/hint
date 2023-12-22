@@ -15,6 +15,7 @@ import {emptyState} from "../../app/root";
 import {localStorageManager} from "../../app/localStorageManager";
 import {currentHintVersion} from "../../app/hintVersion";
 import {getFormData} from "./helpers";
+import { flushPromises } from "@vue/test-utils";
 
 describe("load actions", () => {
 
@@ -22,25 +23,27 @@ describe("load actions", () => {
     const realLocation = window.location;
 
     beforeAll(async () => {
+        vi.useFakeTimers();
         await login();
-        const commit = jest.fn();
+        const commit = vi.fn();
         const formData = getFormData("../testdata/malawi.geojson");
 
-        await baselineActions.uploadShape({commit, dispatch: jest.fn(), rootState} as any, formData);
+        await baselineActions.uploadShape({commit, dispatch: vi.fn(), rootState} as any, formData);
         shape = (commit.mock.calls[1][0]["payload"] as ShapeResponse);
 
-        const mockLocationReload = jest.fn();
+        const mockLocationReload = vi.fn();
         delete (window as any).location;
         window.location = {reload: mockLocationReload} as any;
     });
 
     afterAll(() => {
         window.location = realLocation;
+        vi.useRealTimers();
     });
 
     it("can set files as guest user", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const fakeState = JSON.stringify({
             files: {"shape": shape},
             state: {
@@ -101,7 +104,7 @@ describe("load actions", () => {
     });
 
     it("can create project and set files as logged in user when uploading JSON file", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const fakeState = JSON.stringify({
             files: {"shape": shape},
             state: {
@@ -143,7 +146,7 @@ describe("load actions", () => {
             }
         });
 
-        const mockSaveToLocalStorage = jest.fn();
+        const mockSaveToLocalStorage = vi.fn();
         localStorageManager.savePartialState = mockSaveToLocalStorage;
 
         const dispatch = ((store as any)._modulesNamespaceMap["load/"] as any).context.dispatch;
@@ -169,8 +172,8 @@ describe("load actions", () => {
     });
 
     it("can submit model output ZIP file", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const formData = getFormData("output.zip");
         const state = {rehydrateId: "1"}
 
@@ -181,20 +184,20 @@ describe("load actions", () => {
         expect(commit.mock.calls[1][0].payload).not.toBeNull();
     });
 
-    it("can poll model output ZIP status", (done) => {
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+    it("can poll model output ZIP status", async () => {
+        const commit = vi.fn();
+        const dispatch = vi.fn()
         const state = {rehydrateId: "1"}
 
         actions.pollRehydrate({commit, dispatch, state, rootState} as any);
 
-        setTimeout(() => {
-            expect(commit.mock.calls.length).toBe(2)
-            expect(commit.mock.calls[0][0].type).toBe("RehydratePollingStarted");
-            expect(commit.mock.calls[0][0].payload).toBeGreaterThan(-1);
-            expect(commit.mock.calls[1][0].type).toBe("RehydrateStatusUpdated");
-            expect(commit.mock.calls[1][0]["payload"].status).toBe("MISSING");
-            done();
-        }, 3100)
+        vi.advanceTimersByTime(3000);
+        await flushPromises();
+
+        expect(commit.mock.calls.length).toBe(2)
+        expect(commit.mock.calls[0][0].type).toBe("RehydratePollingStarted");
+        expect(+commit.mock.calls[0][0].payload).toBeGreaterThan(-1);
+        expect(commit.mock.calls[1][0].type).toBe("RehydrateStatusUpdated");
+        expect(commit.mock.calls[1][0]["payload"].status).toBe("MISSING");
     });
 });

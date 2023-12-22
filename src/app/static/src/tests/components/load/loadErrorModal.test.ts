@@ -6,7 +6,7 @@ import {LoadingState} from "../../../app/store/load/state";
 import {expectHasTranslationKey, expectTranslated, mountWithTranslate} from "../../testHelpers";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 
-const mockClearLoadError = jest.fn();
+const mockClearLoadError = vi.fn();
 
 const getStore = (hasError: boolean, loadError: string) => {
     return new Vuex.Store<RootState>({
@@ -30,10 +30,10 @@ const getStore = (hasError: boolean, loadError: string) => {
 
 describe("loadErrorModal", () => {
 
-    const mockTranslate = jest.fn();
+    const mockTranslate = vi.fn();
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
     const getWrapper = (hasError: boolean =  true, loadError: string = "Test Error Message") => {

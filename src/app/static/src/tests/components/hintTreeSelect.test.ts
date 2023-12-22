@@ -1,6 +1,7 @@
 import { VueWrapper, mount } from "@vue/test-utils";
 import HintTreeSelect from "../../app/components/HintTreeSelect.vue";
-import Treeselect from "vue3-treeselect";
+import Treeselect from "@reside-ic/vue3-treeselect";
+import { nextTick } from "vue";
 
 describe("Treeselect component", () => {
 
@@ -22,10 +23,18 @@ describe("Treeselect component", () => {
         return wrapper.vm.$data.reRender
     }
 
+    beforeAll(() => {
+        vi.useFakeTimers();
+    });
+    afterAll(() => {
+        vi.useRealTimers();
+    });
+
     it("updates key when model value changes with user input (array)", async () => {
         const wrapper = getWrapper();
         expect(getKey(wrapper)).toBe(0);
         await callWatcher(wrapper, "modelValue", ["2"]);
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(1);
     });
 
@@ -33,6 +42,7 @@ describe("Treeselect component", () => {
         const wrapper = getWrapper();
         expect(getKey(wrapper)).toBe(0);
         await callWatcher(wrapper, "modelValue", "2");
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(1);
     });
 
@@ -40,6 +50,7 @@ describe("Treeselect component", () => {
         const wrapper = getWrapper();
         expect(getKey(wrapper)).toBe(0);
         await callWatcher(wrapper, "modelValue", null);
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(1);
     });
 
@@ -49,6 +60,7 @@ describe("Treeselect component", () => {
         expect(getKey(wrapper)).toBe(0);
         await treeSelect.vm.$emit("update:model-value", "2")
         await callWatcher(wrapper, "modelValue", ["2"]);
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(0);
     });
 
@@ -58,6 +70,7 @@ describe("Treeselect component", () => {
         expect(getKey(wrapper)).toBe(0);
         await treeSelect.vm.$emit("update:model-value", "2")
         await callWatcher(wrapper, "modelValue", "2");
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(0);
     });
 
@@ -65,6 +78,7 @@ describe("Treeselect component", () => {
         const wrapper = getWrapper(true);
         expect(getKey(wrapper)).toBe(0);
         await callWatcher(wrapper, "modelValue", ["1", "2"]);
+        vi.advanceTimersByTime(1);
         expect(getKey(wrapper)).toBe(0);
     });
 });

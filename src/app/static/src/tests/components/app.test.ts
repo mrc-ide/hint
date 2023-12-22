@@ -8,31 +8,31 @@ import {SurveyAndProgramMutation} from "../../app/store/surveyAndProgram/mutatio
 import {ModelOptionsMutation} from "../../app/store/modelOptions/mutations";
 
 const baselineActions = {
-    getBaselineData: jest.fn()
+    getBaselineData: vi.fn()
 };
 
 const surveyAndProgramActions = {
-    getSurveyAndProgramData: jest.fn()
+    getSurveyAndProgramData: vi.fn()
 };
 
 const modelRunActions = {
-    getResult: jest.fn()
+    getResult: vi.fn()
 };
 
 const modelCalibrateActions = {
-    getResult: jest.fn()
+    getResult: vi.fn()
 };
 
 const adrActions = {
-    getSchemas: jest.fn()
+    getSchemas: vi.fn()
 };
 
 const projectsActions = {
-    getCurrentProject: jest.fn()
+    getCurrentProject: vi.fn()
 };
 
 const genericChartActions = {
-    getGenericChartMetadata: jest.fn()
+    getGenericChartMetadata: vi.fn()
 };
 
 storeOptions.modules!!.baseline!!.actions = baselineActions;
@@ -43,7 +43,7 @@ storeOptions.modules!!.projects!!.actions = projectsActions;
 storeOptions.modules!!.adr!!.actions = adrActions;
 storeOptions.modules!!.genericChart!!.actions = genericChartActions;
 
-console.error = jest.fn();
+console.error = vi.fn();
 
 // only import the app after we have replaced action with mocks
 // as the app will call these actions on import
@@ -55,17 +55,18 @@ import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
 import {LanguageMutation} from "../../app/store/language/mutations";
 import {Language} from "../../app/store/translations/locales";
 import { nextTick } from 'vue';
+import { Mock } from 'vitest';
 
 describe("App", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        console.log = jest.fn();
+        vi.clearAllMocks();
+        console.log = vi.fn();
     });
 
     afterAll(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.error as jest.Mock).mockClear();
+        (console.log as Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     const getStore = (ready: boolean = false) => {
@@ -82,24 +83,21 @@ describe("App", () => {
         return new Vuex.Store<RootState>(localStoreOptions);
     };
 
-    it("loads input data on mount", (done) => {
+    it("loads input data on mount", async () => {
         const store = getStore();
         mount(Hint, {
             global: {
                 plugins: [store]
             }
         });
-
-        setTimeout(() => {
-            expect(baselineActions.getBaselineData).toHaveBeenCalled();
-            expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
-            expect(modelRunActions.getResult).toHaveBeenCalled();
-            expect(modelCalibrateActions.getResult).toHaveBeenCalled();
-            expect(adrActions.getSchemas).toHaveBeenCalled();
-            expect(projectsActions.getCurrentProject).toHaveBeenCalled();
-            expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
-            done();
-        });
+        await nextTick();
+        expect(baselineActions.getBaselineData).toHaveBeenCalled();
+        expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
+        expect(modelRunActions.getResult).toHaveBeenCalled();
+        expect(modelCalibrateActions.getResult).toHaveBeenCalled();
+        expect(adrActions.getSchemas).toHaveBeenCalled();
+        expect(projectsActions.getCurrentProject).toHaveBeenCalled();
+        expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
     });
 
     it("gets language from state", () => {
@@ -134,7 +132,7 @@ describe("App", () => {
 
     it("updates local storage on every mutation", () => {
         const store = getStore();
-        const spy = jest.spyOn(localStorageManager, "saveState");
+        const spy = vi.spyOn(localStorageManager, "saveState");
         store.commit(prefixNamespace("baseline", BaselineMutation.PopulationUploadError), {payload: "test"});
 
         expect(spy).toHaveBeenCalled();
@@ -142,7 +140,7 @@ describe("App", () => {
 
     it("updates language in local storage on every mutation", () => {
         const store = getStore();
-        const spy = jest.spyOn(localStorageManager, "saveState");
+        const spy = vi.spyOn(localStorageManager, "saveState");
         store.commit(LanguageMutation.ChangeLanguage, {payload: Language.pt});
 
         expect(spy).toHaveBeenCalled();
@@ -152,7 +150,7 @@ describe("App", () => {
 
     it("resets model options if baseline selected dataset is updated and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("baseline", BaselineMutation.SetDataset), {payload: {id: "2"}});
 
         expect(spy.mock.calls[1][0]).toBe(RootMutation.ResetOptions);
@@ -162,7 +160,7 @@ describe("App", () => {
 
     it("resets inputs if baseline update mutation is called and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace(
                 "baseline", BaselineMutation.PJNZUpdated),
             {payload: null});
@@ -177,7 +175,7 @@ describe("App", () => {
 
     it("resets inputs if surveyAndProgram update mutation is called and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace(
                 "surveyAndProgram", SurveyAndProgramMutation.SurveyUpdated),
             {payload: null});
@@ -191,7 +189,7 @@ describe("App", () => {
 
     it("resets outputs if modelOptions update mutation is called and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("modelOptions", ModelOptionsMutation.Update), {payload: null});
 
         expect(spy.mock.calls[1][0]).toBe(RootMutation.ResetOutputs);
@@ -200,7 +198,7 @@ describe("App", () => {
 
     it("resets outputs if modelOptions UnValidate mutation is called and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("modelOptions", ModelOptionsMutation.UnValidate));
 
         expect(spy.mock.calls[1][0]).toBe(RootMutation.ResetOutputs);
@@ -209,7 +207,7 @@ describe("App", () => {
 
     it("resets download if calibrate option is unvalidated", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("modelCalibrate", ModelCalibrateMutation.Calibrated));
 
         expect(spy.mock.calls[1][0].type).toBe("downloadResults/ResetIds");
@@ -219,7 +217,7 @@ describe("App", () => {
 
     it("resets outputs if modelRun ClearResult mutation is called and state is ready", () => {
         const store = getStore(true);
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("modelRun", ModelRunMutation.ClearResult));
 
         expect(spy.mock.calls[1][0]).toBe(RootMutation.ResetOutputs);
@@ -228,7 +226,7 @@ describe("App", () => {
 
     it("does not commit any reset mutations if state is not ready", () => {
         const store = getStore();
-        const spy = jest.spyOn(store, "commit");
+        const spy = vi.spyOn(store, "commit");
         store.commit(prefixNamespace("modelOptions", ModelOptionsMutation.Update), {payload: null});
         store.commit(prefixNamespace("surveyAndProgram", SurveyAndProgramMutation.SurveyUpdated), {payload: null});
         store.commit(prefixNamespace("baseline", BaselineMutation.PJNZUpdated), {payload: null});
@@ -255,8 +253,8 @@ describe("App", () => {
         modules.forEach(m => m.ready = true);
 
         // reset mocks from previous call
-        jest.resetAllMocks();
-        const spy = jest.spyOn(store, "commit");
+        vi.resetAllMocks();
+        const spy = vi.spyOn(store, "commit");
 
         store.commit(prefixNamespace("modelOptions", ModelOptionsMutation.Update), {payload: null});
 

@@ -9,7 +9,7 @@ describe("ADR actions", () => {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
@@ -17,7 +17,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/key/`)
             .reply(200, mockSuccess("1234"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.fetchKey({commit, state, rootState} as any);
 
@@ -32,8 +32,8 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/sso`)
             .reply(200, mockSuccess(true));
 
-        const commit = jest.fn();
-        const dispatch = jest.fn()
+        const commit = vi.fn();
+        const dispatch = vi.fn()
 
         await actions.ssoLoginMethod({commit, dispatch, state, rootState} as any);
 
@@ -51,7 +51,7 @@ describe("ADR actions", () => {
         mockAxios.onPost(`/adr/key/`)
             .reply(200, mockSuccess("1234"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.saveKey({commit, state, rootState} as any, "1234");
 
@@ -71,7 +71,7 @@ describe("ADR actions", () => {
         mockAxios.onDelete(`/adr/key/`)
             .reply(200, mockSuccess(null));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.deleteKey({commit, state, rootState} as any);
 
@@ -91,7 +91,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/datasets/`)
             .reply(200, mockSuccess([1]));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getDatasets({commit, state, rootState} as any);
 
@@ -122,7 +122,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/datasets/`)
             .reply(500, mockFailure("error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getDatasets({commit, state, rootState} as any);
 
@@ -153,7 +153,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/datasets/123/releases/`)
             .reply(200, mockSuccess([1]));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getReleases({commit, state, rootState} as any, "123");
 
@@ -169,7 +169,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/datasets/123/releases/`)
             .reply(500, mockFailure("error"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getReleases({commit, state, rootState} as any, "123");
 
@@ -185,7 +185,7 @@ describe("ADR actions", () => {
         mockAxios.onGet(`/adr/schemas/`)
             .reply(200, mockSuccess({baseUrl: "adr.com"}));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getSchemas({commit, state, rootState} as any);
 
@@ -197,7 +197,7 @@ describe("ADR actions", () => {
     });
 
     it("getUserCanUpload does nothing if no selected dataset", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState()
         });
@@ -209,7 +209,7 @@ describe("ADR actions", () => {
     });
 
     it("getUserCanUpload fetches updateable dataset and commits when user can upload", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState({selectedDataset: {organization: {id: "test-org"}} as any})
         });
@@ -224,7 +224,7 @@ describe("ADR actions", () => {
     });
 
     it("getUserCanUpload fetches updateable dataset and commits when user cannot upload", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState({selectedDataset: {organization: {id: "test-org"}} as any})
         });
@@ -239,7 +239,7 @@ describe("ADR actions", () => {
     });
 
     it("getUserCanUpload commits error", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         const root = mockRootState({
             baseline: mockBaselineState({selectedDataset: {organization: {id: "test-org"}} as any})
         });
@@ -257,12 +257,12 @@ describe("ADR actions", () => {
             baseline: mockBaselineState({selectedDataset: {id: "test-dataset", release: "2.0"}} as any)
         });
         const organization = {id: "test-org"};
-        const dispatch = jest.fn().mockImplementation((mutation, payload) => {
+        const dispatch = vi.fn().mockImplementation((mutation, payload) => {
             if (mutation === "getDataset" && payload.id === "test-dataset" && payload.release === "2.0") {
                 root.baseline.selectedDataset!.organization = organization;
             }
         });
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         mockAxios.onGet(`adr/orgs?permission=update_dataset`)
             .reply(200, mockSuccess([{id: "test-org"}]));
@@ -282,7 +282,7 @@ describe("ADR actions", () => {
                 organization: {}
             }));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getDataset({commit, state, rootState} as any, {id: "abc123"});
 
@@ -302,7 +302,7 @@ describe("ADR actions", () => {
                 organization: {}
             }));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const release = {
             id: "V 1.0",
             name: "releaseName",

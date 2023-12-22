@@ -4,18 +4,18 @@ import { mockBaselineState, mockModelCalibrateState, mockPlottingSelections } fr
 import { AgGridVue } from "ag-grid-vue3";
 import TableDisplay from "../../../app/components/outputTable/TableDisplay.vue";
 
-const mockAutoSizeAllColumns = jest.fn();
-const mockGetAllGridColumns = jest.fn().mockReturnValue([
+const mockAutoSizeAllColumns = vi.fn();
+const mockGetAllGridColumns = vi.fn().mockReturnValue([
     {
-        getColId: jest.fn().mockReturnValue("col1"),
-        getActualWidth: jest.fn().mockReturnValue(100)
+        getColId: vi.fn().mockReturnValue("col1"),
+        getActualWidth: vi.fn().mockReturnValue(100)
     },
     {
-        getColId: jest.fn().mockReturnValue("col2"),
-        getActualWidth: jest.fn().mockReturnValue(200)
+        getColId: vi.fn().mockReturnValue("col2"),
+        getActualWidth: vi.fn().mockReturnValue(200)
     }
 ]);
-const mockSizeColumnsToFit = jest.fn();
+const mockSizeColumnsToFit = vi.fn();
 
 const mockAGGridEvent = {
     columnApi: {
@@ -72,7 +72,7 @@ const data = [
 describe("Output Table display table tests", () => {
     const createStore = () => new Vuex.Store({
         getters: {
-            ["modelOutput/tableFilters"]: jest.fn().mockReturnValue([{
+            ["modelOutput/tableFilters"]: vi.fn().mockReturnValue([{
                 column_id: "sex",
                 id: "sex"
             }])

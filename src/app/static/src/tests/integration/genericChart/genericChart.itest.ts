@@ -7,7 +7,7 @@ import {actions as baselineActions} from "../../../app/store/baseline/actions";
 import {actions as sapActions} from "../../../app/store/surveyAndProgram/actions"
 
 export const getGenericChartMetadata = async () => {
-    const commit = jest.fn();
+    const commit = vi.fn();
     await actions.getGenericChartMetadata({commit, rootState} as any);
     expect(commit.mock.calls[0][0]["type"]).toBe("GenericChartMetadataFetched");
     return commit.mock.calls[0][0]["payload"] as GenericChartMetadataResponse;
@@ -19,8 +19,8 @@ describe("genericChart actions", () => {
     });
 
     const uploadInputFiles = async() => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const shapeFormData = getFormData("malawi.geojson");
         await baselineActions.uploadShape({commit, dispatch, rootState} as any, shapeFormData);
         const ancFormData = getFormData("anc.csv");
@@ -37,7 +37,7 @@ describe("genericChart actions", () => {
 
     it("can fetch dataset", async () => {
         await uploadInputFiles();
-        const commit = jest.fn();
+        const commit = vi.fn();
         const payload = {datasetId: "ART", url: "/chart-data/input-time-series/programme"};
         await actions.getDataset({commit, rootState} as any, payload);
         expect(commit.mock.calls[1][0]["type"]).toBe(GenericChartMutation.SetDataset);

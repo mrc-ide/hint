@@ -5,9 +5,9 @@ import {emptyState} from "../../app/root";
 describe(`root actions`, () => {
 
     it("can post error report", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         const state = {
             ...emptyState(),

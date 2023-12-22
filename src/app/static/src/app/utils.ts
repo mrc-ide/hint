@@ -11,7 +11,7 @@ import {
 } from "vuex";
 import {ADRSchemas, Dataset, DatasetResource, DatasetResourceType, Dict, UploadFile, Version} from "./types";
 import {Error, FilterOption, NestedFilterOption, ProjectRehydrateResultResponse, Response} from "./generated";
-import moment, {utc} from 'moment';
+import moment from 'moment';
 import {
     DynamicControlGroup,
     DynamicControlSection, DynamicFormData,
@@ -282,7 +282,7 @@ export const formatToLocalISODateTime = (isoUTCString: string) => {
 };
 
 export const appendCurrentDateTime = () => {
-    return utc().local().format("YMMDD-HHmmss");
+    return moment.utc().local().format("YMMDD-HHmmss");
 }
 
 export const findResource = (datasetWithResources: any, resourceType: string, resourceName?: string | null): DatasetResource | null => {

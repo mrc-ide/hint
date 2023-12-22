@@ -11,16 +11,17 @@ import {expectTranslatedWithStoreType, shallowMountWithTranslate} from "../../te
 import {LanguageMutation, mutations} from "../../../app/store/language/mutations";
 import {Language} from "../../../app/store/translations/locales";
 import { nextTick } from "vue";
+import { Mocked } from "vitest";
 
 describe("Forgot password component", () => {
 
-    let actions: jest.Mocked<PasswordActions>;
+    let actions: Mocked<PasswordActions>;
 
     const createStore = (passwordState?: Partial<PasswordState>) => {
         actions = {
-            requestResetLink: jest.fn(),
-            resetPassword: jest.fn(),
-            changeLanguage: jest.fn()
+            requestResetLink: vi.fn(),
+            resetPassword: vi.fn(),
+            changeLanguage: vi.fn()
         };
 
         const store = new Vuex.Store({

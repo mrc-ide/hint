@@ -4,6 +4,9 @@
     :options="options"
     :model-value="modelValue"
     :multiple="multiple"
+    :disabled="disabled"
+    :clearable="clearable"
+    :placeholder="placeholder"
     @update:model-value="input">
     <!-- way to pass down all slots -->
     <template v-for="(_, slot) in $slots" v-slot:[slot]="scope">
@@ -39,6 +42,21 @@
             },
             multiple: {
                 type: Boolean
+            },
+            disabled: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            clearable: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            placeholder: {
+                type: String,
+                required: false,
+                default: ""
             }
         },
         data() {
@@ -72,7 +90,9 @@
                     
                     if (!this.multiple) {
                         if (newVal === null || newValStringCase || newValArrayCase) {
-                            this.reRender = 1 - this.reRender;
+                            setTimeout(() => {
+                                this.reRender = 1 - this.reRender;
+                            }, 0)
                         }
                     }
                 },

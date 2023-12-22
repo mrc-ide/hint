@@ -325,7 +325,7 @@ describe("chartjsBar component", () => {
     });
 
     it("hide error bars gets called on mount, chartData and showLabelErrorBars change", async () => {
-        const mockHideErrorBars = jest.fn();
+        const mockHideErrorBars = vi.fn();
         BarChartWithErrors.methods!.hideAllErrorBars = mockHideErrorBars;
 
         const wrapper = shallowMount(BarChartWithErrors, {props: propsData});
@@ -400,8 +400,8 @@ describe("chartjsBar component", () => {
             },
             showErrorBars: true
         } as any;
-        const mockHide = jest.fn();
-        const mockShow = jest.fn();
+        const mockHide = vi.fn();
+        const mockShow = vi.fn();
 
         const wrapper = shallowMount(BarChartWithErrors, {props: propsDataMultiple});
         const vm = wrapper.vm as any
@@ -432,7 +432,7 @@ describe("chartjsBar component", () => {
         expect(mockHide).toBeCalledTimes(1);
         expect(mockShow).toBeCalledTimes(0);
 
-        jest.resetAllMocks();
+        vi.resetAllMocks();
 
         const { legendItem: legendItem1, legend: legend1 } = getLegendAndItem(1, false);
         vm.customLegendClick(null, legendItem1, legend1);

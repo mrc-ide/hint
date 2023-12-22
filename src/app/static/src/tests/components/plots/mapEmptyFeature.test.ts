@@ -4,11 +4,15 @@ import registerTranslations from "../../../app/store/translations/registerTransl
 import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
 import Vuex from "vuex";
 
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", async () => {
+    const actual = await vi.importActual("@vue-leaflet/vue-leaflet")
     const LControl = {
         template: "<div id='l-control-mock'><slot></slot></div>"
     }
-    return { LControl }
+    return {
+        ...actual,
+        LControl
+    }
 });
 
 const store = new Vuex.Store({

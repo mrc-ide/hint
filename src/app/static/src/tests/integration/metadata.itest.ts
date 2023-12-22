@@ -9,7 +9,7 @@ describe("Metadata actions", () => {
     });
 
     it("can get plotting metadata", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await actions.getPlottingMetadata({commit, rootState} as any, "MWI");
         expect(commit.mock.calls[0][0]["type"]).toBe("PlottingMetadataFetched");

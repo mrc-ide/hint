@@ -45,7 +45,7 @@ describe("Warning component", () => {
     function setDivHeights(wrapper: any, l: number, wb: number) {
         function internal(refName: string, height: number){
             const selDiv = wrapper.vm.$refs[refName] as HTMLDivElement;
-            jest.spyOn(selDiv, "clientHeight", "get")
+            vi.spyOn(selDiv, "clientHeight", "get")
                 .mockImplementation(() => height);
         }
         internal("line", l)

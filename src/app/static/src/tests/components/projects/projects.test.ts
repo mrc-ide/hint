@@ -12,11 +12,11 @@ import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 describe("Projects component", () => {
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
-    const mockCreateProject = jest.fn()
-    const mockRouterPush = jest.fn()
+    const mockCreateProject = vi.fn()
+    const mockRouterPush = vi.fn()
 
     const createSut = (state: Partial<ProjectsState> = {},
                        isGuest = false) => {
@@ -32,7 +32,7 @@ describe("Projects component", () => {
                     state: mockProjectsState(state),
                     actions: {
                         createProject: mockCreateProject,
-                        getProjects: jest.fn()
+                        getProjects: vi.fn()
                     }
                 }
             }

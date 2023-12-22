@@ -9,7 +9,7 @@ import { mountWithTranslate, shallowMountWithTranslate } from '../../testHelpers
 describe("MapAdjustScale component", () => {
 
     afterEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
     })
 
     const store = new Vuex.Store({

@@ -1,8 +1,12 @@
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", async () => {
+    const actual = await vi.importActual("@vue-leaflet/vue-leaflet")
     const LControl = {
         template: "<div id='l-control-mock'><slot></slot></div>"
     }
-    return { LControl }
+    return {
+        ...actual,
+        LControl
+    }
 });
 
 import {DOMWrapper} from '@vue/test-utils';

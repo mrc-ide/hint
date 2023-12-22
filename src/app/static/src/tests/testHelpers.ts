@@ -11,7 +11,7 @@ import {VNode} from "vue";
 import { VueWrapper, mount, shallowMount } from "@vue/test-utils";
 import translate from "../app/directives/translate";
 import { nextTick } from "vue";
-import Mock = jest.Mock;
+import { Mock } from "vitest";
 
 export function expectEqualsFrozen(args: PayloadWithType<any>, expected: PayloadWithType<any>) {
     expect(Object.isFrozen(args["payload"])).toBe(true);
@@ -31,9 +31,9 @@ export function testUploadErrorCommitted(url: string,
         mockAxios.onPost(url)
             .reply(500, mockFailure("Something went wrong"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const state = mockBaselineState();
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState();
         await action({commit, state, dispatch, rootState} as any, formData);
 
@@ -158,6 +158,7 @@ Since this is just for testing, ts-ignore was used for this special case.
 export function shallowMountWithTranslate<T extends TranslatableState, C>(component: C, store: Store<T>, options?: any): VueWrapper<InstanceType<C>> {
     // @ts-ignore
     return shallowMount(component, {
+        attachTo: document.body,
         ...options,
         global: {
             ...options?.global,
@@ -173,6 +174,7 @@ export function shallowMountWithTranslate<T extends TranslatableState, C>(compon
 export function mountWithTranslate<T extends TranslatableState, C>(component: C, store: Store<T>, options?: any): VueWrapper<InstanceType<C>> {
     // @ts-ignore
     return mount(component, {
+        attachTo: document.body,
         ...options,
         global: {
             ...options?.global,

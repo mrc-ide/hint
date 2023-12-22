@@ -5,7 +5,7 @@ import { mockModelCalibrateState, mockPlottingSelections } from "../../mocks";
 import { SingleSelect } from "@reside-ic/vue-nested-multiselect";
 import NewFilters from "../../../app/components/outputTable/NewFilters.vue";
 
-const mockUpdateTableSelections = jest.fn();
+const mockUpdateTableSelections = vi.fn();
 const mockFilters = [{
     id: "id",
     column_id: "col_id",
@@ -16,7 +16,7 @@ const mockFilters = [{
 describe("Output Table filters tests", () => {
     const createStore = () => new Vuex.Store({
         getters: {
-            ["modelOutput/tableFilters"]: jest.fn().mockReturnValue(mockFilters)
+            ["modelOutput/tableFilters"]: vi.fn().mockReturnValue(mockFilters)
         },
         modules: {
             plottingSelections: {
@@ -97,7 +97,7 @@ describe("Output Table filters tests", () => {
     };
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("renders as expected", async () => {

@@ -5,7 +5,7 @@ import {initialDataExplorationState} from "../../app/store/dataExploration/dataE
 describe(`dataExploration actions`, () => {
 
     it("can post error report", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         const state = {
             ...initialDataExplorationState(),

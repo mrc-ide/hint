@@ -3,19 +3,19 @@ import Vuex from 'vuex';
 import {DataExplorationState, storeOptions} from "../../app/store/dataExploration/dataExploration";
 
 const baselineActions = {
-    getBaselineData: jest.fn()
+    getBaselineData: vi.fn()
 };
 
 const surveyAndProgramActions = {
-    getSurveyAndProgramData: jest.fn()
+    getSurveyAndProgramData: vi.fn()
 };
 
 const adrActions = {
-    getSchemas: jest.fn()
+    getSchemas: vi.fn()
 };
 
 const genericChartActions = {
-    getGenericChartMetadata: jest.fn()
+    getGenericChartMetadata: vi.fn()
 };
 
 storeOptions.modules!!.baseline!!.actions = baselineActions;
@@ -23,7 +23,7 @@ storeOptions.modules!!.surveyAndProgram!!.actions = surveyAndProgramActions;
 storeOptions.modules!!.adr!!.actions = adrActions;
 storeOptions.modules!!.genericChart!!.actions = genericChartActions;
 
-console.error = jest.fn();
+console.error = vi.fn();
 
 // only import the app after we have replaced action with mocks
 // as the app will call these actions on import
@@ -31,17 +31,18 @@ import HintDataExploration from '../../app/components/HintDataExploration.vue';
 import {LanguageMutation} from "../../app/store/language/mutations";
 import {Language} from "../../app/store/translations/locales";
 import { nextTick } from 'vue';
+import { Mock } from 'vitest';
 
 describe("Data Exploration App", () => {
 
     beforeEach(() => {
-        jest.clearAllMocks();
-        console.log = jest.fn();
+        vi.clearAllMocks();
+        console.log = vi.fn();
     });
 
     afterAll(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.error as jest.Mock).mockClear();
+        (console.log as Mock).mockClear();
+        (console.error as Mock).mockClear();
     });
 
     const getStore = (ready: boolean = false) => {
@@ -51,21 +52,18 @@ describe("Data Exploration App", () => {
         return new Vuex.Store<DataExplorationState>(localStoreOptions);
     };
 
-    it("loads input data on mount", (done) => {
+    it("loads input data on mount", async () => {
         const store = getStore();
         mount(HintDataExploration, {
             global: {
                 plugins: [store]
             }
         });
-
-        setTimeout(() => {
-            expect(baselineActions.getBaselineData).toHaveBeenCalled();
-            expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
-            expect(adrActions.getSchemas).toHaveBeenCalled();
-            expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
-            done();
-        });
+        await nextTick();
+        expect(baselineActions.getBaselineData).toHaveBeenCalled();
+        expect(surveyAndProgramActions.getSurveyAndProgramData).toHaveBeenCalled();
+        expect(adrActions.getSchemas).toHaveBeenCalled();
+        expect(genericChartActions.getGenericChartMetadata).toHaveBeenCalled();
     });
 
     it("gets language from state", () => {

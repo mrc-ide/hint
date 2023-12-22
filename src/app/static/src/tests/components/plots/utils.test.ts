@@ -7,17 +7,18 @@ import {
 } from "../../../app/components/plots/utils";
 import {interpolateMagma, interpolateWarm} from "d3-scale-chromatic";
 import {Filter} from "../../../app/generated";
+import { Mock } from "vitest";
 
 describe("plot utils", () => {
 
-    const warnMock = jest.fn();
+    const warnMock = vi.fn();
 
     beforeEach(() => {
         console.warn = warnMock;
     });
 
     afterEach(() => {
-        (console.warn as jest.Mock).mockClear();
+        (console.warn as Mock).mockClear();
     });
 
     it("colorFunctionFromName returns color function", () => {

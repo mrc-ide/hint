@@ -74,7 +74,7 @@
                 (state: RootState) => state.language),
             placeholder() {
                 const key = this.disabled ? "notUsed" : "select";
-                return i18next.t(key, this.currentLanguage)
+                return i18next.t(key, this.currentLanguage) as string
             },
             labelTooltip() {
                 return this.options.reduce(

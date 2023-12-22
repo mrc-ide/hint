@@ -52,7 +52,7 @@ function getStore(modelOutputState: Partial<ModelOutputState> = {}, partialGette
                     }
                 ),
                 actions: {
-                    getResultData: jest.fn()
+                    getResultData: vi.fn()
                 }
             },
             modelOutput: {
@@ -69,16 +69,16 @@ function getStore(modelOutputState: Partial<ModelOutputState> = {}, partialGette
                     ...modelOutputState,
                 },
                 getters: {
-                    barchartIndicators: jest.fn().mockReturnValue(["TEST BARCHART INDICATORS"]),
-                    barchartFilters: jest.fn().mockReturnValue(barchartFilters),
-                    comparisonPlotIndicators: jest.fn().mockReturnValue(["TEST COMPARISON INDICATORS"]),
-                    comparisonPlotFilters: jest.fn().mockReturnValue(comparisonPlotFilters),
-                    bubblePlotIndicators: jest.fn().mockReturnValue(["TEST BUBBLE INDICATORS"]),
-                    bubblePlotFilters: jest.fn().mockReturnValue(["TEST BUBBLE FILTERS"]),
-                    choroplethFilters: jest.fn().mockReturnValue(["TEST CHORO FILTERS"]),
-                    choroplethIndicators: jest.fn().mockReturnValue(["TEST CHORO INDICATORS"]),
-                    countryAreaFilterOption: jest.fn().mockReturnValue({TEST: "TEST countryAreaFilterOption"}),
-                    comparisonPlotDefaultSelections: jest.fn().mockReturnValue(["TEST comparisonPlotDefaultSelections"]),
+                    barchartIndicators: vi.fn().mockReturnValue(["TEST BARCHART INDICATORS"]),
+                    barchartFilters: vi.fn().mockReturnValue(barchartFilters),
+                    comparisonPlotIndicators: vi.fn().mockReturnValue(["TEST COMPARISON INDICATORS"]),
+                    comparisonPlotFilters: vi.fn().mockReturnValue(comparisonPlotFilters),
+                    bubblePlotIndicators: vi.fn().mockReturnValue(["TEST BUBBLE INDICATORS"]),
+                    bubblePlotFilters: vi.fn().mockReturnValue(["TEST BUBBLE FILTERS"]),
+                    choroplethFilters: vi.fn().mockReturnValue(["TEST CHORO FILTERS"]),
+                    choroplethIndicators: vi.fn().mockReturnValue(["TEST CHORO INDICATORS"]),
+                    countryAreaFilterOption: vi.fn().mockReturnValue({TEST: "TEST countryAreaFilterOption"}),
+                    comparisonPlotDefaultSelections: vi.fn().mockReturnValue(["TEST comparisonPlotDefaultSelections"]),
                     ...partialGetters
                 },
                 mutations: modelOutputMutations,
@@ -126,7 +126,7 @@ function getStore(modelOutputState: Partial<ModelOutputState> = {}, partialGette
             downloadResults: {
                 namespaced: true,
                 actions: {
-                    prepareOutputs: jest.fn()
+                    prepareOutputs: vi.fn()
                 }
             }
         }
@@ -235,7 +235,7 @@ describe("ModelOutput component", () => {
     });
 
     it("does not render comparison plot if no there are no comparison plot indicators", () => {
-        const store = getStore({selectedTab: ModelOutputTabs.Comparison}, {comparisonPlotIndicators: jest.fn().mockReturnValue([])});
+        const store = getStore({selectedTab: ModelOutputTabs.Comparison}, {comparisonPlotIndicators: vi.fn().mockReturnValue([])});
         const wrapper = shallowMountWithTranslate(ModelOutput, store, {global: {plugins: [store]}});
         expect(wrapper.findAllComponents(BarChartWithFilters).length).toBe(1);
     });
@@ -811,7 +811,7 @@ describe("ModelOutput component", () => {
         ]
 
         const store = getStore({selectedTab: ModelOutputTabs.Comparison}, {
-            comparisonPlotDefaultSelections: jest.fn().mockReturnValue(comparisonDefaultSelections)
+            comparisonPlotDefaultSelections: vi.fn().mockReturnValue(comparisonDefaultSelections)
         }, {});
         const wrapper = shallowMountWithTranslate(ModelOutput, store, {
             global: {
@@ -849,7 +849,7 @@ describe("ModelOutput component", () => {
         ]
 
         const store = getStore({selectedTab: ModelOutputTabs.Comparison}, {
-            comparisonPlotDefaultSelections: jest.fn().mockReturnValue(comparisonDefaultSelections)
+            comparisonPlotDefaultSelections: vi.fn().mockReturnValue(comparisonDefaultSelections)
         }, {});
         const wrapper = shallowMountWithTranslate(ModelOutput, store, {
             global: {
@@ -985,7 +985,7 @@ describe("ModelOutput component", () => {
     it("renders choropleth table with correct indicator props", () => {
         const store = getStore({selectedTab: ModelOutputTabs.Map},
             {
-                choroplethIndicators: jest.fn().mockReturnValue(
+                choroplethIndicators: vi.fn().mockReturnValue(
                     [
                         {"indicator": "prevalence", "indicator_value": "2"},
                         {"indicator": "art_coverage", "indicator_value": "4"}
@@ -1021,7 +1021,7 @@ describe("ModelOutput component", () => {
                 selectedTab: ModelOutputTabs.Bubble
             },
             {
-                bubblePlotIndicators: jest.fn().mockReturnValue(
+                bubblePlotIndicators: vi.fn().mockReturnValue(
                     [
                         {"indicator": "prevalence", "indicator_value": "2"},
                         {"indicator": "art_coverage", "indicator_value": "4"},
@@ -1077,7 +1077,7 @@ describe("ModelOutput component", () => {
 
     it("renders barchart table with correct indicator props", () => {
         const store = getStore({selectedTab: ModelOutputTabs.Bar}, {
-                barchartIndicators: jest.fn().mockReturnValue(
+                barchartIndicators: vi.fn().mockReturnValue(
                     [
                         {"indicator": "prevalence", "indicator_value": "2"},
                         {"indicator": "art_coverage", "indicator_value": "4"}
@@ -1122,7 +1122,7 @@ describe("ModelOutput component", () => {
 
     it("renders comparison plot table with correct indicator props", () => {
         const store = getStore({selectedTab: ModelOutputTabs.Comparison}, {
-            comparisonPlotIndicators: jest.fn().mockReturnValue(
+            comparisonPlotIndicators: vi.fn().mockReturnValue(
                 [
                     {"indicator": "prevalence", "indicator_value": "2"},
                     {"indicator": "art_coverage", "indicator_value": "4"}

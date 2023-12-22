@@ -10,10 +10,10 @@ import {BaselineState} from "../../../app/store/baseline/baseline";
 describe("download indicator", () => {
 
     afterEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
     })
 
-    const mockDownloadFileActions = jest.fn()
+    const mockDownloadFileActions = vi.fn()
 
     const stateData = {iso3: "MWI", country: "Malawi"}
 

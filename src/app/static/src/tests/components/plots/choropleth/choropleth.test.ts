@@ -16,12 +16,13 @@ import { mountWithTranslate } from "../../../testHelpers";
 import {Layer} from "leaflet";
 import {Feature} from "geojson";
 
-const mockSetTooltipContent = jest.fn();
+const mockSetTooltipContent = vi.fn();
 const mockLayer = {
     setTooltipContent: mockSetTooltipContent
 } as any;
 
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", async () => {
+    const actual = await vi.importActual("@vue-leaflet/vue-leaflet")
     const LMap = {
         template: "<div id='l-map-mock'><slot></slot></div>"
     }
@@ -44,7 +45,7 @@ jest.mock("@vue-leaflet/vue-leaflet", () => {
             }
         }
     }
-    return { LMap, LControl, LGeoJson }
+    return { ...actual, LMap, LControl, LGeoJson }
 });
 
 const store = new Vuex.Store({
@@ -418,7 +419,7 @@ describe("Choropleth component", () => {
 
     it("updateBounds updates bounds of map from features geojson", () => {
         const wrapper = getWrapper();
-        const mockMapFitBounds = jest.fn();
+        const mockMapFitBounds = vi.fn();
 
         const vm = wrapper.vm as any;
         vm.$refs.map.leafletObject = {
@@ -432,7 +433,7 @@ describe("Choropleth component", () => {
 
     it("reset view component updates bounds of map from features geojson", () => {
         const wrapper = getWrapper();
-        const mockMapFitBounds = jest.fn();
+        const mockMapFitBounds = vi.fn();
 
         const vm = wrapper.vm as any;
         vm.$refs.map.leafletObject = {
@@ -537,7 +538,7 @@ describe("Choropleth component", () => {
     });
 
     it("updates bounds when becomes initialises", async () => {
-        const mockUpdateBounds = jest.fn();
+        const mockUpdateBounds = vi.fn();
         const wrapper = getWrapper({ //this cannot initialise
             features: [...props.features],
             featureLevels: [...props.featureLevels],
@@ -576,7 +577,7 @@ describe("Choropleth component", () => {
         const onEachFeatureFunction = options.onEachFeature;
 
         const mockLayer = {
-            bindTooltip: jest.fn()
+            bindTooltip: vi.fn()
         };
 
         const mockFeature = {
@@ -612,7 +613,7 @@ describe("Choropleth component", () => {
         const wrapper = getWrapper();
         const vm = wrapper.vm as any;
 
-        const spy = jest.spyOn(wrapper.vm as any, "setLayerTooltipContent");
+        const spy = vi.spyOn(wrapper.vm as any, "setLayerTooltipContent");
 
         vm.updateTooltips();
 
@@ -626,7 +627,7 @@ describe("Choropleth component", () => {
         const wrapper = getWrapper();
         const vm = wrapper.vm as any;
 
-        const mockSetTooltipContent = jest.fn();
+        const mockSetTooltipContent = vi.fn();
         const mockLayer = {
             setTooltipContent: mockSetTooltipContent
         } as any;
@@ -660,7 +661,7 @@ describe("Choropleth component", () => {
 
     it("triggers updateBounds when component is updated", async () => {
         const wrapper = getWrapper();
-        const spy = jest.spyOn(wrapper.vm as any, "updateBounds");
+        const spy = vi.spyOn(wrapper.vm as any, "updateBounds");
         expect(spy.mock.calls.length).toBe(0);
         // applying any update
         await wrapper.setProps({ ...props, selections: { ...props.selections, detail: 3 }});
@@ -674,7 +675,7 @@ describe("Choropleth component", () => {
 
     it("triggers updateTooltips when component is updated", async () => {
         const wrapper = getWrapper();
-        const spy = jest.spyOn(wrapper.vm as any, "updateTooltips");
+        const spy = vi.spyOn(wrapper.vm as any, "updateTooltips");
         expect(spy.mock.calls.length).toBe(0);
         // applying any update
         await wrapper.setProps({ ...props, selections: { ...props.selections, detail: 3 }});

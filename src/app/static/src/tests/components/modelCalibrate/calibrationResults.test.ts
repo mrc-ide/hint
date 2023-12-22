@@ -32,9 +32,9 @@ function getStore(modelCalibrateState: Partial<ModelCalibrateState> = {}, partia
                 },
                 namespaced: true,
                 getters: {
-                    indicators: jest.fn().mockReturnValue(["TEST BARCHART INDICATORS"]),
-                    filters: jest.fn().mockReturnValue(["TEST BAR FILTERS"]),
-                    calibratePlotDefaultSelections: jest.fn().mockReturnValue(defaultSelections),
+                    indicators: vi.fn().mockReturnValue(["TEST BARCHART INDICATORS"]),
+                    filters: vi.fn().mockReturnValue(["TEST BAR FILTERS"]),
+                    calibratePlotDefaultSelections: vi.fn().mockReturnValue(defaultSelections),
                     ...partialGetters
                 },
                 mutations: modelCalibrateMutations

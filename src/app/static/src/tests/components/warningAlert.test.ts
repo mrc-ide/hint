@@ -31,7 +31,7 @@ describe("Warning alert component", () => {
     }
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("renders no warning alert if there are no warnings", () => {

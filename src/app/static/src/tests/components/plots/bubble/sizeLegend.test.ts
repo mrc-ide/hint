@@ -7,11 +7,15 @@ import MapAdjustScale from "../../../../app/components/plots/MapAdjustScale.vue"
 import {ScaleType} from "../../../../app/store/plottingSelections/plottingSelections";
 import { mountWithTranslate, shallowMountWithTranslate } from "../../../testHelpers";
 
-jest.mock("@vue-leaflet/vue-leaflet", () => {
+vi.mock("@vue-leaflet/vue-leaflet", async () => {
+    const actual = await vi.importActual("@vue-leaflet/vue-leaflet")
     const LControl = {
         template: "<div id='l-control-mock'><slot></slot></div>"
     }
-    return { LControl }
+    return {
+        ...actual,
+        LControl
+    }
 });
 
 const store = new Vuex.Store({

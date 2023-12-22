@@ -47,7 +47,7 @@ describe("Root mutations", () => {
 
     afterEach(() => {
         // restore the spy created with spyOn
-        jest.restoreAllMocks();
+        vi.restoreAllMocks();
     });
 
     const populatedState = function () {
@@ -286,7 +286,7 @@ describe("Root mutations", () => {
         const state = populatedState();
         state.language = Language.fr;
 
-        const mockRouterPush = jest.fn();
+        const mockRouterPush = vi.fn();
         router.push = mockRouterPush;
 
         const version = {id: 1, name: "newVersion", versions: [{id: "newVersion"}]};
@@ -347,7 +347,7 @@ describe("Root mutations", () => {
             modelRun: mockModelRunState({statusPollId: 98}),
             modelCalibrate: mockModelCalibrateState({statusPollId: 99})
         });
-        const spy = jest.spyOn(window, "clearInterval");
+        const spy = vi.spyOn(window, "clearInterval");
 
         mutations.ResetOutputs(state);
 
@@ -364,7 +364,7 @@ describe("Root mutations", () => {
         state.downloadResults.coarseOutput.statusPollId = 97;
         state.downloadResults.summary.statusPollId = 98;
         state.downloadResults.comparison.statusPollId = 99;
-        const spy = jest.spyOn(window, "clearInterval");
+        const spy = vi.spyOn(window, "clearInterval");
 
         mutations.ResetDownload(state);
 

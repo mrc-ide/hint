@@ -1,10 +1,10 @@
 import FilterSelect from "../../../app/components/plots/FilterSelect.vue";
-import TreeSelect from "vue3-treeselect";
 import Vuex from "vuex";
 import {emptyState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import VueFeather from "vue-feather";
 import { mountWithTranslate, shallowMountWithTranslate } from '../../testHelpers';
+import HintTreeSelect from "../../../app/components/HintTreeSelect.vue";
 import { VueWrapper } from "@vue/test-utils";
 
 describe("FilterSelect component", () => {
@@ -25,7 +25,7 @@ describe("FilterSelect component", () => {
     });
 
     it("renders tooltip if any options have descriptions", () => {
-        const tooltip = jest.fn();
+        const tooltip = vi.fn();
         const wrapper = shallowMountWithTranslate(FilterSelect, store, {
             global: {
                 plugins: [store],
@@ -55,7 +55,7 @@ describe("FilterSelect component", () => {
         expect(wrapper.find("span.filter-select").exists()).toBe(false);
     });
 
-    it("renders TreeSelect", () => {
+    it("renders HintTreeSelect", () => {
         const wrapper = mountWithTranslate(FilterSelect, store, {
             global: {
                 plugins: [store]
@@ -69,7 +69,7 @@ describe("FilterSelect component", () => {
                 }
         });
 
-        const treeSelect = wrapper.findComponent(TreeSelect);
+        const treeSelect = wrapper.findComponent(HintTreeSelect);
         expect(treeSelect.props("modelValue")).toBe("2");
         expect(treeSelect.props("disabled")).toBe(false);
         expect(treeSelect.props("options")).toStrictEqual(testOptions);
@@ -81,7 +81,7 @@ describe("FilterSelect component", () => {
         expect(label.classes().indexOf("disabled-label")).toBe(-1);
     });
 
-    it("renders TreeSelect with null value and placeholder if disabled", () => {
+    it("renders HintTreeSelect with null value and placeholder if disabled", () => {
         const wrapper = mountWithTranslate(FilterSelect, store, {
             global: {
                 plugins: [store]
@@ -95,7 +95,7 @@ describe("FilterSelect component", () => {
                 }
         });
 
-        const treeSelect = wrapper.findComponent(TreeSelect);
+        const treeSelect = wrapper.findComponent(HintTreeSelect);
         expect(treeSelect.props("modelValue")).toBeNull();
         expect(treeSelect.props("disabled")).toBe(true);
         expect(treeSelect.props("options")).toStrictEqual(testOptions);
@@ -114,7 +114,7 @@ describe("FilterSelect component", () => {
                 plugins: [store]
             }, props: {label: "label", options: testOptions}
         });
-        await wrapper.findAllComponents(TreeSelect)[0].vm.$emit("update:modelValue", "2");
+        await wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("update:modelValue", "2");
         expect(wrapper.emitted("input")![0][0]).toBe("2");
     });
 
@@ -125,7 +125,7 @@ describe("FilterSelect component", () => {
             },
             props: {label: "label", options: testOptions, disabled: true}
         });
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("update:modelValue", "2");
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("update:modelValue", "2");
         expect(wrapper.emitted("input")!).toBeUndefined();
     });
 
@@ -136,10 +136,10 @@ describe("FilterSelect component", () => {
             },
             props: {label: "Label", options: testOptions, multiple: true, value: []}
         });
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("select", {id: "1", label: "one"});
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("select", {id: "1", label: "one"});
         expect(wrapper.emitted("update:filter-select")![0][0]).toStrictEqual([{id: "1", label: "one"}]);
 
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("select", {id: "2", label: "two"});
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("select", {id: "2", label: "two"});
         expect(wrapper.emitted("update:filter-select")![1][0]).toStrictEqual([{id: "1", label: "one"}, {id: "2", label: "two"}]);
     });
 
@@ -150,10 +150,10 @@ describe("FilterSelect component", () => {
             },
             props: {label: "Label", options: testOptions, multiple: false}
         });
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("select", {id: "1", label: "one"});
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("select", {id: "1", label: "one"});
         expect(wrapper.emitted("update:filter-select")![0][0]).toStrictEqual([{id: "1", label: "one"}]);
 
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("select", {id: "2", label: "two"});
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("select", {id: "2", label: "two"});
         expect(wrapper.emitted("update:filter-select")![1][0]).toStrictEqual([{id: "2", label: "two"}]);
     });
 
@@ -165,7 +165,7 @@ describe("FilterSelect component", () => {
             props: {label: "Label", options: testOptions, multiple: true, value: ["1", "2"]}
         });
 
-        wrapper.findAllComponents(TreeSelect)[0].vm.$emit("deselect", {id: "1", label: "one"});
+        wrapper.findAllComponents(HintTreeSelect)[0].vm.$emit("deselect", {id: "1", label: "one"});
         expect(wrapper.emitted("update:filter-select")![0][0]).toStrictEqual([{id: "2", label: "two"}]);
     });
 });

@@ -15,8 +15,8 @@ describe("model options actions integration", () => {
     beforeAll(async () => {
         await login();
 
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         let formData = getFormData("../testdata/malawi.geojson") ;
 
@@ -28,7 +28,7 @@ describe("model options actions integration", () => {
     });
 
     it("can get valid model options", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.fetchModelRunOptions({commit, rootState} as any);
         expect(commit.mock.calls[1][0]["type"]).toBe("ModelOptionsFetched");
         const payload = commit.mock.calls[1][0]["payload"];
@@ -40,9 +40,9 @@ describe("model options actions integration", () => {
 
     
     it("can validate model options", async () => {
-        const commit = jest.fn();
-        const options =  jest.fn()
-        const version = jest.fn()
+        const commit = vi.fn();
+        const options =  vi.fn()
+        const version = vi.fn()
       
         const mockState = {
             language: Language.en,

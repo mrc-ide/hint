@@ -25,7 +25,7 @@
                     <plotly class="chart"
                             v-if="!chartDataIsEmpty"
                            :chart-data="chartDataPage"
-                           :layout-data="chartConfigValues.layoutData"
+                           :layout-data="(chartConfigValues.layoutData as any)"
                            :style="{height: chartConfigValues.scrollHeight}"></plotly>
                     <div v-else class="mt-5" id="empty-generic-chart-data">
                         <div class="empty-chart-message px-3 py-2">

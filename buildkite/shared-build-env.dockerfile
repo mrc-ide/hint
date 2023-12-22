@@ -1,4 +1,4 @@
-FROM mrcide/node-docker:master
+FROM mrcide/node-20-docker:main
 
 RUN apt-get install wget
 

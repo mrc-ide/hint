@@ -23,9 +23,10 @@ import UploadNewProject from "../../../app/components/load/UploadNewProject.vue"
 import {expectTranslated, mountWithTranslate} from "../../testHelpers";
 import {switches} from "../../../app/featureSwitches";
 import { nextTick } from "vue";
+import { Mock } from "vitest";
 
 // jsdom has only implemented navigate up to hashes, hence appending a hash here to the base url
-const mockCreateObjectUrl = jest.fn(() => "http://localhost#1234");
+const mockCreateObjectUrl = vi.fn(() => "http://localhost#1234");
 window.URL.createObjectURL = mockCreateObjectUrl;
 
 function readAsText(reader:any, file: any) {
@@ -49,10 +50,10 @@ describe("File menu", () => {
     }
 
     const testProjects = [{id: 2, name: "proj1", versions: []}];
-    const mockGetProjects = jest.fn();
+    const mockGetProjects = vi.fn();
 
     beforeEach(() => {
-        jest.clearAllMocks()
+        vi.clearAllMocks()
     })
 
     const storeModules = {
@@ -153,7 +154,7 @@ describe("File menu", () => {
         };
 
 
-        const actualBlob = (mockCreateObjectUrl as jest.Mock).mock.calls[0][0];
+        const actualBlob = (mockCreateObjectUrl as Mock).mock.calls[0][0];
         const reader = new FileReader();
 
         reader.addEventListener('loadend', function () {
@@ -220,7 +221,7 @@ describe("File menu", () => {
         await expectTranslated(link, "LoadJSON", "ChargerJSON", "CarregarJSON", store as any);
 
         const input = wrapper.find("#upload-file").element as HTMLInputElement
-        const mockClick = jest.fn();
+        const mockClick = vi.fn();
 
         input.addEventListener("click", mockClick);
         await link.trigger("click");
@@ -229,7 +230,7 @@ describe("File menu", () => {
 
     it("invokes load JSON action when file selected from dialog, when user is guest", async () => {
         switches.loadJson = true
-        const mockLoadAction = jest.fn();
+        const mockLoadAction = vi.fn();
         const store = createStore({
             load: {
                 namespaced: true,
@@ -246,7 +247,7 @@ describe("File menu", () => {
                 }
             });
 
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadJsonInput")
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadJsonInput")
 
         const testFile = mockFile("testFilename.json", "test file contents", "application/json");
         await triggerSelectJson(wrapper, testFile, "#upload-file");
@@ -258,7 +259,7 @@ describe("File menu", () => {
 
     it("does not invoke load JSON action when no file is selected from dialog, when user is guest", async () => {
         switches.loadJson = true
-        const mockLoadAction = jest.fn();
+        const mockLoadAction = vi.fn();
         const store = createStore({
             load: {
                 namespaced: true,
@@ -275,7 +276,7 @@ describe("File menu", () => {
                 }
             });
 
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadJsonInput")
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadJsonInput")
 
         await wrapper.find("#upload-file").trigger("change")
         expect(mockLoadAction.mock.calls.length).toEqual(0);
@@ -284,7 +285,7 @@ describe("File menu", () => {
     });
 
     it("does not invoke preparingRehydrate action when file selected from dialog, when user is guest", async () => {
-        const mockPreparingRehydrate = jest.fn();
+        const mockPreparingRehydrate = vi.fn();
         const wrapper = mount(FileMenu,
             {
                 global: {
@@ -300,7 +301,7 @@ describe("File menu", () => {
                 }
             });
 
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadZipInput")
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadZipInput")
 
         await wrapper.find("#upload-zip").trigger("change")
         expect(mockPreparingRehydrate.mock.calls.length).toEqual(0);
@@ -309,7 +310,7 @@ describe("File menu", () => {
     });
 
     it("invokes load model output action when file selected from dialog and user is guest", async () => {
-        const mockPreparingRehydrate = jest.fn()
+        const mockPreparingRehydrate = vi.fn()
         const wrapper = mount(FileMenu,
             {
                 global: {
@@ -325,7 +326,7 @@ describe("File menu", () => {
                 },
             });
 
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadZipInput")
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadZipInput")
 
         const testFile = mockFile("test filename", "test file contents", "application/zip");
         await triggerSelectZip(wrapper, testFile, "#upload-zip");
@@ -346,7 +347,7 @@ describe("File menu", () => {
     });
 
     it("error modal can be dismissed", async () => {
-        const clearErrorMock = jest.fn();
+        const clearErrorMock = vi.fn();
         const store = createStore({
             load: {
                 namespaced: true,
@@ -378,7 +379,7 @@ describe("File menu", () => {
     it("can open upload project modal when load JSON is triggered as guest", async () => {
         switches.loadJson = true
         expect(mockGetProjects.mock.calls.length).toBe(0);
-        const mockLoadAction = jest.fn()
+        const mockLoadAction = vi.fn()
         const store = createStore({
             load: {
                 namespaced: true,
@@ -411,7 +412,7 @@ describe("File menu", () => {
     });
 
     it("can open upload project modal and does not get projects as guest when file is uploaded", async () => {
-        const mockPreparingRehydrate = jest.fn()
+        const mockPreparingRehydrate = vi.fn()
         const store = createStore({
             load: {
                 namespaced: true,
@@ -429,8 +430,8 @@ describe("File menu", () => {
     });
 
     it("triggers preparingRehydrate action as non-guest when file is uploaded", async () => {
-        const mockPreparingRehydrate = jest.fn()
-        const mockProjectName = jest.fn()
+        const mockPreparingRehydrate = vi.fn()
+        const mockProjectName = vi.fn()
         const store = createStore({
             load: {
                 namespaced: true,
@@ -467,8 +468,8 @@ describe("File menu", () => {
 
     it("triggers load action as non-guest when JSON file is uploaded", async () => {
         switches.loadJson = true
-        const mockLoadAction = jest.fn()
-        const mockProjectName = jest.fn()
+        const mockLoadAction = vi.fn()
+        const mockProjectName = vi.fn()
         const store = createStore({
             load: {
                 namespaced: true,
@@ -564,7 +565,7 @@ describe("File menu", () => {
 
         (wrapper.vm as any).$data.projectNameJson = true;
         await nextTick();
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadJsonInput");
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadJsonInput");
 
         const modal = wrapper.findComponent("#project-json #load");
         expect((modal as VueWrapper).props("open")).toBe(true);
@@ -583,7 +584,7 @@ describe("File menu", () => {
 
         (wrapper.vm as any).$data.projectNameZip = true;
         await nextTick();
-        const spy = jest.spyOn((wrapper.vm as any), "clearLoadZipInput");
+        const spy = vi.spyOn((wrapper.vm as any), "clearLoadZipInput");
 
         const modal = wrapper.findComponent("#project-zip #load");
         expect((modal as VueWrapper).props("open")).toBe(true);
@@ -593,8 +594,8 @@ describe("File menu", () => {
     });
 
     it("should disable button when uploadZip input field is empty for new project upload", async () => {
-        const mockPreparingRehydrate = jest.fn()
-        const mockProjectName = jest.fn()
+        const mockPreparingRehydrate = vi.fn()
+        const mockProjectName = vi.fn()
         const store = createStore({
             load: {
                 namespaced: true,
@@ -662,12 +663,12 @@ const openUploadNewProject = async (store: Store<any>, inputId= "#upload-file", 
 
 const triggerSelectZip = async (wrapper: VueWrapper, testFile: File, id: string) => {
     const input = wrapper.find(id);
-    jest.spyOn((wrapper.vm.$refs as any).loadZip, "files", "get").mockImplementation(() => [testFile]);
+    vi.spyOn((wrapper.vm.$refs as any).loadZip, "files", "get").mockImplementation(() => [testFile]);
     await input.trigger("change");
 };
 
 const triggerSelectJson = async (wrapper: VueWrapper, testFile: File, id: string) => {
     const input = wrapper.find(id);
-    jest.spyOn((wrapper.vm.$refs as any).loadJson, "files", "get").mockImplementation(() => [testFile]);
+    vi.spyOn((wrapper.vm.$refs as any).loadJson, "files", "get").mockImplementation(() => [testFile]);
     await input.trigger("change");
 };

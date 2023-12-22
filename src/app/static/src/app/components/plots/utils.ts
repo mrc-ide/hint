@@ -250,7 +250,7 @@ export const flattenXAxisFilterOptionIds = (selections: BarchartSelections, filt
 
 
 export const updateSelectionsAndXAxisOrder = (data: BarchartSelections, selections: BarchartSelections, flattenedXAxisFilterOptionIds: string[], updateSelections: (data: {payload: BarchartSelections}) => void) => {
-    const payload = {...selections, ...structuredClone(data)}
+    const payload = {...selections, ...JSON.parse(JSON.stringify(data))}
     if (data.xAxisId && data.selectedFilterOptions) {
         const {xAxisId, selectedFilterOptions} = data
         if (selectedFilterOptions[xAxisId] && flattenedXAxisFilterOptionIds.length) {

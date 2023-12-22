@@ -57,10 +57,10 @@ import { nextTick } from 'vue';
 
 describe("Stepper component", () => {
 
-    const clearOptionsWarnings = jest.fn(); 
-    const clearCalibrateWarnings = jest.fn(); 
-    const clearRunWarnings = jest.fn();
-    const clearReviewInputsWarnings = jest.fn();
+    const clearOptionsWarnings = vi.fn(); 
+    const clearCalibrateWarnings = vi.fn(); 
+    const clearRunWarnings = vi.fn();
+    const clearReviewInputsWarnings = vi.fn();
 
     const createSut = (baselineState?: Partial<BaselineState>,
                        surveyAndProgramState?: Partial<SurveyAndProgramState>,
@@ -69,7 +69,7 @@ describe("Stepper component", () => {
                        stepperState?: Partial<StepperState>,
                        loadState?: Partial<LoadState>,
                        projectsState?: Partial<ProjectsState>,
-                       mockRouterPush = jest.fn(),
+                       mockRouterPush = vi.fn(),
                        partialRootState: Partial<RootState> = {},
                        modelOptionsState: Partial<ModelOptionsState> = {},
                        modelCalibrateState: Partial<ModelCalibrateState> = {},
@@ -90,7 +90,7 @@ describe("Stepper component", () => {
                     state: mockBaselineState(baselineState),
                     getters: baselineGetters,
                     actions: {
-                        deleteAll: jest.fn()
+                        deleteAll: vi.fn()
                     },
                     mutations
                 },
@@ -99,7 +99,7 @@ describe("Stepper component", () => {
                     state: mockSurveyAndProgramState(surveyAndProgramState),
                     getters: surveyAndProgramGetters,
                     actions: {
-                        deleteAll: jest.fn()
+                        deleteAll: vi.fn()
                     },
                     mutations: surveyAndProgramMutations
                 },
@@ -176,7 +176,7 @@ describe("Stepper component", () => {
                        stepperState?: Partial<StepperState>,
                        loadState?: Partial<LoadState>,
                        projectsState?: Partial<ProjectsState>,
-                       mockRouterPush = jest.fn(),
+                       mockRouterPush = vi.fn(),
                        partialRootState: Partial<RootState> = {},
                        modelOptionsState: Partial<ModelOptionsState> = {},
                        modelCalibrateState: Partial<ModelCalibrateState> = {},
@@ -209,7 +209,7 @@ describe("Stepper component", () => {
 
     afterEach(() => {
         localStorage.clear();
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("renders loading spinner while states are not ready", () => {
@@ -249,7 +249,7 @@ describe("Stepper component", () => {
             {},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {updatingLanguage: true});
 
         const store = wrapper.vm.$store;
@@ -450,7 +450,7 @@ describe("Stepper component", () => {
         expect(steps[0].props().active).toBe(true);
     });
 
-    it("updates from completed state when active step data is populated", (done) => {
+    it("updates from completed state when active step data is populated", async () => {
         const baselineState = {
             country: "Malawi",
             iso3: "MWI",
@@ -469,11 +469,8 @@ describe("Stepper component", () => {
             "type": "Validated",
             "payload": mockValidateBaselineResponse()
         });
-
-        nextTick().then(() => {
-            expect(vm.navigationProps.nextDisabled).toBe(false);
-            done();
-        });
+        await nextTick();
+        expect(vm.navigationProps.nextDisabled).toBe(false);
     });
 
     it("active step only becomes active once state becomes ready", async () => {
@@ -618,7 +615,7 @@ describe("Stepper component", () => {
             {activeStep: 4},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {},
             {valid: true},
         );
@@ -674,7 +671,7 @@ describe("Stepper component", () => {
     });
 
     it("validates state once ready", async () => {
-        const spy = jest.spyOn(rootActions as any, "validate");
+        const spy = vi.spyOn(rootActions as any, "validate");
         const wrapper = createSut({ready: true}, {}, {}, {ready: true});
         expect(spy).not.toHaveBeenCalled();
 
@@ -683,8 +680,8 @@ describe("Stepper component", () => {
     });
 
     it("pushes router to projects if logged in user and currentProject not set", () => {
-        const mockRouterPush = jest.fn();
-        //current user is set in jest.config and currentProject is not set be default in the wrapper
+        const mockRouterPush = vi.fn();
+        //current user is set in vi.config and currentProject is not set be default in the wrapper
         const wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(1);
@@ -692,14 +689,14 @@ describe("Stepper component", () => {
     });
 
     it("does not push router to projects if guest user", () => {
-        const mockRouterPush = jest.fn();
+        const mockRouterPush = vi.fn();
         const wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush, {currentUser: 'guest'});
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });
 
     it("does not push router to projects if logged in user and currentProject set", () => {
-        const mockRouterPush = jest.fn();
+        const mockRouterPush = vi.fn();
         const projectsState = {currentProject: {id: 1, name: "testProject", versions: []}};
         const wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
@@ -707,7 +704,7 @@ describe("Stepper component", () => {
     });
 
     it("does not push router to projects if project is loading", () => {
-        const mockRouterPush = jest.fn();
+        const mockRouterPush = vi.fn();
         const projectsState = {loading: true};
         const wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
@@ -770,7 +767,7 @@ describe("Stepper component", () => {
             {activeStep: 7},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {},
             {valid: true},
             {complete: true}
@@ -818,7 +815,7 @@ describe("Stepper component", () => {
             {activeStep},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {},
             {
                 valid: true,
@@ -871,7 +868,7 @@ describe("Stepper component", () => {
             {activeStep: 3},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {},
             {
                 valid: true,
@@ -916,7 +913,7 @@ describe("Stepper component", () => {
             {activeStep: 2},
             {},
             {},
-            jest.fn(),
+            vi.fn(),
             {},
             {},
             {},

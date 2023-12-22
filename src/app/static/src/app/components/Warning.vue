@@ -10,7 +10,7 @@
         depending on the size of the warningBox and whether the user has clicked show more or less. -->
         <div :style="{ overflowY: 'hidden', height: `${renderedBoxHeight}px` }">
             <ul class="mb-0" ref="warningBox" id="warningBox">
-                <li v-for="warning in warnings" :key="warning.text"><div :style="lineStyling">{{ warning.text }}</div></li>
+                <li v-for="warning in warnings" :key="warning.text"><div :style="(lineStyling as any)">{{ warning.text }}</div></li>
             </ul>
             <!-- The below element will never be shown to the user but is used as a proxy to 
             dynamically determine the height in pixels the warnings window should have.  -->

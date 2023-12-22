@@ -24,10 +24,10 @@ const router = createRouter({
 describe("Online support menu", () => {
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
-    const mockGenerateErrorReport = jest.fn()
+    const mockGenerateErrorReport = vi.fn()
 
     const createStore = (stepperState: Partial<StepperState> = {},
                          language: Language = Language.en) => {

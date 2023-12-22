@@ -24,7 +24,6 @@ import Choropleth from "../../../app/components/plots/choropleth/Choropleth.vue"
 import AreaIndicatorsTable from "../../../app/components/plots/table/AreaIndicatorsTable.vue";
 import { nextTick } from 'vue';
 import Filters from '../../../app/components/plots/Filters.vue';
-import Treeselect from "vue3-treeselect";
 import HintTreeSelect from '../../../app/components/HintTreeSelect.vue';
 
 describe("Survey and programme component", () => {
@@ -326,17 +325,17 @@ describe("Survey and programme component", () => {
                 stubs: ["filters", "l-map", "area-indicators-table", "generic-chart"]
             }, data
         });
-        let options = wrapper.findComponent(Treeselect).props("options");
+        let options = wrapper.findComponent(HintTreeSelect).props("options");
         expect(options).toStrictEqual([{id, label: englishName}]);
 
         store.state.language = Language.fr;
         await nextTick();
-        options = wrapper.findComponent(Treeselect).props("options");
+        options = wrapper.findComponent(HintTreeSelect).props("options");
         expect(options).toStrictEqual([{id, label:frenchName}]);
 
         store.state.language = Language.pt;
         await nextTick();
-        options = wrapper.findComponent(Treeselect).props("options");
+        options = wrapper.findComponent(HintTreeSelect).props("options");
         expect(options).toStrictEqual([{id, label:portugueseName}]);
     }
 

@@ -9,10 +9,10 @@ import { Language } from '../../app/store/translations/locales';
 import { nextTick } from 'vue';
 
 describe("Hint data exploration", () => {
-    const mockGetBaselineData = jest.fn();
-    const mockGetSurveyAndProgramData = jest.fn();
-    const mockGetSchemas = jest.fn();
-    const mockGetGenericChartMetadata = jest.fn();
+    const mockGetBaselineData = vi.fn();
+    const mockGetSurveyAndProgramData = vi.fn();
+    const mockGetSchemas = vi.fn();
+    const mockGetGenericChartMetadata = vi.fn();
 
     const createStore = () => {
         const store = new Vuex.Store({
@@ -62,7 +62,7 @@ describe("Hint data exploration", () => {
     };
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        vi.resetAllMocks()
     })
 
     it("renders as expected", () => {

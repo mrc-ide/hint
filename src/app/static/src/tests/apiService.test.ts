@@ -8,21 +8,22 @@ import {
     mockSuccess
 } from "./mocks";
 import {freezer} from '../app/utils';
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 
 describe("ApiService", () => {
 
     beforeEach(() => {
-        console.log = jest.fn();
-        console.warn = jest.fn();
+        console.log = vi.fn();
+        console.warn = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
-        (console.warn as jest.Mock).mockClear();
-        jest.clearAllMocks();
+        (console.log as Mock).mockClear();
+        (console.warn as Mock).mockClear();
+        vi.clearAllMocks();
     });
 
     it("console logs error", async () => {
@@ -30,14 +31,14 @@ describe("ApiService", () => {
             .reply(500, mockFailure("some error message"));
 
         try {
-            await api({commit: jest.fn(), rootState} as any)
+            await api({commit: vi.fn(), rootState} as any)
                 .get("/baseline/")
         } catch (e) {
 
         }
-        expect((console.warn as jest.Mock).mock.calls[0][0])
+        expect((console.warn as Mock).mock.calls[0][0])
             .toBe("No error handler registered for request /baseline/.");
-        expect((console.log as jest.Mock).mock.calls[0][0].errors[0].detail)
+        expect((console.log as Mock).mock.calls[0][0].errors[0].detail)
             .toBe("some error message");
     });
 
@@ -46,12 +47,12 @@ describe("ApiService", () => {
         mockAxios.onGet(`/unusual/`)
             .reply(500, mockFailure("some error message"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await api({commit, rootState} as any)
             .get("/unusual/");
 
-        expect((console.warn as jest.Mock).mock.calls[0][0])
+        expect((console.warn as Mock).mock.calls[0][0])
             .toBe("No error handler registered for request /unusual/.");
 
         expect(commit.mock.calls.length).toBe(1);
@@ -72,12 +73,12 @@ describe("ApiService", () => {
         mockAxios.onGet(`/unusual/`)
             .reply(500, failure);
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
         await api({commit, rootState} as any)
             .get("/unusual/");
 
-        expect((console.warn as jest.Mock).mock.calls[0][0])
+        expect((console.warn as Mock).mock.calls[0][0])
             .toBe("No error handler registered for request /unusual/.");
 
         expect(commit.mock.calls.length).toBe(1);
@@ -136,13 +137,13 @@ describe("ApiService", () => {
     it("can redirect to login when 401 response is received", async () => {
         const realLocation = window.location
         delete (window as any).location
-        window.location = {...window.location, assign: jest.fn()};
+        window.location = {...window.location, assign: vi.fn()};
 
         mockAxios.onGet("/baseline/")
             .reply(401, null);
         expect(window.location.assign).not.toHaveBeenCalled()
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await api({commit, rootState} as any)
             .get("/baseline/");
 
@@ -289,7 +290,7 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(200, mockSuccess("TEST"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         const response = await api({commit, rootState} as any)
             .withSuccess("TEST_TYPE")
             .get("/baseline/");
@@ -304,7 +305,7 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(200, mockResponse);
 
-        const spy = jest.spyOn(freezer, "deepFreeze");
+        const spy = vi.spyOn(freezer, "deepFreeze");
 
         let committedType: any = false;
         let committedPayload: any = false;
@@ -329,7 +330,7 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(200, mockSuccess(fakeData));
 
-        const spy = jest.spyOn(freezer, "deepFreeze");
+        const spy = vi.spyOn(freezer, "deepFreeze");
 
         let committedType: any = false;
         let committedPayload: any = false;
@@ -376,12 +377,12 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(500, mockFailure("some error message"));
 
-        await api({commit: jest.fn(), rootState} as any)
+        await api({commit: vi.fn(), rootState} as any)
             .withSuccess("whatever")
             .ignoreErrors()
             .get("/baseline/");
 
-        expect((console.warn as jest.Mock).mock.calls.length).toBe(0);
+        expect((console.warn as Mock).mock.calls.length).toBe(0);
     });
 
     it("warns if error and success handlers are not set", async () => {
@@ -389,10 +390,10 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(200, mockSuccess(true));
 
-        await api({commit: jest.fn(), rootState} as any)
+        await api({commit: vi.fn(), rootState} as any)
             .get("/baseline/");
 
-        const warnings = (console.warn as jest.Mock).mock.calls;
+        const warnings = (console.warn as Mock).mock.calls;
 
         expect(warnings[0][0]).toBe("No error handler registered for request /baseline/.");
         expect(warnings[1][0]).toBe("No success handler registered for request /baseline/.");
@@ -403,12 +404,12 @@ describe("ApiService", () => {
         mockAxios.onGet(`/baseline/`)
             .reply(200, mockSuccess(true));
 
-        await api({commit: jest.fn(), rootState} as any)
+        await api({commit: vi.fn(), rootState} as any)
             .withSuccess("whatever")
             .ignoreErrors()
             .get("/baseline/");
 
-        expect(mockAxios.history.get[0].headers).toStrictEqual({
+        expect((mockAxios.history.get[0].headers as any).toJSON()).toEqual({
             "Accept": "application/json, text/plain, */*",
             "Accept-Language": "en"
         })
@@ -419,12 +420,12 @@ describe("ApiService", () => {
         mockAxios.onPost(`/baseline/`)
             .reply(200, mockSuccess(true));
 
-        await api({commit: jest.fn(), rootState} as any)
+        await api({commit: vi.fn(), rootState} as any)
             .withSuccess("whatever")
             .ignoreErrors()
             .postAndReturn("/baseline/");
 
-        expect(mockAxios.history.post[0].headers).toStrictEqual({
+        expect((mockAxios.history.post[0].headers as any).toJSON()).toEqual({
             "Accept": "application/json, text/plain, */*",
             "Accept-Language": "en",
             "Content-Type": "application/x-www-form-urlencoded"
@@ -432,7 +433,7 @@ describe("ApiService", () => {
     });
 
     async function expectCouldNotParseAPIResponseError() {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await api({commit, rootState} as any)
             .get("/baseline/");
 

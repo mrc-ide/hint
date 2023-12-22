@@ -50,7 +50,7 @@
                     :selections="barchartSelections"
                     :formatFunction="formatBarchartValue"
                     :showRangesInTooltips="true"
-                    :no-data-message="noChartData"
+                    :no-data-message="(noChartData as string)"
                     :show-error-bars="true"
                     :scale-to-screen="true"
                     @update:selections="updateBarchartSelectionsAndXAxisOrder"></bar-chart-with-filters>
@@ -103,7 +103,7 @@
                     :selections="comparisonPlotSelections"
                     :formatFunction="formatBarchartValue"
                     :showRangesInTooltips="true"
-                    :no-data-message="noChartData"
+                    :no-data-message="(noChartData as string)"
                     :show-error-bars="true"
                     :scale-to-screen="true"
                     @update:selections="updateComparisonPlotSelectionsAndXAxisOrder"></bar-chart-with-filters>

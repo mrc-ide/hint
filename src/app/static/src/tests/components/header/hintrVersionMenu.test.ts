@@ -11,7 +11,7 @@ import { nextTick } from "vue";
 
 describe("Hintr Menu Version", () => {
 
-    const mockGetHinrVersion = jest.fn();
+    const mockGetHinrVersion = vi.fn();
     const createStore = () => {
         const store = new Vuex.Store({
             state: emptyState(),

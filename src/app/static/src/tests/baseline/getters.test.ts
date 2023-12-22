@@ -128,7 +128,7 @@ it("selectedDatasetAvailableResources only returns resources that the user has p
         })
     })
 
-    const getters = jest.fn()
+    const getters = vi.fn()
     expect(baselineGetters.selectedDatasetAvailableResources(state, getters, rootState)).toStrictEqual(selectedDataset.resources);
 
     state = mockBaselineState({

@@ -11,7 +11,7 @@
                 </span>
                 <hintr-version-menu class="pr-2 mr-2 border-right"/>
                 <data-exploration-support-menu class="pr-2 mr-2 border-right"/>
-                <a :href="helpFilename"
+                <a :href="(helpFilename as string)"
                    id="helpFile"
                    target="_blank"
                    class="pr-2 mr-2 border-right"

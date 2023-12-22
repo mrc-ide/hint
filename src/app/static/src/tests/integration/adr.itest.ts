@@ -10,13 +10,13 @@ describe("ADR non-dataset actions", () => {
     });
 
     beforeEach(async () => {
-        await actions.saveKey({commit: jest.fn(), state, rootState} as any, "123");
+        await actions.saveKey({commit: vi.fn(), state, rootState} as any, "123");
     });
 
     const state = {key: null} as any;
 
     it("can fetch ADR key", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.fetchKey({commit, rootState} as any);
 
         expect(commit.mock.calls[0][0]["type"]).toBe(ADRMutation.UpdateKey);
@@ -24,7 +24,7 @@ describe("ADR non-dataset actions", () => {
     });
 
     it("can sso login method", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.ssoLoginMethod({commit, rootState} as any);
 
         expect(commit.mock.calls[0][0]["type"]).toBe(ADRMutation.SetSSOLogin);
@@ -32,7 +32,7 @@ describe("ADR non-dataset actions", () => {
     });
 
     it("can save ADR key", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.saveKey({commit, state, rootState} as any, "1234");
 
         expect(commit.mock.calls[1][0]["type"]).toBe(ADRMutation.UpdateKey);
@@ -40,7 +40,7 @@ describe("ADR non-dataset actions", () => {
     });
 
     it("can delete ADR key", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.deleteKey({commit, state, rootState} as any);
 
         expect(commit.mock.calls[1][0]["type"]).toBe(ADRMutation.UpdateKey);
@@ -49,7 +49,7 @@ describe("ADR non-dataset actions", () => {
 
 
     it("can fetch ADR schemas", async () => {
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.getSchemas({commit, state, rootState} as any);
 
         expect(commit.mock.calls[0][0]["type"]).toBe(ADRMutation.SetSchemas);

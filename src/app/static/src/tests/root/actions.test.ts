@@ -32,8 +32,8 @@ describe("root actions", () => {
     it("validate commits empty invalid steps if all steps are valid", async () => {
 
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             getters: {
                 "stepper/complete": {
                     1: true,
@@ -55,8 +55,8 @@ describe("root actions", () => {
 
     it("validate commits invalid steps if not all steps are valid", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             getters: {
                 "stepper/complete": {
                     1: true,
@@ -82,8 +82,8 @@ describe("root actions", () => {
 
     it("validate can include steps following current in invalid steps", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             getters: {
                 "stepper/complete": {
                     1: true,
@@ -108,8 +108,8 @@ describe("root actions", () => {
 
     it("validate commits empty invalid steps if later steps than current are complete and incomplete, but all are valid", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             getters: {
                 "stepper/complete": {
                     1: true,
@@ -134,8 +134,8 @@ describe("root actions", () => {
 
     it("rollbackInvalidState resets state if not all steps are valid", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             state: {
                 invalidSteps: [2, 3]
             },
@@ -164,8 +164,8 @@ describe("root actions", () => {
 
     it("rollbackInvalidState does not create new version if guest user", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             state: {
                 invalidSteps: [2]
             },
@@ -187,8 +187,8 @@ describe("root actions", () => {
 
     it("rollbackInvalidState dispatches delete baseline and surveyAndProgram action if baseline step is not valid", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             state: {
                 invalidSteps: [1, 2]
             },
@@ -212,8 +212,8 @@ describe("root actions", () => {
 
     it("dispatches no delete action if baseline and surveyAndProgram steps are valid", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             state: {
                 invalidSteps: [3]
             },
@@ -236,8 +236,8 @@ describe("root actions", () => {
 
     it("rollbackInvalidState does nothing if no invalid steps", async () => {
         const mockContext = {
-            commit: jest.fn(),
-            dispatch: jest.fn(),
+            commit: vi.fn(),
+            dispatch: vi.fn(),
             state: {
                 invalidSteps: []
             }
@@ -292,8 +292,8 @@ describe("root actions", () => {
         const getters = {
             errors: [err]
         }
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const payload: ErrorReportManualDetails = {
             email: "test@example.com",
@@ -382,8 +382,8 @@ describe("root actions", () => {
         const getters = {
             errors: [err]
         }
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
 
         const payload: ErrorReportManualDetails = {
             email: "test@example.com",
@@ -441,9 +441,9 @@ describe("root actions", () => {
 
         const rootState = mockRootState();
 
-        const commit = jest.fn();
+        const commit = vi.fn();
 
-        const dispatch = jest.fn();
+        const dispatch = vi.fn();
 
         const getters = {
             errors: []
@@ -468,8 +468,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage fetches plotting metadata and calibrate result", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState(
             {
                 baseline: mockBaselineState({iso3: "MWI"}),
@@ -491,8 +491,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage does not fetch plotting metadata if country code is empty", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState(
             {
                 modelCalibrate: mockModelCalibrateState({
@@ -510,8 +510,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage does not fetch calibrate result if calibrate is not complete", async () =>{
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState(
             {
                 baseline: mockBaselineState({iso3: "MWI"}),
@@ -531,8 +531,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage refreshes genericChart datasets, if any", async() => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState(
             {
                 baseline: mockBaselineState({iso3: "MWI"}),
@@ -548,8 +548,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage fetches nothing if no relevant metadata to fetch", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState({baseline: {iso3: ""} as any})
         await actions.changeLanguage({commit, dispatch, rootState} as any, Language.fr);
 
@@ -559,8 +559,8 @@ describe("root actions", () => {
     });
 
     it("changeLanguage does nothing if new language is the same as current language", async () => {
-        const commit = jest.fn();
-        const dispatch = jest.fn();
+        const commit = vi.fn();
+        const dispatch = vi.fn();
         const rootState = mockRootState(
             {
                 language: Language.fr,

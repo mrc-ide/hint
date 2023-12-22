@@ -39,8 +39,8 @@ describe("Manage file component", () => {
                 error: null,
                 label: "PJNZ",
                 valid: true,
-                upload: jest.fn(),
-                deleteFile: jest.fn(),
+                upload: vi.fn(),
+                deleteFile: vi.fn(),
                 name: "pjnz",
                 accept: "csv",
                 ...props
@@ -58,7 +58,7 @@ describe("Manage file component", () => {
     });
 
     it("renders file upload", () => {
-        const uploadFn = jest.fn();
+        const uploadFn = vi.fn();
         const wrapper = createSut({
             name: "test-name",
             upload: uploadFn
@@ -71,7 +71,7 @@ describe("Manage file component", () => {
 
     it("renders can display ADR tag if file upload is from ADR", () => {
 
-        const uploadFn = jest.fn();
+        const uploadFn = vi.fn();
         const wrapper = createSut({
             name: "test-name",
             upload: uploadFn,
@@ -151,7 +151,7 @@ describe("Manage file component", () => {
     });
 
     it("renders remove link if existing filename is present", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const wrapper = createSut({
             existingFileName: "File.csv",
             deleteFile: removeHandler
@@ -165,7 +165,7 @@ describe("Manage file component", () => {
     });
 
     it("renders remove link if existing filename is present when on data exploration mode", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const store = createStore(mockDataExplorationState(), true);
         const wrapper = shallowMountWithTranslate(ManageFile, store, {
             global: {
@@ -175,7 +175,7 @@ describe("Manage file component", () => {
                 error: null,
                 label: "PJNZ",
                 valid: true,
-                upload: jest.fn(),
+                upload: vi.fn(),
                 deleteFile: removeHandler,
                 name: "pjnz",
                 accept: "csv",
@@ -192,7 +192,7 @@ describe("Manage file component", () => {
     });
 
     it("renders remove link if error is present", async () => {
-        const removeHandler = jest.fn();
+        const removeHandler = vi.fn();
         const wrapper = createSut({
             existingFileName: null,
             error: mockError("test error"),
@@ -232,7 +232,7 @@ describe("Manage file component", () => {
     });
 
     it("renders loading spinner while uploading with success", async () => {
-        const uploader = jest.fn();
+        const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader,
             valid: false
@@ -255,7 +255,7 @@ describe("Manage file component", () => {
     });
 
     it("renders loading spinner while uploading with error", async () => {
-        const uploader = jest.fn();
+        const uploader = vi.fn();
         const wrapper = createSut({
             upload: uploader,
             valid: false,

@@ -4,7 +4,6 @@ import {ADRMutation} from "../../../app/store/adr/mutations";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {mockRootState} from "../../mocks";
 import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
-import Treeselect from "vue3-treeselect";
 import {Language} from "../../../app/store/translations/locales";
 import {Dataset} from "../../../app/types";
 import VueFeather from "vue-feather";
@@ -40,8 +39,8 @@ describe("select release", () => {
             anc: null
         }
     }
-    const getReleasesMock = jest.fn();
-    const clearReleasesMock = jest.fn();
+    const getReleasesMock = vi.fn();
+    const clearReleasesMock = vi.fn();
     
     const getStore = (releases = releasesArray, selectedDataset: Dataset | null = null, getReleases = getReleasesMock) => {
         const store = new Vuex.Store({
@@ -53,12 +52,12 @@ describe("select release", () => {
                         releases
                     },
                     actions: {
-                        getDatasets: jest.fn(),
+                        getDatasets: vi.fn(),
                         getReleases
                     },
                     mutations: {
                         [ADRMutation.ClearReleases]: clearReleasesMock,
-                        [ADRMutation.SetReleases]: jest.fn()
+                        [ADRMutation.SetReleases]: vi.fn()
                     }
                 },
                 baseline: {
@@ -74,7 +73,7 @@ describe("select release", () => {
     }
 
     afterEach(() => {
-        jest.resetAllMocks();
+        vi.resetAllMocks();
     });
 
     it("renders select release", async () => {
@@ -97,9 +96,8 @@ describe("select release", () => {
         expectTranslated(labels[2], "Releases", "Versions",
             "Lançamentos", store);
         expect(rendered.findAllComponents(VueFeather).length).toBe(2);
-        const select = rendered.findComponent(Treeselect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("multiple")).toBe(false);
-        expect(select.props("searchable")).toBe(true);
         expect((rendered.vm.$data as any).releaseId).toBeUndefined();
 
         const expectedOptions = [
@@ -159,7 +157,7 @@ describe("select release", () => {
     });
 
     it("can render tooltips in English", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = getStore()
         
         const rendered = shallowMountWithTranslate(SelectRelease, store,
@@ -176,7 +174,7 @@ describe("select release", () => {
     });
 
     it("can render tooltips in French", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = getStore()
         store.state.language = Language.fr;
         await nextTick();
@@ -195,7 +193,7 @@ describe("select release", () => {
     });
 
     it("can render tooltips in Portuguese", async () => {
-        const mockTooltip = jest.fn();
+        const mockTooltip = vi.fn();
         const store = getStore()
         store.state.language = Language.pt;
         await nextTick();
@@ -221,7 +219,7 @@ describe("select release", () => {
             }, 
         });
         await rendered.setProps({datasetId: "datasetId"})
-        const select = rendered.findComponent(Treeselect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("disabled")).toBe(true);
         const selectRelease = rendered.findAll("input")[1]
         await selectRelease.trigger("change")
@@ -235,7 +233,7 @@ describe("select release", () => {
                 plugins: [store]
             }, props: {datasetId: "datasetId"}
         });
-        const select = rendered.findComponent(Treeselect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("disabled")).toBe(true);
         expect((rendered.vm.$data as any).releaseId).toBe("releaseId");
     });
@@ -267,13 +265,13 @@ describe("select release", () => {
                 plugins: [store]
             }, props: {datasetId: "datasetId", choiceADR: "useRelease"}
         });
-        const select = rendered.findComponent(Treeselect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("disabled")).toBe(true);
         expect((rendered.vm.$data as any).releaseId).toBeUndefined();
     });
 
     it("changes to datasetId and true open prop triggers getRelease method", async () => {
-        const spy = jest.fn()
+        const spy = vi.fn()
         let store = getStore(releasesArray, null, spy)
         const rendered = shallowMountWithTranslate(SelectRelease, store, {
             global: {
@@ -334,7 +332,7 @@ describe("select release", () => {
 
         await rendered.setProps({datasetId: "datasetId2"})
         expect(clearReleasesMock.mock.calls.length).toBe(2);
-        const select = rendered.findComponent(Treeselect);
+        const select = rendered.findComponent(HintTreeSelect);
         expect(select.props("disabled")).toBe(true);
         expect((rendered.vm.$data as any).releaseId).toBe(undefined);
         expect((rendered.vm.$data as any).choiceADR).toBe("useLatest");

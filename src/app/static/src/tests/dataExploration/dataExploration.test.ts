@@ -3,18 +3,18 @@ import Vuex from "vuex";
 
 describe("DataExploration", () => {
     afterEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
     });
 
     it("deletes state from main app, and loads state for explore, from local storage on load", async () => {
-        const  mockDeleteState = jest.fn();
+        const  mockDeleteState = vi.fn();
         localStorageManager.deleteState = mockDeleteState;
-        const mockGetState = jest.fn();
+        const mockGetState = vi.fn();
         localStorageManager.getState = mockGetState;
-        const mockSaveState = jest.fn();
+        const mockSaveState = vi.fn();
         localStorageManager.saveState = mockSaveState;
 
-        const mockConsoleLog = jest.fn();
+        const mockConsoleLog = vi.fn();
         console.log = mockConsoleLog;
 
         const module = await import("../../app/store/dataExploration/dataExploration");

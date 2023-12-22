@@ -1,6 +1,7 @@
 import {mockAxios, mockSuccess, mockFailure, mockRootState} from "../mocks";
 import {actions} from '../../app/store/hintrVersion/actions';
 import { HintrVersionMutation } from "../../app/store/hintrVersion/mutations";
+import { Mock } from "vitest";
 
 const rootState = mockRootState();
 
@@ -8,12 +9,12 @@ describe("hintrVersion Actions ", ()=> {
 
     beforeEach(() => {
         // stop apiService logging to console
-        console.log = jest.fn();
+        console.log = vi.fn();
         mockAxios.reset();
     });
 
     afterEach(() => {
-        (console.log as jest.Mock).mockClear();
+        (console.log as Mock).mockClear();
     });
 
     it("commits hintrVersion after successful fetch", async () => {
@@ -21,7 +22,7 @@ describe("hintrVersion Actions ", ()=> {
         mockAxios.onGet(`/meta/hintr/version`)
             .reply(200, mockSuccess("TEST DATA"));
 
-        const commit = jest.fn();
+        const commit = vi.fn();
         await actions.getHintrVersion({commit, rootState} as any);
          
         expect(commit.mock.calls[0][0]).toStrictEqual({type: "HintrVersionFetched", payload: "TEST DATA"});
