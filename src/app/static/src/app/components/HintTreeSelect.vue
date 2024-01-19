@@ -72,7 +72,9 @@
                     
                     if (!this.multiple) {
                         if (newVal === null || newValStringCase || newValArrayCase) {
-                            this.reRender = 1 - this.reRender;
+                            setTimeout(() => {
+                                this.reRender = 1 - this.reRender;
+                            }, 0)
                         }
                     }
                 },

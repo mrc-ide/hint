@@ -96,7 +96,7 @@
             currentLanguage: mapStateProp<RootState, Language>(null,
                 (state: RootState) => state.language),
             support(): string {
-                return i18next.t("support", this.currentLanguage)
+                return i18next.t("support", this.currentLanguage) as string
             },
             helpVideoLocation(): string {
                 return "https://www.youtube.com/@naomi-unaids"

@@ -5,7 +5,7 @@
         <p class="text-muted" v-translate="'calibrateResultsDesc'"></p>
         <bar-chart-with-filters
             :chart-data="chartData"
-            :filter-config="filterConfig"
+            :filter-config="(filterConfig as FilterConfig)"
             :indicators="indicators"
             :selections="selections"
             :formatFunction="formatBarchartValue"

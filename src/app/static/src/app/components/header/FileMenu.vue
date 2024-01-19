@@ -2,7 +2,7 @@
     <div style="flex:auto">
         <drop-down text="file">
             <p class="dropdown-item mb-0" tabindex="0"
-               @click="$refs.loadZip.click()">
+               @click="($refs.loadZip as any).click()">
                 <span v-translate="'loadZip'"></span>
                 <vue-feather type="upload" size="20" class="icon ml-1"></vue-feather>
             </p>
@@ -18,7 +18,7 @@
                 </a>
                 <a style="display:none" ref="save"></a>
                 <p class="dropdown-item mb-0" tabindex="0"
-                   @click="$refs.loadJson.click()">
+                   @click="($refs.loadJson as any).click()">
                 <span><span class="pr-1" v-translate="'load'"></span>JSON</span>
                 <vue-feather type="upload" size="20" class="icon ml-1"></vue-feather>
                 </p>

@@ -43,7 +43,7 @@
             currentLanguage: mapStateProp<DataExplorationState, Language>(null,
                 (state: DataExplorationState) => state.language),
             support(): string {
-                return i18next.t("support", this.currentLanguage)
+                return i18next.t("support", this.currentLanguage) as string
             }
         },
         methods: {

@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
-    "outDir": "./built/",
-    "sourceMap": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "target": "esnext",
-    "experimentalDecorators": true,
-    "esModuleInterop": true
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+
+    /* Linting */
+    // "strict": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "./src/app/**/*.ts",
-    "./src/app/**/*.vue",
-    "./src/app/**/*.js",
-    "./src/tests/**/*.ts"
-  ],
-  "files": [
-    "./vue-shims.d.ts",
-    "./vuex-shims.d.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "files": ["src/app/declare.d.ts"]
 }

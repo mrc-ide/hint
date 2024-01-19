@@ -89,7 +89,7 @@
             drawChart: async function() {
                 this.rendering = true;
                 const el = this.$refs.chart;
-                const drawFunc = this.layoutRequired ? Plotly.newPlot : Plotly.react;
+                const drawFunc = Plotly.newPlot;
                 this.layoutRequired = false;
                 const drawData = await this.getData()
                 await drawFunc(el as HTMLElement, drawData.data, drawData.layout, {...config as any});
