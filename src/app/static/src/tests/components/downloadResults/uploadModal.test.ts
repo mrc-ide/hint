@@ -1,5 +1,5 @@
 import VueFeather from 'vue-feather';
-import {flushPromises, mount, shallowMount} from "@vue/test-utils";
+import {mount} from "@vue/test-utils";
 import UploadModal from "../../../app/components/downloadResults/UploadModal.vue";
 import Vuex from "vuex";
 import {emptyState} from "../../../app/root";
@@ -86,6 +86,7 @@ describe(`uploadModal `, () => {
         anc: null,
         shape: null,
         survey: null,
+        vmmc: null,
     }
     const mockOrganization = {
         id: "123abc"

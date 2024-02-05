@@ -4,6 +4,7 @@ import {DynamicFormData, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form
 import {CalibrateResultWithType, PayloadWithType} from "../../types";
 import {parseAndFillForm} from "../../utils";
 import {
+    CalibrateDataResponse,
     CalibrateMetadataResponse,
     CalibrateStatusResponse,
     CalibrateSubmitResponse,
@@ -32,7 +33,8 @@ export enum ModelCalibrateMutation {
     CalibrateResultFetched = "CalibrateResultFetched",
     ClearWarnings = "ClearWarnings",
     ResetIds = "ResetIds",
-    MetadataFetched = "MetadataFetched"
+    MetadataFetched = "MetadataFetched",
+    SetData = "SetData"
 }
 
 export const ModelCalibrateUpdates = [
@@ -145,20 +147,13 @@ export const mutations: MutationTree<ModelCalibrateState> = {
         stopPolling(state)
     },
 
-    [ModelCalibrateMutation.CalibrateResultFetched](state: ModelCalibrateState, action: PayloadWithType<CalibrateResultWithType>) {
-        if (!state.result) {
-            state.result = structuredClone({data: action.payload.data});
+    [ModelCalibrateMutation.SetData](state: ModelCalibrateState, action: PayloadWithType<CalibrateDataResponse["data"]>) {
+        if (state.result) {
+            state.result.data = action.payload;
         } else {
-            state.result.data = [...state.result.data, ...action.payload.data];
+            state.result = { data: action.payload }
         }
-        if (!state.fetchedIndicators) {
-            state.fetchedIndicators = [action.payload.indicatorId];
-        } else {
-            if (state.fetchedIndicators.indexOf(action.payload.indicatorId) == -1) {
-                state.fetchedIndicators.push(action.payload.indicatorId);
-            }
-        }
-    },
+    }
 };
 
 const stopPolling = (state: ModelCalibrateState) => {

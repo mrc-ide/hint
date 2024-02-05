@@ -86,7 +86,8 @@ class DownloadTests : SecureIntegrationTests()
                 "notes" to mapOf(
                         "project_notes" to note,
                         "version_notes" to listOf(note, note)
-                )
+                ),
+                "vmmc" to mapOf("filename" to "vmmc", "hash" to "123", "path" to "uploads/vmmc"),
         )
 
         val id = waitForModelRunResult()

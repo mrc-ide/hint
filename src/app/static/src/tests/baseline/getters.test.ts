@@ -104,7 +104,8 @@ it("selectedDatasetAvailableResources only returns resources that the user has p
             pop: null,
             survey: null,
             shape: null,
-            anc: null
+            anc: null,
+            vmmc: null
         }
     }
 

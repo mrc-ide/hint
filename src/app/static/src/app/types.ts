@@ -120,6 +120,7 @@ export interface DatasetResourceSet {
     anc: DatasetResource | null
     shape: DatasetResource | null
     survey: DatasetResource | null
+    vmmc: DatasetResource | null
 }
 
 export interface Dataset {
@@ -150,6 +151,7 @@ export interface ADRSchemas {
     population: string
     shape: string
     survey: string
+    vmmc: string,
     outputZip: string
     outputSummary: string
     outputComparison: string
@@ -326,7 +328,7 @@ export interface UploadImportPayload {
     resourceId: string
 }
 
-export type DatasetResourceType = "pjnz" | "pop"  | "program" | "anc" | "shape" | "survey";
+export type DatasetResourceType = "pjnz" | "pop" | "program" | "anc" | "shape" | "survey" | "vmmc";
 
 export interface DownloadIndicatorDataset {
     filteredData: unknown[],

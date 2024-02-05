@@ -323,6 +323,26 @@ class LocalFileManagerTests
         assertThat(result["pjnz"]!!.path).isEqualTo("$tmpUploadDirectory/pjnzhash")
         assertThat(result["pjnz"]!!.filename).isEqualTo("pjnzfilename")
         assertThat(result["pjnz"]!!.hash).isEqualTo("pjnzhash")
+        assertThat(result.count()).isEqualTo(7)
+    }
+
+    @Test
+    fun `gets model fit files`()
+    {
+
+        val stateRepo = mock<VersionRepository> {
+            on { getVersionFiles("fake-id") } doReturn allFilesMap
+        }
+
+        val sut = LocalFileManager(mockSession, stateRepo, mockProperties, mock(), mock())
+        val result = sut.getModelFitFiles()
+
+        assertThat(result["survey"]!!.path).isEqualTo("$tmpUploadDirectory/surveyhash")
+        assertThat(result["survey"]!!.filename).isEqualTo("surveyfilename")
+        assertThat(result["survey"]!!.hash).isEqualTo("surveyhash")
+        assertThat(result["pjnz"]!!.path).isEqualTo("$tmpUploadDirectory/pjnzhash")
+        assertThat(result["pjnz"]!!.filename).isEqualTo("pjnzfilename")
+        assertThat(result["pjnz"]!!.hash).isEqualTo("pjnzhash")
         assertThat(result.count()).isEqualTo(6)
     }
 

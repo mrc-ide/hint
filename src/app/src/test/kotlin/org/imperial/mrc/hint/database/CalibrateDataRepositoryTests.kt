@@ -60,39 +60,22 @@ class CalibrateDataRepositoryTests
         listOf("area_id_test"),
         listOf(2)
     )
+    val queryAll = FilterQuery(
+        listOf("indicator_test", "indicator_test_2"),
+        listOf(),
+        listOf("age_group_test"),
+        listOf("sex_test"),
+        listOf("area_id_test"),
+        listOf(2)
+    )
     val path = "/src/test/resources/duckdb/test.duckdb"
     val sut = JooqCalibrateDataRepository()
-
-    @Test
-    fun `can get data from duckdb path with single indicator`()
-    {
-        val plotData = sut.getDataFromPath(path, "indicator_test_2")
-        val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
-        val expectedTree = ObjectMapper().readTree(expectedRowIndicator2.toString())
-        assert(plotDataTree.equals(expectedTree))
-    }
-
-    @Test
-    fun `returns empty data if invalid indicator`()
-    {
-        assertThat(sut.getDataFromPath(path, "dangerous_indicator"))
-            .isEqualTo(listOf<CalibrateResultRow>())
-    }
-
-    @Test
-    fun `can get data from duckdb path with all indicators`()
-    {
-        val plotData = sut.getDataFromPath(path, "all")
-        val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
-        val expectedTree = ObjectMapper().readTree(expectedRow.toString())
-        assert(plotDataTree.equals(expectedTree))
-    }
 
     @Test
     fun `throws error if connection is invalid`()
     {
         assertThatThrownBy {
-            sut.getDataFromPath("/src/test/resources/duckdb/test1.duckdb", "all")
+            sut.getFilteredCalibrateData("/src/test/resources/duckdb/test1.duckdb", query)
         }.isInstanceOf(SQLException::class.java)
             .hasMessageContaining("database does not exist")
     }
@@ -103,6 +86,15 @@ class CalibrateDataRepositoryTests
         val plotData = sut.getFilteredCalibrateData(path, query)
         val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
         val expectedTree = ObjectMapper().readTree(expectedRowIndicator2.toString())
+        assert(plotDataTree.equals(expectedTree))
+    }
+
+    @Test
+    fun `can get all data`()
+    {
+        val plotData = sut.getFilteredCalibrateData(path, queryAll)
+        val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
+        val expectedTree = ObjectMapper().readTree(expectedRow.toString())
         assert(plotDataTree.equals(expectedTree))
     }
 }

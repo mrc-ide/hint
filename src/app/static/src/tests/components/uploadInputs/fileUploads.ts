@@ -27,13 +27,16 @@ export function testUploadComponent(name: string, position: number) {
             importANC: jest.fn(),
             importProgram: jest.fn(),
             importSurvey: jest.fn(),
+            importVmmc: jest.fn(),
             uploadSurvey: jest.fn(),
             uploadProgram: jest.fn(),
             uploadANC: jest.fn(),
+            uploadVmmc: jest.fn(),
             deleteSurvey: jest.fn(),
             deleteProgram: jest.fn(),
             deleteANC: jest.fn(),
             deleteAll: jest.fn(),
+            deleteVmmc: jest.fn(),
             getSurveyAndProgramData: jest.fn(),
             selectDataType: jest.fn(),
             validateSurveyAndProgramData: jest.fn()
@@ -178,5 +181,3 @@ export function testUploadComponent(name: string, position: number) {
         });
     });
 }
-
-

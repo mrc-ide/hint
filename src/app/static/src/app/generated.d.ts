@@ -748,6 +748,13 @@ export interface DownloadSubmitRequest {
     fromADR?: boolean;
     resource_url?: string | null;
   };
+  vmmc?: {
+    path: string | null;
+    hash: string;
+    filename: string;
+    fromADR?: boolean;
+    resource_url?: string | null;
+  };
 }
 export interface DownloadSubmitResponse {
   id: string;
@@ -927,7 +934,7 @@ export interface InputTimeSeriesRow {
   area_hierarchy: string;
   missing_ids?: string[] | null;
 }
-export type InputType = "pjnz" | "shape" | "population" | "survey" | "programme" | "anc";
+export type InputType = "pjnz" | "shape" | "population" | "survey" | "programme" | "anc" | "vmmc";
 export interface LevelLabels {
   id: number;
   area_level_label: string;
@@ -1642,7 +1649,7 @@ export interface ValidateBaselineResponse {
   consistent: boolean;
 }
 export interface ValidateInputRequest {
-  type: "pjnz" | "shape" | "population" | "survey" | "programme" | "anc";
+  type: "pjnz" | "shape" | "population" | "survey" | "programme" | "anc" | "vmmc";
   file: {
     path: string | null;
     hash: string;
@@ -1657,7 +1664,8 @@ export type ValidateInputResponse =
   | PopulationResponse
   | ProgrammeResponse
   | AncResponse
-  | SurveyResponse;
+  | SurveyResponse
+  | VmmcResponse;
 
 export interface PjnzResponse {
   hash: string;
@@ -1855,8 +1863,28 @@ export interface SurveyResponse {
     )[];
   }[];
 }
+export interface VmmcResponse {
+  hash: string;
+  filename: string;
+  fromADR?: boolean;
+  resource_url?: string | null;
+  type: "vmmc";
+  data: null;
+  filters: null;
+  warnings: {
+    text: string;
+    locations: (
+      | "review_inputs"
+      | "model_options"
+      | "model_fit"
+      | "model_calibrate"
+      | "review_output"
+      | "download_results"
+    )[];
+  }[];
+}
 export interface ValidateSurveyAndProgrammeRequest {
-  type: "pjnz" | "shape" | "population" | "survey" | "programme" | "anc";
+  type: "pjnz" | "shape" | "population" | "survey" | "programme" | "anc" | "vmmc";
   file: {
     path: string | null;
     hash: string;
@@ -1872,6 +1900,7 @@ export interface VersionInfo {
   rrq: string;
   [k: string]: any;
 }
+export type VmmcResponseData = null;
 export interface Warning {
   text: string;
   locations: (

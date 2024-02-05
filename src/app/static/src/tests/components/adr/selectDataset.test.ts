@@ -42,6 +42,7 @@ describe("select dataset", () => {
         population: "pop",
         shape: "shape",
         survey: "survey",
+        vmmc: "vmmc",
         outputZip: "zip",
         outputSummary: "summary",
         outputComparison: "comparison"
@@ -95,6 +96,14 @@ describe("select dataset", () => {
         metadata_modified: "2020-11-10",
         name: "ANC Resource"
     }
+    const vmmc = {
+        id: "7",
+        resource_type: schemas.vmmc,
+        url: "vmmc.xlsx",
+        last_modified: "2020-11-09",
+        metadata_modified: "2020-11-10",
+        name: "VMMC Resource"
+    }
 
     const fakeRawDatasets = [
         {
@@ -131,7 +140,8 @@ describe("select dataset", () => {
                 metadataModified: "2020-11-04",
                 name: "Shape Resource"
             }),
-            anc: null
+            anc: null,
+            vmmc: null
         }
     };
 
@@ -152,7 +162,8 @@ describe("select dataset", () => {
                 metadataModified: "2020-11-04",
                 name: "Shape Resource"
             }),
-            anc: null
+            anc: null,
+            vmmc: null
         }
     };
     
@@ -173,7 +184,8 @@ describe("select dataset", () => {
                 metadataModified: "2020-11-04",
                 name: "Shape Resource"
             }),
-            anc: null
+            anc: null,
+            vmmc: null
         }
     };
 
@@ -203,6 +215,7 @@ describe("select dataset", () => {
         importSurvey: jest.fn(),
         importProgram: jest.fn(),
         importANC: jest.fn(),
+        importVmmc: jest.fn(),
     }
 
     const mockGetters = {
@@ -496,6 +509,7 @@ describe("select dataset", () => {
             fakeDataset.resources.survey = mockDatasetResource({url: "survey.url"});
             fakeDataset.resources.program = mockDatasetResource({url: "program.url"});
             fakeDataset.resources.anc = mockDatasetResource({url: "anc.url"});
+            fakeDataset.resources.vmmc = mockDatasetResource({url: "vmmc.url"});
             const store = getStore({selectedDataset: fakeDataset, shape: mockShapeResponse()});
             const rendered = shallowMountWithTranslate(SelectDataset, store, {
                 global: {
@@ -506,6 +520,7 @@ describe("select dataset", () => {
             expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.url");
             expect((surveyProgramActions.importProgram as Mock).mock.calls[0][1]).toBe("program.url");
             expect((surveyProgramActions.importANC as Mock).mock.calls[0][1]).toBe("anc.url");
+            expect((surveyProgramActions.importVmmc as Mock).mock.calls[0][1]).toBe("vmmc.url");
         });
 
     it("refreshes survey & program files if any baseline file is refreshed and shape file included in resources",
@@ -515,6 +530,7 @@ describe("select dataset", () => {
             fakeDataset.resources.survey = mockDatasetResource({url: "survey.url"});
             fakeDataset.resources.program = mockDatasetResource({url: "program.url"});
             fakeDataset.resources.anc = mockDatasetResource({url: "anc.url"});
+            fakeDataset.resources.vmmc = mockDatasetResource({url: "vmmc.url"});
             fakeDataset.resources.shape = mockDatasetResource();
             const store = getStore({selectedDataset: fakeDataset});
             const rendered = shallowMountWithTranslate(SelectDataset, store, {
@@ -526,6 +542,7 @@ describe("select dataset", () => {
             expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.url");
             expect((surveyProgramActions.importProgram as Mock).mock.calls[0][1]).toBe("program.url");
             expect((surveyProgramActions.importANC as Mock).mock.calls[0][1]).toBe("anc.url");
+            expect((surveyProgramActions.importVmmc as Mock).mock.calls[0][1]).toBe("vmmc.url");
         });
 
     it("refreshes survey & program files if out of date",
@@ -534,6 +551,7 @@ describe("select dataset", () => {
             fakeDataset.resources.survey = mockDatasetResource({url: "survey.url", outOfDate: true});
             fakeDataset.resources.program = mockDatasetResource({url: "program.url", outOfDate: true});
             fakeDataset.resources.anc = mockDatasetResource({url: "anc.url", outOfDate: true});
+            fakeDataset.resources.vmmc = mockDatasetResource({url: "vmmc.url", outOfDate: true});
             fakeDataset.resources.shape = mockDatasetResource();
             const store = getStore({ selectedDataset: fakeDataset });
             const rendered = shallowMountWithTranslate(SelectDataset, store, {
@@ -545,6 +563,7 @@ describe("select dataset", () => {
             expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.url");
             expect((surveyProgramActions.importProgram as Mock).mock.calls[0][1]).toBe("program.url");
             expect((surveyProgramActions.importANC as Mock).mock.calls[0][1]).toBe("anc.url");
+            expect((surveyProgramActions.importVmmc as Mock).mock.calls[0][1]).toBe("vmmc.url");
         });
 
     it("renders selected dataset if it exists", async () => {
@@ -1003,7 +1022,8 @@ describe("select dataset", () => {
                     shape: mockDatasetResource(shape),
                     survey: mockDatasetResource(survey),
                     program: mockDatasetResource(program),
-                    anc: mockDatasetResource(anc)
+                    anc: mockDatasetResource(anc),
+                    vmmc: mockDatasetResource(vmmc)
                 }
             }
         });
@@ -1027,6 +1047,7 @@ describe("select dataset", () => {
         expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.csv");
         expect((surveyProgramActions.importProgram as Mock).mock.calls[0][1]).toBe("program.csv");
         expect((surveyProgramActions.importANC as Mock).mock.calls[0][1]).toBe("anc.csv");
+        expect((surveyProgramActions.importVmmc as Mock).mock.calls[0][1]).toBe("vmmc.xlsx");
 
         await flushPromises();
 
@@ -1062,6 +1083,7 @@ describe("select dataset", () => {
         expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.csv");
         expect((surveyProgramActions.importProgram as Mock).mock.calls.length).toBe(0);
         expect((surveyProgramActions.importANC as Mock).mock.calls.length).toBe(0);
+        expect((surveyProgramActions.importVmmc as Mock).mock.calls.length).toBe(0);
 
         await flushPromises();
 
@@ -1096,6 +1118,7 @@ describe("select dataset", () => {
         expect((surveyProgramActions.importSurvey as Mock).mock.calls.length).toBe(0);
         expect((surveyProgramActions.importProgram as Mock).mock.calls.length).toBe(0);
         expect((surveyProgramActions.importANC as Mock).mock.calls.length).toBe(0);
+        expect((surveyProgramActions.importVmmc as Mock).mock.calls.length).toBe(0);
 
         await flushPromises();
 
@@ -1110,7 +1133,8 @@ describe("select dataset", () => {
                     shape: mockDatasetResource(shape),
                     survey: mockDatasetResource(survey),
                     program: mockDatasetResource(program),
-                    anc: mockDatasetResource(anc)
+                    anc: mockDatasetResource(anc),
+                    vmmc: mockDatasetResource(vmmc),
                 }
             }
         });
@@ -1134,6 +1158,7 @@ describe("select dataset", () => {
         expect((surveyProgramActions.importSurvey as Mock).mock.calls[0][1]).toBe("survey.csv");
         expect((surveyProgramActions.importProgram as Mock).mock.calls[0][1]).toBe("program.csv");
         expect((surveyProgramActions.importANC as Mock).mock.calls[0][1]).toBe("anc.csv");
+        expect((surveyProgramActions.importVmmc as Mock).mock.calls[0][1]).toBe("vmmc.xlsx");
 
         await flushPromises();
 

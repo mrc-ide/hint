@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="initialised" class="row">
-            <div class="col-md-3">
+            <div class="col-md-3" :class="scaleToScreen ? 'fit-filter' : ''">
                 <div id="indicator-fg" class="form-group">
                     <label class="font-weight-bold">{{filterConfig.indicatorLabel || "Indicator"}}</label>
                     <hint-tree-select :multiple=false
@@ -44,7 +44,7 @@
                 </div>
             </template>
             </div>
-            <div v-if="!!xAxisLabel" id="chart" class="col-md-9">
+            <div v-if="!!xAxisLabel" id="chart" class="col-md-9" :class="scaleToScreen ? 'fit-chart' : ''">
                 <bar-chart-with-errors
                         :data="processedOutputData"
                         :chart-data="processedOutputData"
@@ -172,6 +172,11 @@
                 default: null
             },
             showErrorBars: {
+                type: Boolean,
+                required: false,
+                default: false
+            },
+            scaleToScreen: {
                 type: Boolean,
                 required: false,
                 default: false
@@ -331,3 +336,13 @@
         }
     });
 </script>
+
+<style scoped>
+.fit-filter {
+    height: fit-content;
+}
+
+.fit-chart {
+    height: min(850px, 85vh);
+}
+</style>

@@ -21,7 +21,13 @@ import {
     SurveyFilters,
     SurveyResponse,
     ValidateBaselineResponse,
-    Error, CalibrateResultResponse, Warning, DownloadSubmitRequest, ComparisonPlotResponse, CalibrateMetadataResponse
+    Error,
+    CalibrateResultResponse,
+    Warning,
+    DownloadSubmitRequest,
+    ComparisonPlotResponse,
+    CalibrateMetadataResponse,
+    VmmcResponse
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -310,6 +316,18 @@ export const mockAncResponse = (props: Partial<AncResponse> = {}): AncResponse =
     }
 };
 
+export const mockVmmcResponse = (props: Partial<VmmcResponse> = {}): VmmcResponse => {
+    return {
+        type: "vmmc",
+        filename: "test.xlsx",
+        hash: "1234.xlsx",
+        data: null,
+        filters: null,
+        warnings: [],
+        ...props
+    }
+};
+
 export const mockProgramFilters = (props: Partial<ProgrammeFilters> = {}): ProgrammeFilters => {
     return {
         age: [],
@@ -478,7 +496,8 @@ export const mockDataset = (props: Partial<Dataset> = {}): Dataset => {
             pop: null,
             survey: null,
             shape: null,
-            anc: null
+            anc: null,
+            vmmc: null
         },
         organization: {
           id: "456"

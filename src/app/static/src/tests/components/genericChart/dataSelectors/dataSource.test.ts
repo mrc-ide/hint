@@ -32,7 +32,7 @@ describe("DataSource component", () => {
         const options = wrapper.find("select").findAll("option");
         expect(options.length).toBe(2);
         expect(options[0].attributes("value")).toBe("dataset1");
-        expectTranslated(options[0], "ANC Testing", "Test de clinique prénatale",
+        expectTranslated(options[0], "ANC testing", "Test de clinique prénatale",
             "Teste da CPN", wrapper.vm.$store);
 
         expect(options[1].attributes("value")).toBe("dataset2");

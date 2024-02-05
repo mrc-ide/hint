@@ -5,7 +5,6 @@ import {api} from "../../apiService";
 import {
     constructRehydrateProjectState,
     flatMapControlSections,
-    verifyCheckSum
 } from "../../utils";
 import {Dict, LocalSessionFile, VersionDetails} from "../../types";
 import {localStorageManager} from "../../localStorageManager";
@@ -15,78 +14,22 @@ import {initialStepperState} from "../stepper/stepper";
 import {
     ModelStatusResponse,
     ProjectRehydrateResultResponse,
-    ProjectState
 } from "../../generated";
 import {DynamicFormData} from "@reside-ic/vue-next-dynamic-form";
 import {ModelCalibrateState} from "../modelCalibrate/modelCalibrate";
 
-export type LoadActionTypes = "SettingFiles" | "UpdatingState" | "LoadSucceeded" | "ClearLoadError" | "PreparingRehydrate" | "SaveProjectName" | "RehydrateStatusUpdated" | "RehydratePollingStarted" | "RehydrateResult" | "SetProjectName" | "RehydrateCancel"
+export type LoadActionTypes = "UpdatingState" | "LoadSucceeded" | "ClearLoadError" | "PreparingRehydrate" | "SaveProjectName" | "RehydrateStatusUpdated" | "RehydratePollingStarted" | "RehydrateResult" | "SetProjectName" | "RehydrateCancel"
 export type LoadErrorActionTypes = "LoadFailed" | "RehydrateResultError"
 
 export interface LoadActions {
-    load: (store: ActionContext<LoadState, RootState>, file: File) => void
     preparingRehydrate: (store: ActionContext<LoadState, RootState>, file: FormData) => void
-    setFiles: (store: ActionContext<LoadState, RootState>, payload: setFilesPayload) => void
     loadFromVersion: (store: ActionContext<LoadState, RootState>, versionDetails: VersionDetails) => void
     updateStoreState: (store: ActionContext<LoadState, RootState>, savedState: Partial<RootState>) => void
     clearLoadState: (store: ActionContext<LoadState, RootState>) => void
     pollRehydrate: (store: ActionContext<LoadState, RootState>) => void
 }
 
-export interface setFilesPayload {
-    savedFileContents: string
-}
-
 export const actions: ActionTree<LoadState, RootState> & LoadActions = {
-
-    async load(context, file) {
-        const {dispatch} = context
-
-        const reader = new FileReader();
-        reader.addEventListener('loadend', function () {
-            dispatch("setFiles", {savedFileContents: reader.result as string});
-        });
-        reader.readAsText(file);
-    },
-
-    async setFiles(context, payload) {
-        const {savedFileContents} = payload;
-        const {commit, rootState, rootGetters, dispatch, state} = context;
-        commit({type: "SettingFiles", payload: null});
-
-        const objectContents = verifyCheckSum(savedFileContents as string);
-
-        if (!objectContents) {
-            commit({
-                type: "LoadFailed",
-                payload: {detail: "The file contents are corrupted."}
-            });
-            return;
-        }
-
-        const files = objectContents.files;
-        const savedState = objectContents.state;
-
-        const majorVersion = (s: string) => s ? s.split(".")[0] : null;
-        if (majorVersion(savedState.version) != majorVersion(currentHintVersion)) {
-            commit({
-                type: "LoadFailed",
-                payload: {detail: "Unable to load file created by older version of the application."}
-            });
-            return;
-        }
-
-        if (!rootGetters.isGuest) {
-            await (dispatch("projects/createProject", {name: state.projectName || null}, {root: true}));
-            savedState.projects = {
-                currentProject: rootState.projects.currentProject,
-                currentVersion: rootState.projects.currentVersion,
-                previousProjects: []
-            } as any
-        }
-
-        await getFilesAndLoad(context, files, savedState);
-    },
 
     async loadFromVersion(context, versionDetails) {
         const {commit} = context;

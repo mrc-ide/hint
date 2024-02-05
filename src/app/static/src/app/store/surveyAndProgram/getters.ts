@@ -5,7 +5,6 @@ import {FilterOption} from "../../generated";
 import {rootOptionChildren} from "../../utils";
 import {Language} from "../translations/locales";
 import {DataExplorationState} from "../dataExploration/dataExploration";
-import {BaselineState} from "../baseline/baseline";
 
 function response(state: SurveyAndProgramState) {
     switch (state.selectedDataType) {

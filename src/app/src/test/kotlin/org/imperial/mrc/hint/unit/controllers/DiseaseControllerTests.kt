@@ -53,6 +53,14 @@ class DiseaseControllerTests : HintrControllerTests()
     }
 
     @Test
+    fun `validates vmmc file`()
+    {
+        assertSavesAndValidates(FileType.Vmmc) { sut ->
+            (sut as DiseaseController).uploadVmmc(mockFile)
+        }
+    }
+
+    @Test
     fun `deletes survey file`()
     {
         assertDeletes(FileType.Survey) { sut ->
@@ -73,6 +81,14 @@ class DiseaseControllerTests : HintrControllerTests()
     {
         assertDeletes(FileType.ANC) { sut ->
             (sut as DiseaseController).removeANC()
+        }
+    }
+
+    @Test
+    fun `deletes vmmc file`()
+    {
+        assertDeletes(FileType.Vmmc) { sut ->
+            (sut as DiseaseController).removeVmmc()
         }
     }
 
@@ -204,5 +220,22 @@ class DiseaseControllerTests : HintrControllerTests()
                 .validateSurveyAndProgramme(
                         VersionFileWithPath("test-path", "hash", "some-file-name.csv", false),
                         "shape-path", FileType.ANC, true)
+    }
+
+    @Test
+    fun `gets and validates VMMC`()
+    {
+        val mockApiClient = getMockAPIClient(FileType.Vmmc)
+        val mockRequest = mock<HttpServletRequest> {
+            on { getParameter("strict") } doReturn "true"
+        }
+        val mockFileManager = getMockFileManager(FileType.Vmmc)
+        val sut = DiseaseController(mockFileManager, mockApiClient, mock(), mock(), mockRequest)
+
+        sut.getVmmc()
+        verify(mockApiClient, Times(1))
+            .validateSurveyAndProgramme(
+                VersionFileWithPath("test-path", "hash", "some-file-name.csv", false),
+                "shape-path", FileType.Vmmc, true)
     }
 }

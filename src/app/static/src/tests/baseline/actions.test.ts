@@ -28,6 +28,7 @@ const adrSchemas: ADRSchemas = {
     survey: "survey",
     programme: "program",
     anc: "anc",
+    vmmc: "vmmc",
     outputZip: "zip",
     outputSummary: "summary",
     outputComparison: "comparison"
@@ -97,6 +98,14 @@ const datasetResources = [
     {
         id: "7",
         url: "something.com",
+        last_modified: "2020-11-11",
+        metadata_modified: "2020-11-12",
+        resource_type: "vmmc",
+        name: "VMMC resource"
+    },
+    {
+        id: "8",
+        url: "something.com",
         last_modified: "2020-10-01",
         metadata_modified: "2020-10-02",
         resource_type: "random",
@@ -146,6 +155,13 @@ const availableResources = {
         lastModified: "2020-11-11",
         metadataModified: "2020-11-12",
         name: "ANC resource"
+    }),
+    vmmc: mockDatasetResource({
+        id: "7",
+        url: "something.com",
+        lastModified: "2020-11-11",
+        metadataModified: "2020-11-12",
+        name: "VMMC resource"
     })
 }
 
@@ -613,7 +629,8 @@ describe("Baseline actions", () => {
             pop: null,
             survey: null,
             program: null,
-            anc: null
+            anc: null,
+            vmmc: null
         });
     });
 
@@ -630,7 +647,8 @@ describe("Baseline actions", () => {
             pop: null,
             survey: null,
             program: null,
-            anc: null
+            anc: null,
+            vmmc: null
         }
 
         const expectResources = {
@@ -639,7 +657,8 @@ describe("Baseline actions", () => {
             pop: availableResources.pop,
             survey: availableResources.survey,
             program: availableResources.program,
-            anc: availableResources.anc
+            anc: availableResources.anc,
+            vmmc: availableResources.vmmc
         }
 
         const commit = jest.fn();

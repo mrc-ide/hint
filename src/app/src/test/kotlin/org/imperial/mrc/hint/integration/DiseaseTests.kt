@@ -58,6 +58,17 @@ class DiseaseTests : VersionFileTests()
     }
 
     @Test
+    fun `can upload VMMC file`()
+    {
+        val postEntity = getTestEntity("vmmc.xlsx")
+        val entity = testRestTemplate.postForEntity<String>("/disease/vmmc/", postEntity)
+        assertSuccess(entity, "ValidateInputResponse")
+
+        val data = getResponseData(entity)
+        assertThat(data["type"].asText()).isEqualTo("vmmc")
+    }
+
+    @Test
     fun `can get survey data`()
     {
         val postEntity = getTestEntity("survey.csv")

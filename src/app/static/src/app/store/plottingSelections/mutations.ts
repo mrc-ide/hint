@@ -36,6 +36,13 @@ export const mutations: MutationTree<PlottingSelectionsState> = {
     },
     [PlottingSelectionsMutations.updateTableSelections](state: PlottingSelectionsState, action: PayloadWithType<Partial<TableSelections>>) {
         state.table = {...state.table, ...action.payload};
+        // should make this more general in the future by looking at the
+        // filters per preset
+        if (state.table.preset === "sex_by_5_year_age_group") {
+            delete state.table.selectedFilterOptions.area_level
+        } else {
+            delete state.table.selectedFilterOptions.area_id
+        }
     },
     [PlottingSelectionsMutations.updateSAPChoroplethSelections](state: PlottingSelectionsState, action: PayloadWithType<Partial<ChoroplethSelections>>) {
         state.sapChoropleth = {...state.sapChoropleth, ...action.payload}

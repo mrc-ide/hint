@@ -19,13 +19,17 @@ class DownloadController(val apiClient: HintrAPIClient,
             @PathVariable("id") id: String,
             @RequestBody projectPayload: Map<String, Any?>? = null): ResponseEntity<String>
     {
+        val payload = projectPayload?.toMutableMap() ?: mutableMapOf()
         if (type == "agyw") {
             val file = fileManager.getFile(FileType.PJNZ)
-            val payload = projectPayload?.toMutableMap() ?: mutableMapOf()
             payload["pjnz"] = file
-            return apiClient.downloadOutputSubmit(type, id, payload)
+        } else if (type == "spectrum") {
+            val file = fileManager.getFile(FileType.Vmmc)
+            if (file != null) {
+                payload["vmmc"] = file
+            }
         }
-        return apiClient.downloadOutputSubmit(type, id, projectPayload)
+        return apiClient.downloadOutputSubmit(type, id, payload)
     }
 
     @GetMapping("/status/{id}")

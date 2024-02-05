@@ -301,7 +301,7 @@ describe("Survey and programme component", () => {
 
     it("survey is included in data sources when survey data is present", async () => {
         await expectDataSource({survey: mockSurveyResponse(), selectedDataType: DataType.Survey},
-            "Household Survey", "Enquête de ménage", "Inquérito aos agregados familiares", "2");
+            "Household survey", "Enquête de ménage", "Inquérito aos agregados familiares", "2");
     });
 
     it("programme (ART) is included in data sources when programme data is present", async () => {
@@ -311,7 +311,7 @@ describe("Survey and programme component", () => {
 
     it("ANC is included in data sources when ANC data is present", async () => {
         await expectDataSource({anc: mockAncResponse(), selectedDataType: DataType.ANC},
-            "ANC Testing", "Test de clinique prénatale", "Teste da CPN", "0");
+            "ANC testing", "Test de clinique prénatale", "Teste da CPN", "0");
     });
 
     async function expectDataSource(state: Partial<SurveyAndProgramState>, englishName: string, frenchName: string,

@@ -122,6 +122,7 @@ export default defineComponent({
             const columnFilter = filters.value.find(f => f.column_id === currentPreset.defaults.column.id);
             if (!columnFilter) return [];
             const columnSelections = selections.value.selectedFilterOptions[columnFilter.id];
+            if (!columnSelections) return [];
             const columnHeaders = columnSelections.map(selection => {
                 return {
                     headerName: selection.label,

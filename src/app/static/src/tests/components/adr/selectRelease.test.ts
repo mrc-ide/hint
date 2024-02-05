@@ -37,7 +37,8 @@ describe("select release", () => {
             pop: null,
             survey: null,
             shape: null,
-            anc: null
+            anc: null,
+            vmmc: null
         }
     }
     const getReleasesMock = jest.fn();

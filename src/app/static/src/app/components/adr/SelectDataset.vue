@@ -138,6 +138,7 @@
         survey: "Household Survey",
         program: "ART",
         anc: "ANC",
+        vmmc: "VMMC",
     };
 
     const namespace = "adr";
@@ -280,6 +281,7 @@
             importSurvey: mapActionByName("surveyAndProgram", "importSurvey"),
             importProgram: mapActionByName("surveyAndProgram", "importProgram"),
             importANC: mapActionByName("surveyAndProgram", "importANC"),
+            importVmmc: mapActionByName("surveyAndProgram", "importVmmc"),
             async importDataset() {
                 this.stopPolling();
 
@@ -297,6 +299,7 @@
                     survey,
                     program,
                     anc,
+                    vmmc,
                 } = this.selectedDatasetAvailableResources;
 
                 await Promise.all([
@@ -310,6 +313,7 @@
                     survey && this.importSurvey(survey.url),
                     program && this.importProgram(program.url),
                     anc && this.importANC(anc.url),
+                    vmmc && this.importVmmc(vmmc.url),
                 ]));
 
                 this.loading = false;
@@ -329,6 +333,7 @@
                     survey,
                     program,
                     anc,
+                    vmmc,
                 } = this.selectedDataset!.resources;
                 await Promise.all([
                     this.outOfDateResources["pjnz"] &&
@@ -361,6 +366,9 @@
                     (baselineUpdated || this.outOfDateResources["anc"]) &&
                     anc &&
                     this.importANC(anc.url),
+                    (baselineUpdated || this.outOfDateResources["vmmc"]) &&
+                    vmmc &&
+                    this.importVmmc(vmmc.url),
                 ]));
 
                 this.markResourcesUpdated();

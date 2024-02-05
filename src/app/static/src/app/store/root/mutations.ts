@@ -124,6 +124,8 @@ export const mutations: MutationTree<RootState> = {
                     return !!state.surveyAndProgram.program;
                 case DataType.Survey:
                     return !!state.surveyAndProgram.survey;
+                case DataType.Vmmc:
+                    return !!state.surveyAndProgram.vmmc;
             }
         };
 

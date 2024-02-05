@@ -8,7 +8,8 @@ import {
     mockRootState,
     mockSuccess,
     mockSurveyAndProgramState,
-    mockSurveyResponse
+    mockSurveyResponse,
+    mockVmmcResponse
 } from "../mocks";
 import {SurveyAndProgramMutation} from "../../app/store/surveyAndProgram/mutations";
 import {expectEqualsFrozen} from "../testHelpers";
@@ -178,6 +179,12 @@ describe("Survey and programme actions", () => {
         expect(commit.mock.calls.length).toBe(0);
     });
 
+    it("does not call import VMMC if url is missing", async () => {
+        const commit = jest.fn();
+        await actions.importVmmc({commit, rootState} as any, "");
+
+        expect(commit.mock.calls.length).toBe(0);
+    });
 
     const checkProgrammeImportUpload = (commit: Mock) => {
         expect(commit.mock.calls[0][0]).toStrictEqual({
@@ -376,6 +383,112 @@ describe("Survey and programme actions", () => {
         });
     }
 
+    it("sets data after vmmc file upload", async () => {
+
+        mockAxios.onPost(`/disease/vmmc/?strict=true`)
+            .reply(200, mockSuccess({data: "TEST", warnings: "TEST WARNINGS"}));
+
+        const commit = jest.fn();
+        await actions.uploadVmmc({commit, rootState} as any, mockFormData as any);
+
+        checkVmmcImportUpload(commit);
+    });
+
+    it("sets data after vmmc file import", async () => {
+        const url = "/adr/vmmc/?strict=true"
+        mockAxios.onPost(url)
+            .reply(200, mockSuccess({data: "TEST", warnings: "TEST WARNINGS"}));
+
+        const commit = jest.fn();
+
+        await actions.importVmmc({commit, rootState: root({vmmc: {id: "123"}})} as any, "some-url");
+
+        expectValidAdrImportPayload(url)
+
+        checkVmmcImportUpload(commit);
+    });
+
+    const checkVmmcImportUpload = (commit: Mock) => {
+        expect(commit.mock.calls.length).toBe(5);
+
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.VmmcUpdated,
+            payload: null
+        });
+
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.WarningsFetched,
+            payload: {type: DataType.Vmmc, warnings: []}
+        });
+
+        expect(commit.mock.calls[2][0]).toStrictEqual({
+            type: "genericChart/ClearDataset",
+            payload: "vmmc"
+        });
+
+        expectEqualsFrozen(commit.mock.calls[3][0], {
+            type: SurveyAndProgramMutation.VmmcUpdated,
+            payload: {data: "TEST", warnings: "TEST WARNINGS"}
+        });
+
+        expect(commit.mock.calls[4][0]).toStrictEqual(
+            {
+                type: "WarningsFetched",
+                payload: {type: 3, warnings: "TEST WARNINGS"}
+            });
+    }
+
+    it("sets error message after failed vmmc upload", async () => {
+
+        mockAxios.onPost(`/disease/vmmc/?strict=true`)
+            .reply(500, mockFailure("error message"));
+
+        const commit = jest.fn();
+        await actions.uploadVmmc({commit, rootState} as any, mockFormData as any);
+
+        checkFailedVmmcImportUpload(commit);
+    });
+
+    it("sets error message after failed vmmc import", async () => {
+
+        mockAxios.onPost(`/adr/vmmc/?strict=true`)
+            .reply(500, mockFailure("error message"));
+
+        const commit = jest.fn();
+        await actions.importVmmc({commit, rootState} as any, "some-url/file.txt");
+
+        checkFailedVmmcImportUpload(commit);
+    });
+
+    const checkFailedVmmcImportUpload = (commit: Mock) => {
+        expect(commit.mock.calls.length).toEqual(5);
+
+        expect(commit.mock.calls[0][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.VmmcUpdated,
+            payload: null
+        });
+
+        expect(commit.mock.calls[1][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.WarningsFetched,
+            payload: {type: DataType.Vmmc, warnings: []}
+        });
+
+        expect(commit.mock.calls[2][0]).toStrictEqual({
+            type: "genericChart/ClearDataset",
+            payload: "vmmc"
+        });
+
+        expect(commit.mock.calls[3][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.VmmcError,
+            payload: mockError("error message")
+        });
+
+        expect(commit.mock.calls[4][0]).toStrictEqual({
+            type: SurveyAndProgramMutation.VmmcErroredFile,
+            payload: "file.txt"
+        });
+    }
+
     it("gets data, commits it and marks state ready", async () => {
 
         mockAxios.onGet(`/disease/survey/?strict=true`)
@@ -387,6 +500,9 @@ describe("Survey and programme actions", () => {
         mockAxios.onGet(`/disease/anc/?strict=true`)
             .reply(200, mockSuccess(mockAncResponse()));
 
+        mockAxios.onGet(`/disease/vmmc/?strict=true`)
+            .reply(200, mockSuccess(mockVmmcResponse()));
+
         const commit = jest.fn();
         await actions.getSurveyAndProgramData({commit, rootState} as any);
 
@@ -394,12 +510,12 @@ describe("Survey and programme actions", () => {
         expect(calls).toContain(SurveyAndProgramMutation.SurveyUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.ProgramUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.ANCUpdated);
+        expect(calls).toContain(SurveyAndProgramMutation.VmmcUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.Ready);
 
         const payloads = commit.mock.calls.map((callArgs) => callArgs[0]["payload"]);
-        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(4);
+        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(5);
         //ready payload is true, which is frozen by definition
-
     });
 
     it("it validates, commits and marks state ready", async () => {
@@ -413,6 +529,9 @@ describe("Survey and programme actions", () => {
         mockAxios.onGet(`/disease/anc/?strict=true`)
             .reply(200, mockSuccess(mockAncResponse()));
 
+        mockAxios.onGet(`/disease/vmmc/?strict=true`)
+            .reply(200, mockSuccess(mockVmmcResponse()));
+
         const commit = jest.fn();
         await actions.validateSurveyAndProgramData({commit, rootState} as any);
 
@@ -420,17 +539,17 @@ describe("Survey and programme actions", () => {
         expect(calls).toContain(SurveyAndProgramMutation.SurveyUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.ProgramUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.ANCUpdated);
+        expect(calls).toContain(SurveyAndProgramMutation.VmmcUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.Ready);
-        expect(commit.mock.calls[3][0]).toStrictEqual(
+        expect(commit.mock.calls[4][0]).toStrictEqual(
             {
                 type: "SelectedDataTypeUpdated",
                 payload: DataType.Survey
             });
 
         const payloads = commit.mock.calls.map((callArgs) => callArgs[0]["payload"]);
-        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(5);
+        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(6);
         //ready payload is true, which is frozen by definition
-
     });
 
     it("it runs validation, fails one and commits correctly", async () => {
@@ -444,6 +563,9 @@ describe("Survey and programme actions", () => {
         mockAxios.onGet(`/disease/anc/?strict=true`)
             .reply(200, mockSuccess(mockAncResponse()));
 
+        mockAxios.onGet(`/disease/vmmc/?strict=true`)
+            .reply(200, mockSuccess(mockVmmcResponse()));
+
         const commit = jest.fn();
         await actions.validateSurveyAndProgramData({commit, rootState} as any);
 
@@ -451,11 +573,12 @@ describe("Survey and programme actions", () => {
         expect(calls).toContain(SurveyAndProgramMutation.SurveyError);
         expect(calls).toContain(SurveyAndProgramMutation.ProgramUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.ANCUpdated);
+        expect(calls).toContain(SurveyAndProgramMutation.VmmcUpdated);
         expect(calls).toContain(SurveyAndProgramMutation.Ready);
-        expect(commit.mock.calls[3][0]).toStrictEqual({type: "SelectedDataTypeUpdated", payload: DataType.Program});
+        expect(commit.mock.calls[4][0]).toStrictEqual({type: "SelectedDataTypeUpdated", payload: DataType.Program});
 
         const payloads = commit.mock.calls.map((callArgs) => callArgs[0]["payload"]);
-        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(4);
+        expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(5);
         //ready payload is true, which is frozen by definition
 
     });
@@ -471,6 +594,9 @@ describe("Survey and programme actions", () => {
         mockAxios.onGet(`/disease/anc/?strict=true`)
             .reply(500, mockFailure("Failed"));
 
+        mockAxios.onGet(`/disease/vmmc/?strict=true`)
+            .reply(500, mockFailure("Failed"));
+
         const commit = jest.fn();
         await actions.validateSurveyAndProgramData({commit, rootState} as any);
 
@@ -478,13 +604,13 @@ describe("Survey and programme actions", () => {
         expect(calls).toContain(SurveyAndProgramMutation.SurveyError);
         expect(calls).toContain(SurveyAndProgramMutation.ProgramError);
         expect(calls).toContain(SurveyAndProgramMutation.ANCError);
+        expect(calls).toContain(SurveyAndProgramMutation.VmmcError);
         expect(calls).toContain(SurveyAndProgramMutation.Ready);
-        expect(commit.mock.calls[3][0]).toStrictEqual({type: "SelectedDataTypeUpdated", payload: null});
+        expect(commit.mock.calls[4][0]).toStrictEqual({type: "SelectedDataTypeUpdated", payload: null});
 
         const payloads = commit.mock.calls.map((callArgs) => callArgs[0]["payload"]);
         expect(payloads.filter(p => Object.isFrozen(p)).length).toBe(2);
         //ready payload is true, which is frozen by definition
-
     });
 
     it("fails silently and marks state ready if getting data fails", async () => {
@@ -496,6 +622,9 @@ describe("Survey and programme actions", () => {
             .reply(500);
 
         mockAxios.onGet(`/disease/programme/?strict=true`)
+            .reply(500);
+
+        mockAxios.onGet(`/disease/vmmc/?strict=true`)
             .reply(500);
 
         const commit = jest.fn();
@@ -612,6 +741,44 @@ describe("Survey and programme actions", () => {
         });
     });
 
+    it("deletes VMMC and resets selected data type", async () => {
+        mockAxios.onDelete("/disease/vmmc/")
+            .reply(200, mockSuccess(true));
+
+        const commit = jest.fn();
+        await actions.deleteVmmc({
+            commit,
+            rootState,
+            state: mockSurveyAndProgramState({selectedDataType: DataType.Vmmc, program: mockProgramResponse()})
+        } as any);
+        expect(commit).toBeCalledTimes(4);
+        expect(commit.mock.calls[0][0]["type"]).toBe(SurveyAndProgramMutation.VmmcUpdated);
+        expect(commit.mock.calls[1][0]).toEqual({
+            type: SurveyAndProgramMutation.SelectedDataTypeUpdated,
+            payload: DataType.Program
+        });
+        expect(commit.mock.calls[2][0]).toEqual({
+            type: "genericChart/ClearDataset",
+            payload: "vmmc"
+        });
+        expect(commit.mock.calls[3][0]).toEqual({
+            type: SurveyAndProgramMutation.WarningsFetched,
+            payload: {type: DataType.Vmmc, warnings: []}
+        });
+
+        commit.mockReset();
+        await actions.deleteVmmc({
+            commit,
+            rootState,
+            state: mockSurveyAndProgramState({selectedDataType: DataType.Vmmc, survey: mockSurveyResponse()})
+        } as any);
+        expect(commit).toBeCalledTimes(4);
+        expect(commit.mock.calls[1][0]).toEqual({
+            type: SurveyAndProgramMutation.SelectedDataTypeUpdated,
+            payload: DataType.Survey
+        });
+    });
+
     it("deletes all", async () => {
         mockAxios.onDelete("/disease/anc/")
             .reply(200, mockSuccess(true));
@@ -622,10 +789,13 @@ describe("Survey and programme actions", () => {
         mockAxios.onDelete("/disease/programme/")
             .reply(200, mockSuccess(true));
 
+        mockAxios.onDelete("/disease/vmmc/")
+            .reply(200, mockSuccess(true));
+
         const commit = jest.fn();
         await actions.deleteAll({commit, rootState, state: mockSurveyAndProgramState()} as any);
-        expect(mockAxios.history["delete"].length).toBe(3);
-        expect(commit).toBeCalledTimes(8);
+        expect(mockAxios.history["delete"].length).toBe(4);
+        expect(commit).toBeCalledTimes(11);
         expect(commit.mock.calls.map(c => c[0]["type"])).toEqual([
             SurveyAndProgramMutation.SurveyUpdated,
             SurveyAndProgramMutation.WarningsFetched,
@@ -633,6 +803,9 @@ describe("Survey and programme actions", () => {
             "genericChart/ClearDataset",
             SurveyAndProgramMutation.WarningsFetched,
             SurveyAndProgramMutation.ANCUpdated,
+            "genericChart/ClearDataset",
+            SurveyAndProgramMutation.WarningsFetched,
+            SurveyAndProgramMutation.VmmcUpdated,
             "genericChart/ClearDataset",
             SurveyAndProgramMutation.WarningsFetched
         ]);

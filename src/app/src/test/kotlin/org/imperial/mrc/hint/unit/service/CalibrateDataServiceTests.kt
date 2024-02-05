@@ -28,29 +28,6 @@ class CalibrateDataServiceTests
     private val filterQuery = FilterQuery(listOf(), listOf(), listOf(), listOf(), listOf(), listOf())
 
     @Test
-    fun `can get calibrate data`()
-    {
-        val mockClient = mock<HintrAPIClient> {
-            on { getCalibrateResultData(anyString()) } doReturn mockCalibratePathResponse
-        }
-
-        val mockCalibrateDataRepo = mock<CalibrateDataRepository> {
-            on { getDataFromPath("testPath", "all") } doReturn listOf(mockResultRow)
-        }
-
-        val mockSession = mock<Session> {
-            on { getUserProfile() } doReturn CommonProfile().apply { id = ADRClientBuilderTests.TEST_EMAIL }
-            on { getAccessToken() } doReturn "FAKE_TOKEN"
-        }
-
-        val sut = CalibrateDataService(mockClient, mockCalibrateDataRepo, mockSession)
-
-        val dataObj = sut.getCalibrateData("anyPath", "all")
-
-        assert(dataObj[0] == mockResultRow)
-    }
-
-    @Test
     fun `can get filtered calibrate data`()
     {
         val mockClient = mock<HintrAPIClient> {

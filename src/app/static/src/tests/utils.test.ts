@@ -1,7 +1,5 @@
 import {
-    addCheckSum,
     freezer,
-    verifyCheckSum,
     flattenOptions,
     flattenOptionsIdsByHierarchy,
     flattenToIdSet,
@@ -35,23 +33,6 @@ describe("utils", () => {
         config: {},
         statusText: ""
     }
-
-    it("can make and verify downloadable content", () => {
-        const test = {
-            something: 120,
-            another: {
-                prop: "test"
-            }
-        };
-
-        const content = addCheckSum(JSON.stringify(test));
-
-        const resultData = JSON.parse(content);
-        expect(JSON.parse(resultData[1])).toStrictEqual(test);
-
-        const result = verifyCheckSum(content);
-        expect(result).toStrictEqual(test);
-    });
 
     it("it can read and download blob content", () => {
         const mObjectURL = "blob:https://naomi.unaids.org/download/test";
@@ -97,16 +78,6 @@ describe("utils", () => {
         const filename = extractFilenameFrom(contentDisposition)
         expect(filename).toBe("MWI_comparison-report_20221116-1328.html")
     })
-
-    it("does not verify corrupted downloadable content", () => {
-        const test = "test";
-        const content = addCheckSum(test);
-        const resultData = JSON.parse(content);
-        const corruptedContent = JSON.stringify([resultData[0], "corrupted"]);
-
-        const result = verifyCheckSum(corruptedContent);
-        expect(result).toBe(false);
-    });
 
     it("deep freezes an object", () => {
 

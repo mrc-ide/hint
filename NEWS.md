@@ -1,3 +1,7 @@
+# hint 3.6.0
+
+* Add new input file "VMMC" for uploading DMPPT2 outputs to add VMMC indicators into datapack download
+
 # hint 3.5.1
 
 * Fix bug where indicator loading would not end because call stack exceeded error in chrome

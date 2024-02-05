@@ -12,13 +12,16 @@ export interface SurveyAndProgramActions {
     importSurvey: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, url: string) => void,
     importProgram: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, url: string) => void,
     importANC: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, url: string) => void,
+    importVmmc: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, url: string) => void,
     uploadSurvey: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, formData: FormData) => void,
     uploadProgram: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, formData: FormData) => void,
     uploadANC: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, formData: FormData) => void
+    uploadVmmc: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, formData: FormData) => void
     getSurveyAndProgramData: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void;
     deleteSurvey: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void
     deleteProgram: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void
     deleteANC: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void
+    deleteVmmc: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void
     deleteAll: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void
     selectDataType: (store: ActionContext<SurveyAndProgramState, DataExplorationState>, payload: DataType) => void
     validateSurveyAndProgramData: (store: ActionContext<SurveyAndProgramState, DataExplorationState>) => void;
@@ -27,7 +30,8 @@ export interface SurveyAndProgramActions {
 const enum DATASET_TYPE {
     ANC = "anc",
     ART = "art",
-    SURVEY = "survey"
+    SURVEY = "survey",
+    VMMC = "vmmc"
 }
 
 function commitSelectedDataTypeUpdated(commit: Commit, dataType: DataType) {
@@ -117,6 +121,30 @@ async function uploadOrImportSurvey(context: ActionContext<SurveyAndProgramState
         });
 }
 
+async function uploadOrImportVmmc(context: ActionContext<SurveyAndProgramState, DataExplorationState>,
+                                  options: UploadImportOptions, filename: string) {
+    const {commit} = context;
+    commit({type: SurveyAndProgramMutation.VmmcUpdated, payload: null});
+    commit({type: SurveyAndProgramMutation.WarningsFetched, payload: {type: DataType.Vmmc, warnings: []}});
+    commitClearGenericChartDataset(commit, DATASET_TYPE.VMMC);
+
+    await api<SurveyAndProgramMutation, SurveyAndProgramMutation>(context)
+        .withError(SurveyAndProgramMutation.VmmcError)
+        .withSuccess(SurveyAndProgramMutation.VmmcUpdated)
+        .freezeResponse()
+        .postAndReturn<SurveyResponse>(getUrlWithQuery(context, options.url), options.payload)
+        .then((response) => {
+            if (response) {
+                commit({
+                    type: SurveyAndProgramMutation.WarningsFetched,
+                    payload: {type: DataType.Vmmc, warnings: response.data.warnings}
+                })
+            } else {
+                commit({type: SurveyAndProgramMutation.VmmcErroredFile, payload: filename});
+            }
+        });
+}
+
 export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & SurveyAndProgramActions = {
 
     selectDataType(context, payload) {
@@ -148,6 +176,14 @@ export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & 
         }
     },
 
+    async importVmmc(context, url) {
+        if (url) {
+            const data = buildData (context.rootState.baseline?.selectedDataset, url, "vmmc")
+            await uploadOrImportVmmc(context, {url: "/adr/vmmc/", payload: data},
+                getFilenameFromImportUrl(url))
+        }
+    },
+
     async uploadSurvey(context, formData) {
         await uploadOrImportSurvey(context, {url: "/disease/survey/", payload: formData},
             getFilenameFromUploadFormData(formData))
@@ -160,6 +196,11 @@ export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & 
 
     async uploadANC(context, formData) {
         await uploadOrImportANC(context, {url: "/disease/anc/", payload: formData},
+            getFilenameFromUploadFormData(formData))
+    },
+
+    async uploadVmmc(context, formData) {
+        await uploadOrImportVmmc(context, {url: "/disease/vmmc/", payload: formData},
             getFilenameFromUploadFormData(formData))
     },
 
@@ -216,11 +257,31 @@ export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & 
             });
     },
 
+    async deleteVmmc(context) {
+        const {commit, state} = context;
+        await api<SurveyAndProgramMutation, SurveyAndProgramMutation>(context)
+            .delete("/disease/vmmc/")
+            .then(() => {
+                commit({type: SurveyAndProgramMutation.VmmcUpdated, payload: null});
+                if (state.selectedDataType == DataType.Vmmc) {
+                    if (state.program) {
+                        // TODO: do we need this?
+                        commitSelectedDataTypeUpdated(commit, DataType.Program)
+                    } else if (state.survey) {
+                        commitSelectedDataTypeUpdated(commit, DataType.Survey)
+                    }
+                }
+                commitClearGenericChartDataset(commit, DATASET_TYPE.VMMC)
+                commit({type: SurveyAndProgramMutation.WarningsFetched, payload: {type: DataType.Vmmc, warnings: []}});
+            });
+    },
+
     async deleteAll(store) {
         await Promise.all([
             actions.deleteSurvey(store),
             actions.deleteProgram(store),
-            actions.deleteANC(store)
+            actions.deleteANC(store),
+            actions.deleteVmmc(store)
         ]);
     },
 
@@ -242,7 +303,12 @@ export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & 
                     .ignoreErrors()
                     .withSuccess(SurveyAndProgramMutation.ANCUpdated)
                     .freezeResponse()
-                    .get<AncResponse>(getUrlWithQuery(context, "/disease/anc/"))
+                    .get<AncResponse>(getUrlWithQuery(context, "/disease/anc/")),
+                api<SurveyAndProgramMutation, SurveyAndProgramMutation>(context)
+                    .ignoreErrors()
+                    .withSuccess(SurveyAndProgramMutation.VmmcUpdated)
+                    .freezeResponse()
+                    .get<AncResponse>(getUrlWithQuery(context, "/disease/vmmc/"))
             ]);
 
         commit({type: SurveyAndProgramMutation.Ready, payload: true});
@@ -283,6 +349,16 @@ export const actions: ActionTree<SurveyAndProgramState, DataExplorationState> & 
                     .then((response) => {
                         if (response && response.data) {
                             successfulDataTypes.push(DataType.ANC)
+                        }
+                    }),
+                api<SurveyAndProgramMutation, SurveyAndProgramMutation>(context)
+                    .withError(SurveyAndProgramMutation.VmmcError)
+                    .withSuccess(SurveyAndProgramMutation.VmmcUpdated)
+                    .freezeResponse()
+                    .get<AncResponse>(getUrlWithQuery(context, "/disease/vmmc/"))
+                    .then((response) => {
+                        if (response && response.data) {
+                            successfulDataTypes.push(DataType.Vmmc)
                         }
                     })
             ]);

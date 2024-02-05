@@ -1,15 +1,15 @@
 <template>
     <div class="dropdown">
         <p class="dropdown-toggle"
-        v-translate="text"
-        tabindex="0"
-        @click="toggle"
-        @blur="close">
+           v-translate="text"
+           tabindex="0"
+           @click="toggle"
+           @blur="close">
         </p>
         <div class="dropdown-menu" :class="{'show':show, 'dropdown-menu-right': right}"
-        @mouseenter="menuFocused"
-        @mouseleave="menuUnfocused"
-        @click="toggle">
+             @mouseenter="menuFocused"
+             @mouseleave="menuUnfocused"
+             @click="toggle">
             <slot></slot>
         </div>
     </div>

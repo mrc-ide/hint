@@ -475,4 +475,15 @@ describe("Barchart component", () => {
         });
         expect(wrapper.find("#noDataMessage").exists()).toBe(false);
     });
+
+    it("scale to screen toggle works as expected", () => {
+        const wrapper = shallowMount(BarChartWithFilters, {
+            props: {
+                ...propsData,
+                scaleToScreen: true
+            },
+        });
+        expect(wrapper.find(".col-md-3").classes()).toStrictEqual(["col-md-3", "fit-filter"]);
+        expect(wrapper.find(".col-md-9").classes()).toStrictEqual(["col-md-9", "fit-chart"]);
+    });
 });

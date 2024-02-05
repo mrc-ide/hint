@@ -16,7 +16,7 @@ class ModelRunController(val fileManager: FileManager, val apiClient: HintrAPICl
     @ResponseBody
     fun run(@RequestBody modelRunOptions: ModelOptions): ResponseEntity<String>
     {
-        val allFiles = fileManager.getFiles()
+        val allFiles = fileManager.getModelFitFiles()
         return apiClient.submit(allFiles, modelRunOptions)
     }
 
@@ -24,7 +24,7 @@ class ModelRunController(val fileManager: FileManager, val apiClient: HintrAPICl
     @ResponseBody
     fun validateModelOptions(@RequestBody modelRunOptions: ModelOptions): ResponseEntity<String>
     {
-        val allFiles = fileManager.getFiles()
+        val allFiles = fileManager.getModelFitFiles()
         return apiClient.validateModelOptions(allFiles, modelRunOptions)
     }
 

@@ -18,6 +18,8 @@ steps:
 
   - label: ":mag: Test front-end"
     command: buildkite/test-front-end.sh
+    agents:
+      queue: "parallel"
 
   - label: ":mag: Test browser e2e"
     command: buildkite/test-browser-e2e.sh
