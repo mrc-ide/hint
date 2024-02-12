@@ -19,6 +19,7 @@ import {CalibrateResultWithType, Dict, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
 import {PlottingSelectionsMutations} from "../plottingSelections/mutations";
 import { ModelOutputMutation } from "../modelOutput/mutations";
+import { commitPlotDefaultSelections } from "../plotSelections/utils";
 
 type ResultDataPayload = {
     indicatorId: string,
@@ -116,7 +117,8 @@ export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrat
 
         if (response) {
             if (response.data) {
-                selectFilterDefaults(response.data, commit, PlottingSelectionsMutations.updateComparisonPlotSelections)
+                // TODO:PC
+                // selectFilterDefaults(response.data, commit, PlottingSelectionsMutations.updateComparisonPlotSelections)
             }
             commit(ModelCalibrateMutation.SetComparisonPlotData, response.data);
         }
@@ -174,7 +176,7 @@ export const fetchFirstNIndicators = async (dispatch: Dispatch, indicators: Barc
 };
 
 export const getResultMetadata = async function (context: ActionContext<ModelCalibrateState, RootState>) {
-    const {commit, dispatch, state} = context;
+    const {commit, dispatch, state, rootState} = context;
     const calibrateId = state.calibrateId;
 
     const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
@@ -187,13 +189,9 @@ export const getResultMetadata = async function (context: ActionContext<ModelCal
         const data = response.data;
         commit({type: ModelCalibrateMutation.MetadataFetched, payload: data});
 
-        selectFilterDefaults(data, commit, PlottingSelectionsMutations.updateBarchartSelections)
+        commitPlotDefaultSelections(data, commit, rootState);
 
-        const indicators = data.plottingMetadata.barchart.indicators;
-        await fetchFirstNIndicators(dispatch, indicators, 5);
-        
         commit(ModelCalibrateMutation.Calibrated);
-
 
         if (switches.modelCalibratePlot) {
             dispatch("getCalibratePlot");
