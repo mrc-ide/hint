@@ -5,7 +5,7 @@ import {emptyState} from "../../../app/root";
 import {flushPromises, shallowMount} from "@vue/test-utils";
 import GenericChart from "../../../app/components/genericChart/GenericChart.vue";
 import DataSource from "../../../app/components/genericChart/dataSelectors/DataSource.vue";
-import FiltersComp from "../../../app/components/plots/Filters.vue";
+import FiltersComp from "../../../app/components/plots/FilterSet.vue";
 // Mock the import of plotly to avoid import failures in non-browser context
 jest.mock("plotly.js-basic-dist", () => ({
     newPlot: jest.fn()

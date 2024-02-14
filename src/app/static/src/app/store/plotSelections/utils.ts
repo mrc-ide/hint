@@ -12,11 +12,11 @@ export const filtersAfterUseShapeRegions = (filterTypes: FilterTypes[], rootStat
             [rootState.baseline.shape!.filters!.regions] : [];
 
         const index = filters.findIndex(f => f.id === "area");
-        const { use_shape_regions, ...areaFilterConfig } = area;
-        filters[index] = { ...areaFilterConfig, options: regions };
+        const {use_shape_regions, ...areaFilterConfig} = area;
+        filters[index] = {...areaFilterConfig, options: regions};
     }
     return filters;
-};
+}
 
 type NestedFilterOption = {
     id: string

@@ -9,10 +9,9 @@ import {
     CalibrateStatusResponse,
     CalibrateResultResponse,
     ComparisonPlotResponse,
-    CalibrateDataResponse, PlottingMetadataResponse, CalibrateMetadataResponse
+    CalibrateDataResponse,
+    CalibrateMetadataResponse,
 } from "../../generated";
-import {BarchartIndicator, Filter} from "../../types";
-import {BarchartSelections, PlottingSelectionsState} from "../plottingSelections/plottingSelections";
 
 export interface ModelCalibrateState extends ReadyState, WarningsState {
     optionsFormMeta: DynamicFormMeta
@@ -58,25 +57,12 @@ export const initialModelCalibrateState = (): ModelCalibrateState => {
     }
 };
 
-export const modelCalibrateGetters = {
-    indicators: (state: ModelCalibrateState): BarchartIndicator[] => {
-        return state.calibratePlotResult!.plottingMetadata.barchart.indicators;
-    },
-    filters: (state: ModelCalibrateState): Filter[] => {
-        return state.calibratePlotResult!.plottingMetadata.barchart.filters;
-    },
-    calibratePlotDefaultSelections: (state: ModelCalibrateState): BarchartSelections => {
-        return state.calibratePlotResult!.plottingMetadata.barchart.defaults;
-    }
-};
-
 const namespaced = true;
 
 export const modelCalibrate = (existingState: Partial<RootState> | null): Module<ModelCalibrateState, RootState> => {
     return {
         namespaced,
         state: {...initialModelCalibrateState(), ...existingState && existingState.modelCalibrate, ready: false},
-        getters: modelCalibrateGetters,
         mutations,
         actions
     };

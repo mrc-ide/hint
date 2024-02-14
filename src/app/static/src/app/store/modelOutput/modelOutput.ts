@@ -6,11 +6,12 @@ import {mutations} from "./mutations";
 import {actions} from "./actions";
 import {rootOptionChildren} from "../../utils";
 import {UnadjustedBarchartSelections} from "../plottingSelections/plottingSelections";
+import {PlotName, plotNames} from "../plotSelections/plotSelections";
 
 const namespaced = true;
 
 export interface ModelOutputState {
-    selectedTab: string,
+    selectedTab: PlotName,
     loading: {
         [k in ModelOutputTabs]: boolean
     }
@@ -75,7 +76,7 @@ export const modelOutputGetters = {
 const getPresetMetadata = (rootState: RootState) => {
     const currentPreset = rootState.plottingSelections.table.preset;
     const presetMetadata = rootState.modelCalibrate.metadata?.tableMetadata.presets;
-    const currentPresetMetadata = presetMetadata?.find(p => p.defaults.id === currentPreset);
+    const currentPresetMetadata = presetMetadata?.find((p: any) => p.defaults.id === currentPreset);
     if (currentPreset && presetMetadata && currentPresetMetadata) {
         return currentPresetMetadata;
     }
@@ -113,7 +114,7 @@ const outputPlotFilters = (rootState: RootState, resultName: "metadata" | "compa
 
 export const initialModelOutputState = (): ModelOutputState => {
     return {
-        selectedTab: "",
+        selectedTab: plotNames[0],
         loading: {
             [ModelOutputTabs.Map]: false,
             [ModelOutputTabs.Bar]: false,

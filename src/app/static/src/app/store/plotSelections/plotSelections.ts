@@ -2,7 +2,7 @@ import { CalibrateMetadataResponse, FilterOption, FilterRef } from "../../genera
 import { mutations } from "./mutations";
 
 export type PlotName = keyof CalibrateMetadataResponse["plotSettingsControl"]
-const plotNames: PlotName[] = ["barchart", "choropleth", "bubble", "table"]
+export const plotNames: PlotName[] = ["barchart", "choropleth", "bubble", "table"]
 
 export type FilterSelection = {
     multiple: boolean
@@ -30,5 +30,5 @@ export const initialPlotSelectionsState = (): PlotSelectionsState => {
 export const plotSelections = {
     namespaced: true,
     state: initialPlotSelectionsState(),
-    mutations
+    mutations,
 };

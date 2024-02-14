@@ -52,6 +52,7 @@ import {DownloadResultsState, initialDownloadResultsState} from "../app/store/do
 import {GenericChartState, initialGenericChartState} from "../app/store/genericChart/genericChart";
 import {DataExplorationState, initialDataExplorationState} from "../app/store/dataExploration/dataExploration";
 import {DynamicControlType, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
+import {initialPlotSelectionsState, PlotSelectionsState} from "../app/store/plotSelections/plotSelections";
 
 export const mockAxios = new MockAdapter(axios);
 
@@ -164,6 +165,13 @@ export const mockModelOutputState = (props?: Partial<ModelOutputState>): ModelOu
 export const mockPlottingSelections = (props?: Partial<PlottingSelectionsState>) => {
     return {
         ...initialPlottingSelectionsState(),
+        ...props
+    }
+};
+
+export const mockPlotSelectionsState = (props?: Partial<PlotSelectionsState>): PlotSelectionsState => {
+    return {
+        ...initialPlotSelectionsState(),
         ...props
     }
 };
@@ -413,25 +421,6 @@ export const mockCalibrateResultResponse = (props: Partial<CalibrateResultRespon
             mode: 0.5,
             upper: 0.5
         }],
-        warnings: [],
-        ...props
-    }
-};
-
-export const mockCalibrateMetadataResponse = (props: Partial<CalibrateMetadataResponse> = {})
-    : CalibrateMetadataResponse => {
-    return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [], filters: []
-            },
-            choropleth: {
-                indicators: [], filters: []
-            }
-        },
-        tableMetadata: {
-            presets: []
-        },
         warnings: [],
         ...props
     }

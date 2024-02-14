@@ -23,7 +23,7 @@ import {GenericChartState} from "../../../app/store/genericChart/genericChart";
 import Choropleth from "../../../app/components/plots/choropleth/Choropleth.vue";
 import AreaIndicatorsTable from "../../../app/components/plots/table/AreaIndicatorsTable.vue";
 import { nextTick } from 'vue';
-import Filters from '../../../app/components/plots/Filters.vue';
+import Filters from '../../../app/components/plots/FilterSet.vue';
 import Treeselect from "vue3-treeselect";
 import HintTreeSelect from '../../../app/components/HintTreeSelect.vue';
 

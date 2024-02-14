@@ -17,9 +17,8 @@ import {
 import {switches} from "../../featureSwitches";
 import {CalibrateResultWithType, Dict, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
-import {PlottingSelectionsMutations} from "../plottingSelections/mutations";
 import { ModelOutputMutation } from "../modelOutput/mutations";
-import { commitPlotDefaultSelections } from "../plotSelections/utils";
+import {commitPlotDefaultSelections, filtersAfterUseShapeRegions} from "../plotSelections/utils";
 
 type ResultDataPayload = {
     indicatorId: string,
@@ -182,11 +181,11 @@ export const getResultMetadata = async function (context: ActionContext<ModelCal
     const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
         .ignoreSuccess()
         .withError(ModelCalibrateMutation.SetError)
-        .freezeResponse()
         .get<CalibrateMetadataResponse>(`calibrate/result/metadata/${calibrateId}`);
 
     if (response) {
         const data = response.data;
+        data.filterTypes = filtersAfterUseShapeRegions(data.filterTypes, rootState);
         commit({type: ModelCalibrateMutation.MetadataFetched, payload: data});
 
         commitPlotDefaultSelections(data, commit, rootState);

@@ -385,6 +385,7 @@ export interface CalibrateResultWithType {
     indicatorId: string;
 }
 
+// TODO: Remove this in favour of plotting metadata?
 export enum ModelOutputTabs {
     Map = "map",
     Bar = "bar",
