@@ -1,10 +1,8 @@
 <template>
-
     <single-select :options="controlOptions"
                    :model-value="selected"
                    :placeholder="placeholder"
                    @update:model-value="updateControlSelection"/>
-
 </template>
 
 <script lang="ts">
@@ -15,6 +13,7 @@ import {useStore} from "vuex";
 import {RootState} from "../../root";
 import {FilterOption} from "../../generated";
 import {PlotName} from "../../store/plotSelections/plotSelections";
+import { PlotSelectionActionUpdate } from "../../store/plotSelections/actions";
 
 export default defineComponent({
     props: {
@@ -23,9 +22,13 @@ export default defineComponent({
     setup(props) {
         const store = useStore<RootState>();
 
+        const activePlot = computed(() => {
+            return store.state.modelOutput.selectedTab;
+        });
+
         const controlOptions = computed(() => {
-            const plotName: PlotName = store.state.modelOutput.selectedTab;
-            return store.state.modelCalibrate.metadata!.plotSettingsControl[plotName].plotSettings.find(f => f.id === props.plotControlId)!.options;
+            return store.state.modelCalibrate.metadata!.plotSettingsControl[activePlot.value].plotSettings
+                .find(f => f.id === props.plotControlId)!.options;
         });
 
         const selected = computed(() => {
@@ -35,12 +38,21 @@ export default defineComponent({
         });
 
         const updateControlSelection = (newSelection: FilterOption) => {
-            // TODO: dispatch action to run the effects
-            console.log("Dispatching action to update selected state " + newSelection.id);
+            store.dispatch("plotSelections/updateSelections", {
+                payload: {
+                    plot: activePlot.value,
+                    selection: {
+                        plotSetting: {
+                            id: props.plotControlId,
+                            options: [newSelection]
+                        }
+                    }
+                } as PlotSelectionActionUpdate
+            });
         };
 
         const placeholder = computed(() => {
-            return i18next.t("select", "en");
+            return i18next.t("select", store.state.language);
         });
 
         return {

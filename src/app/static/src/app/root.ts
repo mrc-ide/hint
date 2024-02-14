@@ -86,7 +86,7 @@ export interface WarningsState {
 
 const persistState = (store: Store<RootState>): void => {
     store.subscribe((mutation: MutationPayload, state: RootState) => {
-        console.log(mutation.type);
+        // console.log(mutation.type);
         localStorageManager.saveState(state);
 
         const {dispatch} = store;

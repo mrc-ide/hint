@@ -1,5 +1,5 @@
 import { Commit } from "vuex";
-import { CalibrateMetadataResponse, FilterOption, FilterRef, FilterTypes, PlotSettingOption } from "../../generated";
+import { CalibrateMetadataResponse, FilterOption, FilterTypes, PlotSettingOption } from "../../generated";
 import { PlotName } from "./plotSelections";
 import { PlotSelectionUpdate, PlotSelectionsMutations } from "./mutations";
 import { RootState } from "../../root";
@@ -39,10 +39,12 @@ const getFullNestedFilters = (filterOptions: NestedFilterOption[]) => {
 
 export const filtersInfoFromPlotSettings = (
     settings: PlotSettingOption[],
-    defaultFilterTypes: FilterRef[] | undefined,
-    filterTypes: FilterTypes[]
+    plotName: PlotName,
+    rootState: RootState
 ) => {
-    let filterRefs = defaultFilterTypes;
+    const metadata = rootState.modelCalibrate.metadata!;
+    const filterTypes = filtersAfterUseShapeRegions(metadata.filterTypes, rootState);
+    let filterRefs = metadata.plotSettingsControl[plotName].defaultFilterTypes;
     let multiFilters: string[] = [];
     let filterValues: Record<string, string[]> = {};
 
@@ -99,7 +101,6 @@ export const commitPlotDefaultSelections = (
     rootState: RootState
 ) => {
     const plotControl = metadata.plotSettingsControl;
-    const filters = filtersAfterUseShapeRegions(metadata.filterTypes, rootState);
     for (const plotName in plotControl) {
         const name = plotName as PlotName;
         const payload: PlotSelectionUpdate = {
@@ -120,12 +121,7 @@ export const commitPlotDefaultSelections = (
             }
         });
 
-        const filtersInfo = filtersInfoFromPlotSettings(
-            defaultSettingOptions,
-            control.defaultFilterTypes,
-            filters
-        );
-
+        const filtersInfo = filtersInfoFromPlotSettings(defaultSettingOptions, name, rootState);
         payload.selections.filters = filtersInfo;
 
         commit(

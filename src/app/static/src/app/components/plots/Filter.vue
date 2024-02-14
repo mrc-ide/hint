@@ -1,16 +1,14 @@
 <template>
-
-    <multi-select v-if="multiple"
+    <multi-select v-if="filter.multiple"
                   :options="options"
                   :model-value="selected"
                   :placeholder="placeholder"
                   @update:model-value="updateSelection"/>
     <single-select v-else
                    :options="options"
-                   :model-value="selected[0]"
+                   :model-value="selected?.at(0)"
                    :placeholder="placeholder"
                    @update:model-value="updateSelection"/>
-
 </template>
 
 <script lang="ts">
@@ -20,7 +18,7 @@ import i18next from "i18next";
 import { useStore } from "vuex";
 import { RootState } from "../../root";
 import { FilterOption } from "../../generated";
-import { PlotName } from "../../store/plotSelections/plotSelections";
+import { PlotSelectionActionUpdate } from "../../store/plotSelections/actions";
 
 export default defineComponent({
     props: {
@@ -29,9 +27,13 @@ export default defineComponent({
     setup(props) {
         const store = useStore<RootState>();
 
+        const activePlot = computed(() => {
+            return store.state.modelOutput.selectedTab;
+        });
+
         const filter = computed(() => {
-            const plotName: PlotName = store.state.modelOutput.selectedTab;
-            return store.state.plotSelections[plotName].filters.find(f => f.stateFilterId === props.stateFilterId)!;
+            return store.state.plotSelections[activePlot.value].filters
+                .find(f => f.stateFilterId === props.stateFilterId)!;
         })
 
         const options = computed(() => {
@@ -43,8 +45,17 @@ export default defineComponent({
         });
 
         const updateSelection = (newSelection: FilterOption | FilterOption[]) => {
-            // TODO: dispatch event and update the selectedOptions in state
-            console.log("Dispatching action to update selection in state " + JSON.stringify(newSelection));
+            store.dispatch("plotSelections/updateSelections", {
+                payload: {
+                    plot: activePlot.value,
+                    selection: {
+                        filter: {
+                            filterId: props.stateFilterId,
+                            options: Array.isArray(newSelection) ? newSelection : [newSelection]
+                        }
+                    }
+                } as PlotSelectionActionUpdate
+            });
         };
 
         const placeholder = computed(() => {
@@ -52,7 +63,7 @@ export default defineComponent({
         });
 
         return {
-            multiple: filter.value.multiple,
+            filter,
             options,
             selected,
             updateSelection,
