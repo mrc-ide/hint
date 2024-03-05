@@ -50,7 +50,7 @@
     "@vue/eslint-config-typescript": "^9.1.0",
     "@vue/test-utils": "^2.3.0",
     "@vue/vue3-jest": "^27.0.0-alpha.1",
-    "axios": "^0.21.1",
+    "axios": "^0.28.0",
     "axios-middleware": "^0.3.1",
     "axios-mock-adapter": "^1.17.0",
     "babel-core": "^7.0.0-bridge.0",
