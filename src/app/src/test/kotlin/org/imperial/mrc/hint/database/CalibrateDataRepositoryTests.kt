@@ -2,6 +2,7 @@ package org.imperial.mrc.hint.database
 
 import org.imperial.mrc.hint.db.JooqCalibrateDataRepository
 import org.imperial.mrc.hint.models.CalibrateResultRow
+import org.imperial.mrc.hint.models.FilterQuery
 import org.junit.jupiter.api.Test
 import org.jooq.tools.json.JSONArray
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -51,6 +52,14 @@ class CalibrateDataRepositoryTests
             2
         )
     ))
+    val query = FilterQuery(
+        listOf("indicator_test_2"),
+        listOf(),
+        listOf("age_group_test"),
+        listOf("sex_test"),
+        listOf("area_id_test"),
+        listOf(2)
+    )
     val path = "/src/test/resources/duckdb/test.duckdb"
     val sut = JooqCalibrateDataRepository()
 
@@ -86,5 +95,14 @@ class CalibrateDataRepositoryTests
             sut.getDataFromPath("/src/test/resources/duckdb/test1.duckdb", "all")
         }.isInstanceOf(SQLException::class.java)
             .hasMessageContaining("database does not exist")
+    }
+
+    @Test
+    fun `can get filtered data`()
+    {
+        val plotData = sut.getFilteredCalibrateData(path, query)
+        val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
+        val expectedTree = ObjectMapper().readTree(expectedRowIndicator2.toString())
+        assert(plotDataTree.equals(expectedTree))
     }
 }

@@ -11,12 +11,17 @@ import org.jooq.tools.json.JSONObject
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import kotlin.system.measureTimeMillis
+import org.imperial.mrc.hint.models.FilterQuery
 
 interface CalibrateService
 {
     fun getCalibrateData(
         id: String,
         indicator: String): List<CalibrateResultRow>
+    
+    fun getFilteredCalibrateData(
+        id: String,
+        filterQuery: FilterQuery): List<CalibrateResultRow>
 }
 
 @Service
@@ -48,5 +53,15 @@ class CalibrateDataService(
         }, logger, "Fetched calibrate data", logData)
 
         return data
+    }
+
+    override fun getFilteredCalibrateData(
+        id: String,
+        filterQuery: FilterQuery): List<CalibrateResultRow>
+    {
+        val res = apiClient.getCalibrateResultData(id)
+        val jsonBody = ObjectMapper().readTree(res.body?.toString())
+        val path = jsonBody.get("data").get("path").textValue()
+        return calibrateDataRepository.getFilteredCalibrateData(path, filterQuery)
     }
 }
