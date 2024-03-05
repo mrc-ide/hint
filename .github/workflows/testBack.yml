@@ -1,0 +1,72 @@
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - "*"
+
+name: Back-end tests
+
+jobs:
+    test-adr-related-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Run Dependencies
+              run: ./scripts/run-dependencies.sh
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+               node-version: 14.x
+
+            - name: Install Packages
+              run: |
+                npm ci --prefix=src/app/static
+                npm install -g codecov
+
+            - name: Build front end
+              run: |
+                npm run build --prefix=src/app/static
+                npm run copy --prefix=src/app/static
+
+            - name: Compile Kotlin
+              run: ./src/gradlew -p src app:compileKotlin
+
+            - name: Test Back-end
+              run: >
+                ./src/gradlew -p src :app:test -PshardTest=1/2 -x app:compileFrontEnd -x app:copyAssets -x app:compileKotlin
+    test-non-adr-related-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Run Dependencies
+              run: ./scripts/run-dependencies.sh
+
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                node-version: 14.x
+
+            - name: Install Packages
+              run: |
+                npm ci --prefix=src/app/static
+                npm install -g codecov
+
+            - name: Build front end
+              run: |
+                npm run build --prefix=src/app/static
+                npm run copy --prefix=src/app/static
+
+            - name: Compile Kotlin
+              run: ./src/gradlew -p src app:compileKotlin
+
+            - name: Test Back-end
+              run: >
+                ./src/gradlew -p src :app:detektMain -x app:compileFrontEnd -x app:copyAssets -x app:compileKotlin 
+                -PexcludeADR=true :app:test -PshardTest=2/2 -x app:compileFrontEnd -x app:copyAssets -x app:compileKotlin
+                :userCLI:test :app:jacocoTestReport -x app:compileFrontEnd -x app:copyAssets -x app:compileKotlin && 
+                codecov -f ./src/app/coverage/test/*.xml

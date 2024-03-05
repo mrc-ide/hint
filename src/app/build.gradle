@@ -65,7 +65,7 @@ dependencies {
     }
     testImplementation "org.leadpony.justify:justify:1.1.0"
     testImplementation "org.leadpony.joy:joy:1.1.0"
-    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.1'
     testImplementation "com.nhaarman:mockito-kotlin:1.3.0"
     testImplementation "org.jsoup:jsoup:1.11.3"
     testImplementation "org.xmlmatchers:xml-matchers:0.10"
@@ -79,6 +79,17 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
     kotlinOptions {
         freeCompilerArgs = ['-Xjsr305=strict']
         jvmTarget = JavaVersion.VERSION_11
+    }
+}
+
+tasks.withType(Test) {
+    filter {
+        if (shardTest == "1/2") {
+            includeTestsMatching "*ADR*"
+        }
+        if (shardTest == "2/2") {
+            excludeTestsMatching "*ADR*"
+        }
     }
 }
 
