@@ -68,8 +68,11 @@ export interface RootState extends DataExplorationState {
     modelCalibrate: ModelCalibrateState,
     modelOutput: ModelOutputState,
     plottingSelections: PlottingSelectionsState,
+    // Output data used for plotting
     plotData: PlotDataState,
+    // Control and filter selections for output plots
     plotSelections: PlotSelectionsState,
+    // Colour and size scales selected by user in output plots
     plotState: PlotState,
     load: LoadState,
     errors: ErrorsState,

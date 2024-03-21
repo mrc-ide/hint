@@ -33,9 +33,9 @@ import {computed, defineComponent, PropType, ref} from "vue";
 import {LControl} from "@vue-leaflet/vue-leaflet";
 import MapAdjustScale from "./MapAdjustScale.vue";
 import {useStore} from "vuex";
-import {RootState} from "../../../root";
-import {ChoroplethIndicatorMetadata} from "../../../generated";
-import {ScaleSettings} from "../../../store/plotState/plotState";
+import {RootState} from "../../root";
+import {ChoroplethIndicatorMetadata} from "../../generated";
+import {ScaleSettings} from "../../store/plotState/plotState";
 
 export default defineComponent({
     props: {

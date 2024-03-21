@@ -11,7 +11,8 @@ export interface InputPlotState {
 }
 
 export interface OutputPlotState {
-    colourScales: ScaleSelections
+    colourScales: ScaleSelections,
+    sizeScales: ScaleSelections
 }
 
 export type ScaleSelections = Dict<ScaleSettings>;
@@ -30,7 +31,8 @@ export const initialPlotState = (): PlotState => {
             colourScales: {}
         },
         output: {
-            colourScales: {}
+            colourScales: {},
+            sizeScales: {}
         }
     }
 }

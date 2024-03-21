@@ -35,7 +35,7 @@ export const actions: ActionTree<PlotSelectionsState, RootState> & PlotSelection
         const { state, commit, rootState } = context;
         const updatedSelections: PlotSelectionsState[PlotName]  = {...state[plot]};
         if ("filter" in selection) {
-            const fIndex = updatedSelections.filters.findIndex(f => f.filterId === selection.filter.filterId);
+            const fIndex = updatedSelections.filters.findIndex(f => f.stateFilterId === selection.filter.filterId);
             updatedSelections.filters[fIndex].selection = selection.filter.options;
         } else {
             const pIndex = updatedSelections.controls.findIndex(p => p.id === selection.plotSetting.id);

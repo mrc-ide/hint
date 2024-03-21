@@ -1,5 +1,5 @@
 <template>
-    <div class="p-3 ml-2">
+    <div class="p-3">
         <div class="form-check dynamic-filtered">
             <label class="form-check-label">
                 <input id="type-input-dynamic-filtered" class="form-check-input" type="radio" :name="scaleTypeGroup"
@@ -56,12 +56,12 @@
 <script lang="ts">
 
 import {computed, defineComponent, PropType} from "vue";
-import {ScaleSettings, ScaleType} from "../../../store/plotState/plotState";
+import {ScaleSettings, ScaleType} from "../../store/plotState/plotState";
 import i18next from "i18next";
 import {useStore} from "vuex";
-import {RootState} from "../../../root";
-import {ChoroplethIndicatorMetadata} from "../../../generated";
-import {useUpdateScale} from "../useUpdateScale";
+import {RootState} from "../../root";
+import {ChoroplethIndicatorMetadata} from "../../generated";
+import {useUpdateScale} from "./useUpdateScale";
 
 export default defineComponent({
     emits: ['update:selectedScale'],
@@ -80,11 +80,9 @@ export default defineComponent({
         },
     },
     setup(props, { emit }) {
-        const store = useStore<RootState>();
-        const scaleStep = computed(() => {
-            return store.getters["modelCalibrate/scaleStep"];
-        });
-        const {updateOutputColourScale} = useUpdateScale();
+        const {getScaleStep, updateOutputScale} = useUpdateScale();
+
+        const scaleStep = computed(() => getScaleStep(props.name));
 
         const invalidMsg = computed(() => {
             let result = null;
@@ -121,7 +119,7 @@ export default defineComponent({
             set(newType: ScaleType) {
                 const newScaleSetting = {...props.selectedScale};
                 newScaleSetting.type = newType;
-                updateOutputColourScale(newScaleSetting)
+                updateOutputScale(props.name, newScaleSetting)
                 emit('update:selectedScale')
             }
         });
@@ -133,7 +131,7 @@ export default defineComponent({
             set(newMin: number) {
                 const newScaleSetting = {...props.selectedScale};
                 newScaleSetting.customMin = newMin;
-                updateOutputColourScale(newScaleSetting)
+                updateOutputScale(props.name, newScaleSetting)
                 emit('update:selectedScale')
             }
         });
@@ -145,7 +143,7 @@ export default defineComponent({
             set(newMax: number) {
                 const newScaleSetting = {...props.selectedScale};
                 newScaleSetting.customMax = newMax;
-                updateOutputColourScale(newScaleSetting)
+                updateOutputScale(props.name, newScaleSetting)
                 emit('update:selectedScale')
             }
         });

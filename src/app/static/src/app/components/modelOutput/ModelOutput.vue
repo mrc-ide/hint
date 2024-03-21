@@ -15,6 +15,7 @@
                 <filter-set/>
             </div>
             <choropleth class="col-md-9" v-if="selectedPlot === 'choropleth'"/>
+            <bubble class="col-md-9" v-if="selectedPlot === 'bubble'"/>
         </div>
     </div>
 </template>
@@ -28,6 +29,7 @@ import {useStore} from "vuex";
 import {RootState} from "../../root";
 import { ModelOutputMutation } from "../../store/modelOutput/mutations";
 import Choropleth from "../plots/choropleth/Choropleth.vue";
+import Bubble from "../plots/bubble/Bubble.vue";
 
 export default defineComponent({
 
@@ -44,6 +46,7 @@ export default defineComponent({
 
     components: {
         Choropleth,
+        Bubble,
         FilterSet,
         PlotControlSet
     }
