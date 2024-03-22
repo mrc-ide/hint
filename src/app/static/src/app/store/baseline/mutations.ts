@@ -60,7 +60,6 @@ export const mutations: MutationTree<BaselineState> = {
         if (state.selectedDataset) {
             const resources = state.selectedDataset.resources;
             Object.keys(resources).map((k: string) => {
-                console.log(`checking ${k}`)
                 const key = k as keyof DatasetResourceSet;
                 if (!payload[key]) {
                     // resource has been removed from the dataset
@@ -80,10 +79,7 @@ export const mutations: MutationTree<BaselineState> = {
 
     [BaselineMutation.SetDataset](state: BaselineState, payload: Dataset) {
         state.selectedDatasetHasChanged = state.selectedDataset?.id !== payload.id
-        console.log("set dataset payload is")
-        console.log(payload)
         state.selectedDataset = payload;
-        console.log(state.selectedDataset)
     },
 
     [BaselineMutation.SetRelease](state: BaselineState, payload: Release | null) {

@@ -69,29 +69,20 @@ export const baselineGetters = {
         const { selectedDataset } = state
 
         if (selectedDataset?.id && selectedDataset.resources) {
-            console.log("adr datasets are")
-            console.log(rootState.adr.datasets)
             const selectedDatasetFromDatasets = rootState.adr.datasets
                 .find(dataset => dataset.id === selectedDataset.id) || null
 
-            console.log("selected dataset from datasets");
-            console.log(selectedDatasetFromDatasets)
             const checkResourceAvailable = (resourceType: string) => {
                 const res = selectedDatasetFromDatasets?.resources
                     .some((resource: any) => resource.resource_type && resource.resource_type === resourceType)
-                console.log(`checking ${resourceType}`);
-                console.log(res);
                 return res
             }
 
             Object.entries(resourceTypes).forEach(([key, value]) => {
-                console.log(`checking resource ${key}`)
                 resources[key as keyof typeof resources] =
                     checkResourceAvailable(value) ? selectedDataset.resources[key as keyof typeof resources] : null
             })
         }
-        console.log(`Avaialble resources are ${resources}`)
-        console.log(resources)
         return resources
     },
 };

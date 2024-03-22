@@ -1,6 +1,7 @@
 import { CalibrateMetadataResponse, Error, FilterOption, FilterRef } from "../../generated";
 import { mutations } from "./mutations";
 import { actions } from "./actions";
+import { getters } from "./getters";
 
 export type PlotName = keyof CalibrateMetadataResponse["plotSettingsControl"]
 export const plotNames: PlotName[] = ["barchart", "choropleth", "bubble", "table"]
@@ -33,5 +34,6 @@ export const plotSelections = {
     namespaced: true,
     state: initialPlotSelectionsState(),
     mutations,
-    actions
+    actions,
+    getters
 };

@@ -52,6 +52,7 @@ import {
 } from "./store/downloadIndicator/downloadIndicator";
 import { initialPlotSelectionsState, PlotSelectionsState, plotSelections } from "./store/plotSelections/plotSelections";
 import { initialPlotDataState, PlotDataState, plotData } from "./store/plotData/plotData";
+import { initialPlotState, PlotState, plotState } from "./store/plotState/plotState";
 
 export interface RootState extends DataExplorationState {
     version: string,
@@ -69,6 +70,7 @@ export interface RootState extends DataExplorationState {
     plottingSelections: PlottingSelectionsState,
     plotData: PlotDataState,
     plotSelections: PlotSelectionsState,
+    plotState: PlotState,
     load: LoadState,
     errors: ErrorsState,
     projects: ProjectsState
@@ -174,6 +176,7 @@ export const emptyState = (): RootState => {
         plottingSelections: initialPlottingSelectionsState(),
         plotData: initialPlotDataState(),
         plotSelections: initialPlotSelectionsState(),
+        plotState: initialPlotState(),
         errors: initialErrorsState(),
         projects: initialProjectsState(),
         currentUser: currentUser,
@@ -203,6 +206,7 @@ export const storeOptions: StoreOptions<RootState> = {
         plottingSelections: plottingSelections(existingState),
         plotData,
         plotSelections,
+        plotState,
         stepper: stepper(existingState),
         load,
         errors,
