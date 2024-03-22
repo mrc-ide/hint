@@ -117,7 +117,7 @@ const updateColourScales = () => {
 const updateSizeScales = () => {
     sizeIndicatorMetadata.value = store.getters["modelCalibrate/bubbleSizeMetadata"];
     const sizeScales = store.state.plotState.output.sizeScales;
-    const sizeIndicator =  store.getters["plotSelections/bubbleSizeIndicator"];
+    const sizeIndicator = store.getters["plotSelections/bubbleSizeIndicator"];
     sizeScale.value = sizeScales[sizeIndicator];
     if (!sizeScale.value) {
         sizeScale.value = initialiseScaleFromMetadata(sizeIndicatorMetadata.value);

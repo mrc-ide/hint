@@ -2,6 +2,7 @@ import {useStore} from "vuex";
 import {RootState} from "../../root";
 import {ScaleSettings} from "../../store/plotState/plotState";
 import {computed} from "vue";
+import {PlotStateMutations} from "../../store/plotState/mutations";
 
 export const useUpdateScale = () => {
     const store = useStore<RootState>();
@@ -47,7 +48,7 @@ export const useUpdateScale = () => {
             indicatorId = bubbleColourIndicator.value
         }
         store.commit({
-            type: 'plotState/updateOutputColourScales',
+            type: `plotState/${PlotStateMutations.updateOutputColourScales}`,
             payload: {indicatorId: indicatorId, newScaleSettings}
         })
     };

@@ -2,10 +2,18 @@ import {Module} from 'vuex';
 import {actions} from './actions';
 import {mutations} from './mutations';
 import {ReadyState} from "../../root";
-import {NestedFilterOption, PjnzResponse, PopulationResponse, ShapeResponse, Error} from "../../generated";
+import {
+    NestedFilterOption,
+    PjnzResponse,
+    PopulationResponse,
+    ShapeResponse,
+    Error,
+    FilterOption
+} from "../../generated";
 import { Dataset, Release, Dict, DatasetResourceSet, DatasetResource } from "../../types";
 import {resourceTypes} from "../../utils";
 import {DataExplorationState} from "../dataExploration/dataExploration";
+import {Feature} from "geojson";
 
 export interface BaselineState extends ReadyState {
     selectedDataset: Dataset | null
@@ -84,6 +92,19 @@ export const baselineGetters = {
             })
         }
         return resources
+    },
+    areaIdToLevelMap: (state: BaselineState): Dict<number> => {
+        const features = state.shape?.data.features
+        if (!features) {
+            return {}
+        }
+        return features.reduce(
+            (map: Dict<number>, feature: any) => {
+                if (feature.properties?.area_id) {
+                    map[feature.properties.area_id] = feature.properties.area_level;
+                }
+                return map;
+            }, {});
     },
 };
 

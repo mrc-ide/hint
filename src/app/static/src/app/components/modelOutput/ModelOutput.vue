@@ -16,6 +16,8 @@
             </div>
             <choropleth class="col-md-9" v-if="selectedPlot === 'choropleth'"/>
             <bubble class="col-md-9" v-if="selectedPlot === 'bubble'"/>
+            <barchart class="col-md-9" v-if="selectedPlot === 'barchart'"
+                :show-error-bars="false"/>
         </div>
     </div>
 </template>
@@ -30,6 +32,7 @@ import {RootState} from "../../root";
 import { ModelOutputMutation } from "../../store/modelOutput/mutations";
 import Choropleth from "../plots/choropleth/Choropleth.vue";
 import Bubble from "../plots/bubble/Bubble.vue";
+import Barchart from "../plots/bar/Barchart.vue";
 
 export default defineComponent({
 
@@ -45,6 +48,7 @@ export default defineComponent({
     },
 
     components: {
+        Barchart,
         Choropleth,
         Bubble,
         FilterSet,

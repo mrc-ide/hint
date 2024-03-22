@@ -41,7 +41,7 @@ export const useChoroplethTooltips = (featureData: Ref<IndicatorValuesDict>,
 };
 
 const tooltipContent = function (feature: Feature, featureIndicators: IndicatorValuesDict,
-                                        indicatorMetadata: ChoroplethIndicatorMetadata): string {
+                                 indicatorMetadata: ChoroplethIndicatorMetadata): string {
     let format = "";
     let scale = 1;
     let accuracy: number | null = null;

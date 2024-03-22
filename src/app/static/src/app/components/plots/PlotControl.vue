@@ -38,6 +38,7 @@ export default defineComponent({
         });
 
         const updateControlSelection = (newSelection: FilterOption) => {
+            console.log("updating control selection", newSelection)
             store.dispatch("plotSelections/updateSelections", {
                 payload: {
                     plot: activePlot.value,
