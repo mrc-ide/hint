@@ -9,10 +9,11 @@ import {
     CalibrateStatusResponse,
     CalibrateResultResponse,
     ComparisonPlotResponse,
-    CalibrateDataResponse, PlottingMetadataResponse, CalibrateMetadataResponse
+    CalibrateDataResponse,
+    CalibrateMetadataResponse
 } from "../../generated";
 import {BarchartIndicator, Filter} from "../../types";
-import {BarchartSelections, PlottingSelectionsState} from "../plottingSelections/plottingSelections";
+import {BarchartSelections} from "../plottingSelections/plottingSelections";
 
 export interface ModelCalibrateState extends ReadyState, WarningsState {
     optionsFormMeta: DynamicFormMeta

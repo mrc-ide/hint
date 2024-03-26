@@ -10,6 +10,7 @@ import 'floating-vue/dist/style.css';
 import "../scss/style.scss";
 import "bootstrap/scss/bootstrap-grid.scss";
 import "@reside-ic/vue-nested-multiselect/style.css";
+import "bootstrap/dist/js/bootstrap.bundle.js";
 
 const mountEl = document.querySelector("#app");
 const mountElForgotPassword = document.querySelector("#forgotPasswordApp");

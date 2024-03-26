@@ -14,7 +14,7 @@ export interface LoadState {
     statusPollId: number
     complete: boolean
     rehydrateResult: ProjectRehydrateResultResponse
-    projectName: string
+    newProjectName: string
 }
 
 export const initialLoadState = (): LoadState => {
@@ -26,6 +26,6 @@ export const initialLoadState = (): LoadState => {
         statusPollId: -1,
         complete: false,
         rehydrateResult: {} as ProjectRehydrateResultResponse,
-        projectName: ""
+        newProjectName: ""
     }
 };

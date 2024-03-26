@@ -1,6 +1,5 @@
 import Vuex, {Store} from "vuex";
 import UserHeader from "../../../app/components/header/UserHeader.vue";
-import FileMenu from "../../../app/components/header/FileMenu.vue";
 import LanguageMenu from "../../../app/components/header/LanguageMenu.vue";
 import HintrVersionMenu from "../../../app/components/header/HintrVersionMenu.vue";
 import {RootState} from "../../../app/root";
@@ -59,16 +58,6 @@ describe("user header", () => {
         const loginLink = wrapper.find("a[href='/login']");
         expectTranslated(loginLink, "Log In", "Ouvrir une session", "Iniciar Sessão", store);
         expect(logoutLink.length).toBe(0);
-    });
-
-    it("renders file menu", () => {
-        const store = createStore()
-        const wrapper = shallowMountWithTranslate(UserHeader, store, {
-            global: {
-                plugins: [store]
-            }, stubs: ["router-link"]
-        });
-        expect(wrapper.findAllComponents(FileMenu).length).toBe(1);
     });
 
     it("renders language menu", () => {

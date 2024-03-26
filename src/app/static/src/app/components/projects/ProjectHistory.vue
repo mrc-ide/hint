@@ -1,6 +1,8 @@
 <template>
-    <div v-if="projects.length > 0">
-        <h5 v-translate="'projectHistory'"></h5>
+    <div v-if="projects.length == 0" class="text-center">
+        <h5 class="mt-5" v-translate="'projectPlaceholderText'"></h5>
+    </div>
+    <div v-else>
         <div id="headers" class="row font-weight-bold pt-2">
             <div class="col-md-1 header-cell"></div>
             <div class="col-md-3 header-cell" v-translate="'projectName'"></div>
@@ -321,7 +323,7 @@
 <script lang="ts">
     import i18next from "i18next";
     import {Project, Version, VersionIds} from "../../types";
-    import {BCollapse, vBToggle} from "bootstrap-vue-next";
+    import {BCollapse} from "bootstrap-vue-next";
     import VueFeather from "vue-feather";
     import Modal from "../Modal.vue";
     import {formatDateTime, mapActionByName, mapStateProp, versionLabel} from "../../utils";
@@ -330,7 +332,6 @@
     import {RootState} from "../../root";
     import ProjectsMixin from "./ProjectsMixin";
     import ShareProject from "./ShareProject.vue";
-    import {projects} from "../../store/projects/projects";
     import { defineComponent } from "vue";
 
     const namespace = "projects";
@@ -564,7 +565,6 @@
                 "promoteVersion"
             ),
             createProject: mapActionByName(namespace, "createProject"),
-            getProjects: mapActionByName(namespace, "getProjects"),
             versionCountLabel(project: Project) {
                 const lng = this.currentLanguage;
                 return project.versions.length == 1

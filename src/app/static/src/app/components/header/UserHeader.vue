@@ -5,13 +5,13 @@
                 <div class="navbar-header">
                     {{ title }}
                 </div>
-                <router-link id="projects-link" v-if="!isGuest" to="/projects" class="ml-2 pr-2 border-right"
+                <router-link id="projects-link" v-if="!isGuest" to="/projects" class="ml-2 pr-2"
                              v-translate="'projects'"
-                             style="flex:none"></router-link>
-                <file-menu :title="title || ''"></file-menu>
+                             style="flex:auto"></router-link>
                 <span v-if="!isGuest" class="pr-2 mr-2 border-right text-white">
                     <span v-translate="'loggedInAs'"></span> {{ user }}
                 </span>
+                <div v-else style="flex:auto"></div>
                 <hintr-version-menu class="pr-2 mr-2 border-right"/>
                 <online-support-menu class="pr-2 mr-2 border-right"/>
                 <a v-if="!isGuest" href="/logout" class="pr-2 mr-2 border-right" v-translate="'logout'">
@@ -25,7 +25,6 @@
 </template>
 <script lang="ts">
     import {mapGetters} from 'vuex';
-    import FileMenu from "./FileMenu.vue";
     import LanguageMenu from "./LanguageMenu.vue";
     import HintrVersionMenu from "./HintrVersionMenu.vue";
     import OnlineSupportMenu from "./OnlineSupportMenu.vue";
@@ -46,7 +45,6 @@
             }
         },
         components: {
-            FileMenu,
             LanguageMenu,
             HintrVersionMenu,
             OnlineSupportMenu

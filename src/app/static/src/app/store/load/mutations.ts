@@ -20,7 +20,7 @@ export interface LoadMutations {
     RehydratePollingStarted: LoadMutation,
     RehydrateResult: LoadMutation,
     RehydrateResultError: LoadMutation,
-    SetProjectName: LoadMutation,
+    SetNewProjectName: LoadMutation,
     RehydrateCancel: LoadMutation
 }
 
@@ -28,8 +28,8 @@ export const mutations: MutationTree<LoadState> & LoadMutations = {
     SettingFiles(state: LoadState) {
         state.loadingState = LoadingState.SettingFiles;
     },
-    SetProjectName(state: LoadState, projectName: string) {
-        state.projectName = projectName
+    SetNewProjectName(state: LoadState, projectName: string) {
+        state.newProjectName = projectName
     },
     RehydrateCancel(state: LoadState) {
         state.preparing = false;

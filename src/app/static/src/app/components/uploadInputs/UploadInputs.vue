@@ -1,5 +1,20 @@
 <template>
     <div>
+        <div v-if="isGuest" id="load-zip">
+            <button id="load-zip-button"
+                    class="btn btn-red mb-4"
+                    type="button"
+                    @click="$refs.loadZip.click()">
+                <vue-feather type="upload" size="20" class="icon ml-1 align-middle"></vue-feather>
+                <span class="align-middle ml-2" v-translate="'loadZip'"></span>
+            </button>
+            <input id="upload-zip"
+                   v-translate:aria-label="'selectFile'"
+                   type="file"
+                   style="display: none;" ref="loadZip"
+                   @change="loadZip" accept=".zip">
+        </div>
+
         <div class="row">
             <div class="col-sm-6 col-md-8">
                 <form>
@@ -94,66 +109,26 @@
 </template>
 
 <script lang="ts">
-
-    import {CustomVue, mapActions, mapState} from "vuex";
+    import {CustomVue, mapActions, mapGetters, mapState} from "vuex";
     import {BaselineState} from "../../store/baseline/baseline";
-    import {PartialFileUploadProps} from "../../types";
     import {MetadataState} from "../../store/metadata/metadata";
     import ErrorAlert from "../ErrorAlert.vue";
     import LoadingSpinner from "../LoadingSpinner.vue";
     import ManageFile from "../files/ManageFile.vue";
-    import {RootState} from "../../root";
     import {SurveyAndProgramState} from "../../store/surveyAndProgram/surveyAndProgram";
-    import {mapRootStateProps, mapStatePropByName, mapStateProps} from "../../utils";
+    import {getFormData, mapRootStateProps, mapStateProps} from "../../utils";
     import { Error } from "../../generated";
     import { defineComponent } from "vue";
+    import VueFeather from "vue-feather";
 
     const namespace = 'baseline';
-
-    interface ADRResponse {
-        valid: boolean,
-        error: Error | null,
-        fromADR?: boolean,
-        existingFileName: string
-    }
-
-    interface Computed {
-        country: string,
-        pjnz: ADRResponse,
-        shape: ADRResponse,
-        population: ADRResponse,
-        hasBaselineError: boolean,
-        baselineError: Error | null,
-        validating: boolean,
-        plottingMetadataError: Error | null,
-        anc: ADRResponse,
-        survey: ADRResponse,
-        programme: ADRResponse,
-        vmmc: ADRResponse,
-    }
-
-    interface Methods {
-        uploadPJNZ: (formData: FormData) => void,
-        uploadShape: (formData: FormData) => void,
-        uploadPopulation: (formData: FormData) => void,
-        deletePJNZ: () => void,
-        deleteShape: () => void,
-        deletePopulation: () => void,
-        uploadSurvey: (formData: FormData) => void,
-        uploadProgram: (formData: FormData) => void,
-        uploadANC: (formData: FormData) => void,
-        uploadVmmc: (formData: FormData) => void,
-        deleteSurvey: () => void,
-        deleteProgram: () => void,
-        deleteANC: () => void
-        deleteVmmc: () => void
-    }
 
     type PlottingMetadataError = Record<"plottingMetadataError", (this: CustomVue, state: MetadataState) => Error | null>
 
     export default defineComponent({
         name: "UploadInputs",
         computed: {
+            ...mapGetters(["isGuest"]),
             ...mapStateProps(namespace, {
                 country: (state: BaselineState) => state.country,
                 pjnz: (state: BaselineState) => ({
@@ -224,10 +199,26 @@
                 deleteProgram: 'surveyAndProgram/deleteProgram',
                 deleteANC: 'surveyAndProgram/deleteANC',
                 deleteVmmc: 'surveyAndProgram/deleteVmmc',
-                getPlottingMetadata: 'metadata/getPlottingMetadata'
-            })
+                getPlottingMetadata: 'metadata/getPlottingMetadata',
+                preparingRehydrate: 'load/preparingRehydrate',
+            }),
+            loadZip() {
+                const input = this.$refs.loadZip as HTMLInputElement;
+                if (input.files && input.files.length > 0) {
+                    const file = input.files[0];
+                    this.clearLoadZipInput();
+                    this.preparingRehydrate(getFormData(file));
+                }
+            },
+            clearLoadZipInput() {
+                // clearing value because browser does not
+                // allow selection of the same file twice
+                const input = this.$refs.loadZip as HTMLInputElement
+                input.value = ""
+            },
         },
         components: {
+            VueFeather,
             ErrorAlert,
             LoadingSpinner,
             ManageFile

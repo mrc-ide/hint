@@ -69,10 +69,10 @@ describe("Load mutations", () => {
         expect(testState.statusPollId).toEqual(-1);
     });
 
-    it("set Project name state", () => {
+    it("set new Project name state", () => {
         const testState = mockLoadState();
-        mutations.SetProjectName(testState,  "project name");
-        expect(testState.projectName).toBe("project name");
+        mutations.SetNewProjectName(testState,  "project name");
+        expect(testState.newProjectName).toBe("project name");
     });
 
     it("set RehydrateCancel state", () => {
