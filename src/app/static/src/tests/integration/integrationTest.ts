@@ -25,12 +25,12 @@ export const login = async (username = "test.user@example.com", password = "pass
             validateStatus: (status) => status == 303
         });
 
-    const cookie = res.headers["set-cookie"][0].split(";")[0];
+    const cookie = res.headers["set-cookie"]![0].split(";")[0];
 
     // Register middleware to pass the session cookie with all requests
     await service.register({
         onRequest(config: AxiosRequestConfig) {
-            config.headers["Cookie"] = cookie;
+            config.headers!["Cookie"] = cookie;
             return config;
         }
     } as any);

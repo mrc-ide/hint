@@ -534,7 +534,8 @@ export const readStream = (response: AxiosResponse) => {
     URL.revokeObjectURL(fileUrl)
 }
 
-export const extractFilenameFrom = (contentDisposition: string): string => {
+export const extractFilenameFrom = (contentDisposition: string | undefined): string => {
+    if (!contentDisposition) return "";
     return contentDisposition
         .split(';')[1]
         .split('filename=')[1]
