@@ -163,7 +163,7 @@ export function testUploadComponent(name: string, position: number) {
             }
         });
 
-        wrapper.findAllComponents(ManageFile)[position].props().upload({name: "TEST"});
+        wrapper.findAllComponents(ManageFile)[position].props().upload({name: "TEST"} as any);
         await flushPromises();
         expect(expectedUploadAction.mock.calls[0][1]).toStrictEqual({name: "TEST"});
     });

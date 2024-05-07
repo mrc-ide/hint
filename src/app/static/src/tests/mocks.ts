@@ -51,7 +51,10 @@ import {ADRUploadState, initialADRUploadState} from "../app/store/adrUpload/adrU
 import {DownloadResultsState, initialDownloadResultsState} from "../app/store/downloadResults/downloadResults";
 import {GenericChartState, initialGenericChartState} from "../app/store/genericChart/genericChart";
 import {DynamicControlType, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
+import {initialPlotSelectionsState, PlotSelectionsState} from "../app/store/plotSelections/plotSelections";
 import {DownloadIndicatorState, initialDownloadIndicatorState} from "../app/store/downloadIndicator/downloadIndicator";
+import { PlotDataState, initialPlotDataState } from "../app/store/plotData/plotData";
+import { PlotState, initialPlotState } from "../app/store/plotState/plotState";
 
 export const mockAxios = new MockAdapter(axios);
 
@@ -164,6 +167,34 @@ export const mockModelOutputState = (props?: Partial<ModelOutputState>): ModelOu
 export const mockPlottingSelections = (props?: Partial<PlottingSelectionsState>) => {
     return {
         ...initialPlottingSelectionsState(),
+        ...props
+    }
+};
+
+export const mockPlotData = (props?: Partial<PlotDataState>) => {
+    return {
+        ...initialPlotDataState(),
+        ...props
+    }
+};
+
+export const mockPlotSelections = (props?: Partial<PlotSelectionsState>) => {
+    return {
+        ...initialPlotSelectionsState(),
+        ...props
+    }
+};
+
+export const mockPlotState = (props?: Partial<PlotState>) => {
+    return {
+        ...initialPlotState(),
+        ...props
+    }
+};
+
+export const mockPlotSelectionsState = (props?: Partial<PlotSelectionsState>): PlotSelectionsState => {
+    return {
+        ...initialPlotSelectionsState(),
         ...props
     }
 };
@@ -413,25 +444,6 @@ export const mockCalibrateResultResponse = (props: Partial<CalibrateResultRespon
             mode: 0.5,
             upper: 0.5
         }],
-        warnings: [],
-        ...props
-    }
-};
-
-export const mockCalibrateMetadataResponse = (props: Partial<CalibrateMetadataResponse> = {})
-    : CalibrateMetadataResponse => {
-    return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [], filters: []
-            },
-            choropleth: {
-                indicators: [], filters: []
-            }
-        },
-        tableMetadata: {
-            presets: []
-        },
         warnings: [],
         ...props
     }

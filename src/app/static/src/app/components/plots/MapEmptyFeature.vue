@@ -9,12 +9,12 @@
 </template>
 
 <script lang="ts">
-    import {defineComponent} from "vue";
-    import {LControl} from "@vue-leaflet/vue-leaflet";
+import {defineComponent} from "vue";
+import {LControl} from "@vue-leaflet/vue-leaflet";
 
-    export default defineComponent({
-        components: {
-            LControl
-        }
-    });
+export default defineComponent({
+    components: {
+        LControl
+    }
+});
 </script>

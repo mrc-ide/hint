@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.imperial.mrc.hint.clients.HintrAPIClient
 import org.imperial.mrc.hint.controllers.MetadataController
+import org.imperial.mrc.hint.FileManager
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -41,7 +42,10 @@ class MetadataControllerTests
             on { getPlottingMetadata("MWI") } doReturn mockResponse
         }
 
-        val sut = MetadataController(mockAPIClient)
+        val mockFileManager = mock<FileManager> {}
+        val mockClassLoader = mock<ClassLoader> {}
+
+        val sut = MetadataController(mockAPIClient, mockClassLoader, mockFileManager)
         val result = sut.plotting("MWI")
         assertThat(result).isSameAs(mockResponse)
     }
@@ -56,7 +60,10 @@ class MetadataControllerTests
             on { getVersion() } doReturn mockResponse
         }
 
-        val sut = MetadataController(mockAPIClient)
+        val mockFileManager = mock<FileManager> {}
+        val mockClassLoader = mock<ClassLoader> {}
+
+        val sut = MetadataController(mockAPIClient, mockClassLoader, mockFileManager)
         val result = sut.version()
         assertThat(result).isSameAs(mockResponse)
     }
@@ -69,7 +76,10 @@ class MetadataControllerTests
             on { getUploadMetadata("id1") } doReturn mockResponse
         }
 
-        val sut = MetadataController(mockAPIClient)
+        val mockFileManager = mock<FileManager> {}
+        val mockClassLoader = mock<ClassLoader> {}
+
+        val sut = MetadataController(mockAPIClient, mockClassLoader, mockFileManager)
         val result = sut.uploadMetadata("id1")
         assertThat(result).isSameAs(mockResponse)
     }
@@ -90,7 +100,8 @@ class MetadataControllerTests
                 "${tmpDir}/metadata/input-time-series-config-jsonata.txt", "TEST_JSONATA")
             }
 
-        val sut = MetadataController(mock(), mockClassLoader)
+        val mockFileManager = mock<FileManager> {}
+        val sut = MetadataController(mock(), mockClassLoader, mockFileManager)
         val result = sut.genericChart()
         assertThat(result.statusCode).isEqualTo(HttpStatus.OK)
         val resultJson = ObjectMapper().readValue<ObjectNode>(result.body!!)
@@ -106,7 +117,9 @@ class MetadataControllerTests
             on { getResource("metadata/generic-chart.json") } doReturn URL("file:/nonexistent.json")
         }
 
-        val sut = MetadataController(mock(), mockClassLoader)
+        val mockFileManager = mock<FileManager> {}
+
+        val sut = MetadataController(mock(), mockClassLoader, mockFileManager)
         assertThatThrownBy{ sut.genericChart() }
                 .isInstanceOf(FileNotFoundException::class.java)
     }
@@ -122,7 +135,9 @@ class MetadataControllerTests
                     "${tmpDir}/metadata/input-time-series-config-jsonata.txt", "TEST_JSONATA")
         }
 
-        val sut = MetadataController(mock(), mockClassLoader)
+        val mockFileManager = mock<FileManager> {}
+
+        val sut = MetadataController(mock(), mockClassLoader, mockFileManager)
         assertThatThrownBy{ sut.genericChart() }
                 .isInstanceOf(NullPointerException::class.java)
     }

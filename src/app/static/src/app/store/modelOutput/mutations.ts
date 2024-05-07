@@ -1,6 +1,7 @@
 import {MutationTree} from "vuex";
 import {ModelOutputState} from "./modelOutput";
 import {ModelOutputTabs, PayloadWithType} from "../../types";
+import {OutputPlotName} from "../plotSelections/plotSelections";
 
 export enum ModelOutputMutation {
     TabSelected = "TabSelected",
@@ -14,7 +15,7 @@ type TabLoading = {
 
 export const mutations: MutationTree<ModelOutputState> = {
 
-    [ModelOutputMutation.TabSelected](state: ModelOutputState, payload: PayloadWithType<ModelOutputTabs>) {
+    [ModelOutputMutation.TabSelected](state: ModelOutputState, payload: PayloadWithType<OutputPlotName>) {
         state.selectedTab = payload.payload;
     },
 

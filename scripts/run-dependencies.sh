@@ -11,9 +11,10 @@ REDIS=hintr_redis
 HINTR_VERSION=$(<$HERE/../src/config/hintr_version)
 
 REGISTRY=mrcide
+GHCR=ghcr.io/mrc-ide
 DB_IMAGE=$REGISTRY/hint-db:master
 DB_MIGRATE_IMAGE=$REGISTRY/hint-db-migrate:master
-HINTR_IMAGE=$REGISTRY/$API:$HINTR_VERSION
+HINTR_IMAGE=$GHCR/$API:$HINTR_VERSION
 
 docker network create $NETWORK
 docker pull $DB_IMAGE

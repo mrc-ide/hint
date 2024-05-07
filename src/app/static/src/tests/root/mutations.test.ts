@@ -75,7 +75,7 @@ describe("Root mutations", () => {
             metadata: mockMetadataState({plottingMetadataError: mockError("Test Metadata Error")}),
             surveyAndProgram: mockSurveyAndProgramState({surveyError: mockError("Test Survey Error"), ready: true}),
             modelOptions: mockModelOptionsState({valid: true}),
-            modelOutput: mockModelOutputState({selectedTab: "Barchart"}),
+            modelOutput: mockModelOutputState({selectedTab: "barchart"}),
             modelRun: mockModelRunState({modelRunId: "123", ready: true}),
             modelCalibrate: mockModelCalibrateState({complete: true, ready: true}),
             plottingSelections: mockPlottingSelections({barchart: {indicatorId: "Test Indicator"} as BarchartSelections}),
@@ -246,7 +246,7 @@ describe("Root mutations", () => {
 
         const state = mockRootState({
             modelRun: mockModelRunState({modelRunId: "TEST"}),
-            modelOutput: mockModelOutputState({selectedTab: "TEST"}),
+            modelOutput: mockModelOutputState({selectedTab: "choropleth"}),
             modelCalibrate: mockModelCalibrateState({complete: true})
         });
 

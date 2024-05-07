@@ -23,7 +23,10 @@ import {
     mockLoadState,
     mockDownloadResultsState,
     mockDownloadIndicatorData,
-    mockDownloadIndicatorState
+    mockDownloadIndicatorState,
+    mockPlotData,
+    mockPlotSelections,
+    mockPlotState
 } from "./mocks";
 import {localStorageManager, serialiseState} from "../app/localStorageManager";
 import {RootState} from "../app/root";
@@ -105,6 +108,9 @@ describe("LocalStorageManager", () => {
             language: Language.en,
             metadata: mockMetadataState({plottingMetadataError: mockError("metadataError")}),
             plottingSelections: mockPlottingSelections(),
+            plotData: mockPlotData(),
+            plotSelections: mockPlotSelections(),
+            plotState: mockPlotState(),
             surveyAndProgram: mockSurveyAndProgramState({
                 selectedDataType: DataType.Survey,
                 warnings: [{text: "test warning", locations: ["review_inputs"]}]

@@ -1,11 +1,14 @@
 import {MutationTree} from 'vuex';
 import {MetadataState} from "./metadata";
-import {PlottingMetadataResponse, Error, AdrMetadataResponse} from "../../generated";
+import {PlottingMetadataResponse, Error, AdrMetadataResponse, ReviewInputFilterMetadataResponse} from "../../generated";
 import {PayloadWithType} from "../../types";
 
 export enum MetadataMutations {
     PlottingMetadataFetched= "PlottingMetadataFetched",
     PlottingMetadataError = "PlottingMetadataError",
+    ReviewInputsMetadataFetched = "ReviewInputsMetadataFetched",
+    ReviewInputsMetadataError = "ReviewInputsMetadataError",
+    ReviewInputsMetadataToggleComplete = "ReviewInputsMetadataToggleComplete",
     AdrUploadMetadataFetched = "AdrUploadMetadataFetched",
     AdrUploadMetadataError = "AdrUploadMetadataError"
 }
@@ -19,6 +22,19 @@ export const mutations: MutationTree<MetadataState> = {
     [MetadataMutations.PlottingMetadataFetched](state: MetadataState, action: PayloadWithType<PlottingMetadataResponse>) {
         state.plottingMetadata = action.payload;
         state.plottingMetadataError = null;
+    },
+
+    [MetadataMutations.ReviewInputsMetadataFetched](state: MetadataState, action: PayloadWithType<ReviewInputFilterMetadataResponse>) {
+        state.reviewInputMetadata = action.payload;
+        state.reviewInputMetadataError = null;
+    },
+
+    [MetadataMutations.ReviewInputsMetadataError](state: MetadataState, action: PayloadWithType<Error>) {
+        state.reviewInputMetadataError = action.payload;
+    },
+
+    [MetadataMutations.ReviewInputsMetadataToggleComplete](state: MetadataState, action: PayloadWithType<boolean>) {
+        state.reviewInputMetadataFetched = action.payload;
     },
 
     [MetadataMutations.AdrUploadMetadataError](state: MetadataState, action: PayloadWithType<Error>) {

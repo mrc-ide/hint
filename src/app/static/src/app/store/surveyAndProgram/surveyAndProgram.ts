@@ -8,6 +8,13 @@ import {RootState} from "../../root";
 
 export enum DataType { ANC, Program, Survey, Vmmc}
 
+export enum FileType {
+    ANC = "anc",
+    Programme = "programme",
+    Survey = "survey",
+    Shape = "shape"
+}
+
 export interface SAPWarnings {
     type: string,
     warnings: Warning[]

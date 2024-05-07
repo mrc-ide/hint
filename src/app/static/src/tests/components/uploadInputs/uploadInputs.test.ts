@@ -617,7 +617,7 @@ describe("UploadInputs upload component", () => {
             },
         });
 
-        wrapper.findAllComponents(ManageFile)[index].props().upload({name: "TEST"});
+        wrapper.findAllComponents(ManageFile)[index].props().upload({name: "TEST"} as any);
         await flushPromises();
         expect(action().mock.calls[0][1]).toStrictEqual({name: "TEST"});
     };

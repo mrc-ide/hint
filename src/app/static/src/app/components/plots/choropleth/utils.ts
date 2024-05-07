@@ -1,35 +1,21 @@
-import { BarchartIndicator } from './../../../generated.d';
-import {ChoroplethIndicatorMetadata, FilterOption} from "../../../generated";
-import {Dict, Filter, IndicatorValuesDict, NumericRange} from "../../../types";
-import {getColor, iterateDataValues} from "../utils";
-import {initialScaleSettings} from "../../../store/plottingSelections/plottingSelections";
+import {IndicatorValuesDict, NumericRange} from "../../../types";
+import {ChoroplethIndicatorMetadata} from "../../../generated";
+import {getColour} from "../utils";
 
-export const getFeatureIndicator = function (data: any[],
-                                             selectedAreaIds: string[],
-                                             indicatorMeta: ChoroplethIndicatorMetadata,
-                                             colourRange: NumericRange,
-                                             filters: Filter[],
-                                             selectedFilterValues: Dict<FilterOption[]>): IndicatorValuesDict {
+export const getFeatureData = function (data: any[],
+                                        indicatorMeta: ChoroplethIndicatorMetadata,
+                                        colourRange: NumericRange): IndicatorValuesDict {
 
     const result = {} as IndicatorValuesDict;
-    iterateDataValues(data, [indicatorMeta], selectedAreaIds, filters, selectedFilterValues,
-        (areaId: string, indicatorMeta: ChoroplethIndicatorMetadata, value: number, values: any) => {
-            result[areaId] = {
-                value: value,
-                color: getColor(value, indicatorMeta, colourRange),
-                lower_value: values['lower'],
-                upper_value: values['upper']
-            }
-        });
-
-    return result;
-};
-
-export const initialiseScaleFromMetadata = function (meta: ChoroplethIndicatorMetadata | undefined) {
-    const result = initialScaleSettings();
-    if (meta) {
-        result.customMin = meta.min;
-        result.customMax = meta.max;
+    for (const row of data) {
+        const value = row[indicatorMeta.value_column]
+        result[row.area_id] = {
+            value: value,
+            color: getColour(value, indicatorMeta, colourRange),
+            lower_value: row['lower'],
+            upper_value: row['upper']
+        }
     }
+
     return result;
 };

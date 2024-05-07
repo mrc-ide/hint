@@ -17,8 +17,10 @@ import {
 import {switches} from "../../featureSwitches";
 import {CalibrateResultWithType, Dict, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
-import {PlottingSelectionsMutations} from "../plottingSelections/mutations";
 import { ModelOutputMutation } from "../modelOutput/mutations";
+import {commitPlotDefaultSelections, filtersAfterUseShapeRegions} from "../plotSelections/utils";
+import { PlotDataType } from "../plotSelections/plotSelections";
+import {commitInitialScaleSelections} from "../plotState/utils";
 
 type ResultDataPayload = {
     indicatorId: string,
@@ -116,7 +118,8 @@ export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrat
 
         if (response) {
             if (response.data) {
-                selectFilterDefaults(response.data, commit, PlottingSelectionsMutations.updateComparisonPlotSelections)
+                // TODO:PC
+                // selectFilterDefaults(response.data, commit, PlottingSelectionsMutations.updateComparisonPlotSelections)
             }
             commit(ModelCalibrateMutation.SetComparisonPlotData, response.data);
         }
@@ -174,26 +177,23 @@ export const fetchFirstNIndicators = async (dispatch: Dispatch, indicators: Barc
 };
 
 export const getResultMetadata = async function (context: ActionContext<ModelCalibrateState, RootState>) {
-    const {commit, dispatch, state} = context;
+    const {commit, dispatch, state, rootState} = context;
     const calibrateId = state.calibrateId;
 
     const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
         .ignoreSuccess()
         .withError(ModelCalibrateMutation.SetError)
-        .freezeResponse()
         .get<CalibrateMetadataResponse>(`calibrate/result/metadata/${calibrateId}`);
 
     if (response) {
         const data = response.data;
+        data.filterTypes = filtersAfterUseShapeRegions(data.filterTypes, rootState);
         commit({type: ModelCalibrateMutation.MetadataFetched, payload: data});
 
-        selectFilterDefaults(data, commit, PlottingSelectionsMutations.updateBarchartSelections)
+        await commitPlotDefaultSelections(data, commit, rootState);
+        commitInitialScaleSelections(data, commit);
 
-        const indicators = data.plottingMetadata.barchart.indicators;
-        await fetchFirstNIndicators(dispatch, indicators, 5);
-        
         commit(ModelCalibrateMutation.Calibrated);
-
 
         if (switches.modelCalibratePlot) {
             dispatch("getCalibratePlot");
@@ -215,25 +215,3 @@ export const getCalibrateStatus = async function (context: ActionContext<ModelCa
             }
         });
 };
-
-const selectFilterDefaults = (data: CalibrateMetadataResponse, commit: Commit, mutationName: string) => {
-    if (data?.plottingMetadata?.barchart?.defaults) {
-        const defaults = data.plottingMetadata.barchart.defaults;
-        const unfrozenDefaultOptions = Object.keys(defaults.selected_filter_options)
-            .reduce((dict, key) => {
-                dict[key] = [...defaults.selected_filter_options[key]];
-                return dict;
-            }, {} as Dict<FilterOption[]>);
-
-        commit({
-                type: `plottingSelections/${mutationName}`,
-                payload: {
-                    indicatorId: defaults.indicator_id,
-                    xAxisId: defaults.x_axis_id,
-                    disaggregateById: defaults.disaggregate_by_id,
-                    selectedFilterOptions: unfrozenDefaultOptions
-                }
-            },
-            {root: true});
-    }
-}
