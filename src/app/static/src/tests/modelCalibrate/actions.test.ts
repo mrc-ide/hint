@@ -9,13 +9,12 @@ import {
     mockSuccess,
     mockWarning
 } from "../mocks";
-import {actions, fetchFirstNIndicators} from "../../app/store/modelCalibrate/actions";
+import {actions} from "../../app/store/modelCalibrate/actions";
 import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
 import {freezer} from "../../app/utils";
 import {switches} from "../../app/featureSwitches";
 import {DownloadResultsMutation} from "../../app/store/downloadResults/mutations";
 import { ModelOutputTabs } from "../../app/types";
-import { BarchartIndicator } from "../../app/generated";
 import { Mock } from "vitest";
 import { flushPromises } from "@vue/test-utils";
 
@@ -278,23 +277,6 @@ describe("ModelCalibrate actions", () => {
         expect(dispatch.mock.calls[0][0]).toBe("getComparisonPlot");
     });
 
-    it("fetchFirstNIndicators works as expected", () => {
-        const dispatch = vi.fn();
-        const mockBarchartIndicators: Partial<BarchartIndicator>[] = [
-            { indicator: "indicator1" },
-            { indicator: "indicator2" },
-            { indicator: "indicator3" },
-        ]
-        fetchFirstNIndicators(dispatch, mockBarchartIndicators as any, 2);
-        expect(dispatch.mock.calls.length).toBe(2);
-        expect(dispatch.mock.calls[0][0]).toBe("modelCalibrate/getResultData");
-        expect(dispatch.mock.calls[0][1]).toStrictEqual({ indicatorId: "indicator1", tab: ModelOutputTabs.Bar });
-        expect(dispatch.mock.calls[0][2]).toStrictEqual({ root: true });
-        expect(dispatch.mock.calls[1][0]).toBe("modelCalibrate/getResultData");
-        expect(dispatch.mock.calls[1][1]).toStrictEqual({ indicatorId: "indicator2", tab: ModelOutputTabs.Bar });
-        expect(dispatch.mock.calls[1][2]).toStrictEqual({ root: true });
-    });
-
     it("getResult does not fetch when status is not done", async () => {
         mockAxios.onGet(`/calibrate/result/1234`)
             .reply(200, mockSuccess("Test result"));
@@ -317,7 +299,7 @@ describe("ModelCalibrate actions", () => {
         expect(commit.mock.calls[0][0]).toBe("Ready");
     });
 
-    it("getResultData commits result when fetched for a new indicator", async () => {
+    it("getResultData commits result when fetching data", async () => {
 
         const mockResultDataResponse = {
             data: "PREVALENCE DATA"
@@ -337,25 +319,18 @@ describe("ModelCalibrate actions", () => {
             fetchedIndicators: ["mock"]
         });
 
-        await actions.getResultData({commit, state, rootState, dispatch} as any, {indicatorId: "prevalence", tab: ModelOutputTabs.Map});
+        await actions.getResultData({commit, state, rootState, dispatch} as any, {payload: {}, tab: ModelOutputTabs.Map});
 
-        expect(commit.mock.calls.length).toBe(3);
-        expect(commit.mock.calls[0][0]).toBe("modelOutput/SetTabLoading");
-        expect(commit.mock.calls[0][1].payload).toStrictEqual({tab: ModelOutputTabs.Map, loading: true});
-        expect(commit.mock.calls[0][2]["root"]).toBe(true);
+        // doesn't set tab loading because of the timeout
+        expect(commit.mock.calls.length).toBe(2);
 
-        expect(commit.mock.calls[1][0]["type"]).toBe("CalibrateResultFetched");
-        expect(commit.mock.calls[1][0]["payload"]["indicatorId"]).toBe("prevalence");
-        expect(commit.mock.calls[1][0]["payload"]["data"]).toBe("PREVALENCE DATA");
+        expect(commit.mock.calls[0][0]["type"]).toBe("CalibrateResultFetched");
+        expect(commit.mock.calls[0][0]["payload"]["payload"]).toStrictEqual({});
+        expect(commit.mock.calls[0][0]["payload"]["data"]).toBe("PREVALENCE DATA");
 
-        expect(commit.mock.calls[2][0]).toBe("modelOutput/SetTabLoading");
-        expect(commit.mock.calls[2][1].payload).toStrictEqual({tab: ModelOutputTabs.Map, loading: false});
-        expect(commit.mock.calls[2][2]["root"]).toBe(true);
-
-        // Fetching an already-known indicator does not trigger a refresh
-        await actions.getResultData({commit, state, rootState, dispatch} as any, {indicatorId: "mock", tab: ModelOutputTabs.Map});
-
-        expect(commit.mock.calls.length).toBe(3);
+        expect(commit.mock.calls[1][0]).toBe("modelOutput/SetTabLoading");
+        expect(commit.mock.calls[1][1].payload).toStrictEqual({tab: ModelOutputTabs.Map, loading: false});
+        expect(commit.mock.calls[1][2]["root"]).toBe(true);
     });
 
     it("getResultData commits error when unsuccessful data fetch", async () => {
@@ -372,10 +347,10 @@ describe("ModelCalibrate actions", () => {
             } as any
         });
 
-        await actions.getResultData({commit, dispatch, state, rootState} as any, {indicatorId: "prevalence", tab: ModelOutputTabs.Map});
+        await actions.getResultData({commit, dispatch, state, rootState} as any, {payload: {}, tab: ModelOutputTabs.Map});
 
-        expect(commit.mock.calls.length).toBe(3);
-        expect(commit.mock.calls[1][0]).toStrictEqual({
+        expect(commit.mock.calls.length).toBe(2);
+        expect(commit.mock.calls[0][0]).toStrictEqual({
             type: "SetError",
             payload: mockError("Test Error")
         });
@@ -398,7 +373,7 @@ describe("ModelCalibrate actions", () => {
             } as any
         });
 
-        await actions.getResultData({commit, dispatch, state, rootState} as any, {indicatorId: "prevalence", tab: ModelOutputTabs.Map});
+        await actions.getResultData({commit, dispatch, state, rootState} as any, {payload: {}, tab: ModelOutputTabs.Map});
 
         expect(mockAxios.history.get.length).toBe(0);
         expect(commit.mock.calls.length).toBe(0);

@@ -302,13 +302,14 @@
         },
         methods: {
             initialise: function () {
+                const initialSelections: Partial<ChoroplethSelections> = {};
                 if (this.selections.detail < 0) {
-                    this.onDetailChange(this.maxLevel);
+                    initialSelections.detail = this.maxLevel;
                 }
 
                 if (!this.selections.indicatorId || !this.indicators.some((i: ChoroplethIndicatorMetadata) => i.indicator == this.selections.indicatorId)) {
                     const indicator = this.indicatorNameLookup.prevalence ? "prevalence" : this.indicators[0].indicator;
-                    this.changeSelections({indicatorId: indicator});
+                    initialSelections.indicatorId = indicator;
                 }
 
                 const existingFilterSels = this.selections.selectedFilterOptions;
@@ -326,8 +327,9 @@
                 }, {} as Dict<FilterOption[]>);
                 //assume area filters remain valid
                 refreshSelected[this.areaFilterId] = this.selections.selectedFilterOptions[this.areaFilterId];
+                initialSelections.selectedFilterOptions = refreshSelected;
 
-                this.changeSelections({selectedFilterOptions: refreshSelected});
+                this.changeSelections(initialSelections);
             },
             updateBounds: function () {
                 if (this.initialised) {

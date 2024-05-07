@@ -1,91 +1,70 @@
 package org.imperial.mrc.hint.db
 
-import org.jooq.tools.json.JSONArray
+import org.jooq.tools.jdbc.SingleConnectionDataSource
 import org.springframework.stereotype.Component
 import org.imperial.mrc.hint.models.CalibrateResultRow
-import java.nio.file.Path
+import org.imperial.mrc.hint.models.ResultData
+import org.imperial.mrc.hint.models.FilterQuery
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.Statement
 import java.util.Properties
-import java.sql.ResultSet
-import java.sql.SQLException
-import java.sql.PreparedStatement
-
-const val INDICATOR_QUERY = """SELECT
-age_group,area_id,
-calendar_quarter,
-indicator,
-ROUND(lower, 4) AS lower,
-ROUND(mean, 4) AS mean,
-ROUND(mode, 4) AS mode,
-sex,
-ROUND(upper, 4) AS upper,
-area_level,
-FROM data WHERE indicator=?"""
-
-const val DEFAULT_QUERY = """SELECT
-age_group,area_id,
-calendar_quarter,
-indicator,
-ROUND(lower, 4) AS lower,
-ROUND(mean, 4) AS mean,
-ROUND(mode, 4) AS mode,
-sex,
-ROUND(upper, 4) AS upper,
-area_level,
-FROM data"""
+import org.ktorm.database.*
+import org.ktorm.dsl.*
+import java.nio.file.Path
 
 interface CalibrateDataRepository
 {
-    fun getDataFromPath(
+    fun getFilteredCalibrateData(
         path: Path,
-        indicator: String): List<CalibrateResultRow>
+        filterQuery: FilterQuery): List<CalibrateResultRow>
 }
 
 @Component
 class JooqCalibrateDataRepository: CalibrateDataRepository
 {
-
-    private fun convertDataToArrayList(resultSet: ResultSet): List<CalibrateResultRow> {
-            resultSet.use {
-            return generateSequence {
-                if (it.next()) {
-                    CalibrateResultRow(
-                        it.getString("indicator"),
-                        it.getString("calendar_quarter"),
-                        it.getString("age_group"),
-                        it.getString("sex"),
-                        it.getString("area_id"),
-                        it.getFloat("mode"),
-                        it.getFloat("mean"),
-                        it.getFloat("lower"),
-                        it.getFloat("upper"),
-                        it.getInt("area_level")
-                    )
-                } else {
-                    null
-                }
-            }.toList()
-        }
-    }
-
-    private fun getDataFromConnection(
+    @Suppress("UnsafeCallOnNullableType")
+    private fun getFilteredDataFromConnection(
         conn: Connection,
-        indicator: String): List<CalibrateResultRow> {
-        val resultSet: ResultSet
-        if (indicator == "all") {
-            val query = DEFAULT_QUERY
-            val stmt: Statement = conn.createStatement()
-            resultSet = stmt.executeQuery(query)
-        } else {
-            val stmt: PreparedStatement = conn.prepareStatement(INDICATOR_QUERY)
-            stmt.setString(1, indicator)
-            resultSet = stmt.executeQuery()
-        }
-        
-        val arrayList = convertDataToArrayList(resultSet)
-        return arrayList
+        filterQuery: FilterQuery): List<CalibrateResultRow>
+    {
+        val dataSource = SingleConnectionDataSource(conn)
+        return Database.connect(dataSource)
+            .from(ResultData)
+            .select()
+            .whereWithConditions {
+                if (filterQuery.indicator.size > 0) {
+                    it += ResultData.indicator inList filterQuery.indicator
+                }
+                if (filterQuery.calendarQuarter.size > 0) {
+                    it += ResultData.calendarQuarter inList filterQuery.calendarQuarter
+                }
+                if (filterQuery.ageGroup.size > 0) {
+                    it += ResultData.ageGroup inList filterQuery.ageGroup
+                }
+                if (filterQuery.sex.size > 0) {
+                    it += ResultData.sex inList filterQuery.sex
+                }
+                if (filterQuery.areaId.size > 0) {
+                    it += ResultData.areaId inList filterQuery.areaId
+                }
+                if (filterQuery.areaLevel.size > 0) {
+                    it += ResultData.areaLevel inList filterQuery.areaLevel
+                }
+            }
+            .map { it ->
+                CalibrateResultRow(
+                    it.getString("indicator")!!,
+                    it.getString("calendar_quarter")!!,
+                    it.getString("age_group")!!,
+                    it.getString("sex")!!,
+                    it.getString("area_id")!!,
+                    it.getFloat("mode"),
+                    it.getFloat("mean"),
+                    it.getFloat("lower"),
+                    it.getFloat("upper"),
+                    it.getInt("area_level")
+                )
+            }
     }
 
     private fun getDBConnFromPathResponse(path: Path): Connection {
@@ -95,12 +74,12 @@ class JooqCalibrateDataRepository: CalibrateDataRepository
         return conn
     }
 
-    override fun getDataFromPath(
+    override fun getFilteredCalibrateData(
         path: Path,
-        indicator: String): List<CalibrateResultRow>
+        filterQuery: FilterQuery): List<CalibrateResultRow>
     {
         getDBConnFromPathResponse(path).use { conn ->
-            return getDataFromConnection(conn, indicator)
+            return getFilteredDataFromConnection(conn, filterQuery)
         }
     }
 }

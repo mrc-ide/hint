@@ -18,7 +18,7 @@
                     <label class="col-3 col-form-label" v-translate="'detail'">
                     </label>
                     <div class="col">
-                        <hint-tree-select :model-value="`${detail}`"
+                        <hint-tree-select :model-value="`${initialDetail}`"
                                      :multiple="false"
                                      :clearable="false"
                                      :searchable="false"
@@ -69,7 +69,6 @@
         data() {
             return {
                 optionsLoaded: false,
-                detail: this.initialDetail
             }
         },
         computed: {

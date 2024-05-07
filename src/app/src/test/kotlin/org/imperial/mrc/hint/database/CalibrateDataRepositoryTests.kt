@@ -2,6 +2,7 @@ package org.imperial.mrc.hint.database
 
 import org.imperial.mrc.hint.db.JooqCalibrateDataRepository
 import org.imperial.mrc.hint.models.CalibrateResultRow
+import org.imperial.mrc.hint.models.FilterQuery
 import org.junit.jupiter.api.Test
 import org.jooq.tools.json.JSONArray
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -52,29 +53,38 @@ class CalibrateDataRepositoryTests
             2
         )
     ))
-    val path = Paths.get("src/test/resources/duckdb/test.duckdb")
+    val query = FilterQuery(
+        listOf("indicator_test_2"),
+        listOf(),
+        listOf("age_group_test"),
+        listOf("sex_test"),
+        listOf("area_id_test"),
+        listOf(2)
+    )
+    val queryAll = FilterQuery(
+        listOf("indicator_test", "indicator_test_2"),
+        listOf(),
+        listOf("age_group_test"),
+        listOf("sex_test"),
+        listOf("area_id_test"),
+        listOf(2)
+    )
+    val path = Paths.get("/src/test/resources/duckdb/test.duckdb")
     val sut = JooqCalibrateDataRepository()
 
     @Test
-    fun `can get data from duckdb path with single indicator`()
+    fun `can get filtered data`()
     {
-        val plotData = sut.getDataFromPath(path, "indicator_test_2")
+        val plotData = sut.getFilteredCalibrateData(path, query)
         val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
         val expectedTree = ObjectMapper().readTree(expectedRowIndicator2.toString())
         assert(plotDataTree.equals(expectedTree))
     }
 
     @Test
-    fun `returns empty data if invalid indicator`()
+    fun `can get all data`()
     {
-        assertThat(sut.getDataFromPath(path, "dangerous_indicator"))
-            .isEqualTo(listOf<CalibrateResultRow>())
-    }
-
-    @Test
-    fun `can get data from duckdb path with all indicators`()
-    {
-        val plotData = sut.getDataFromPath(path, "all")
+        val plotData = sut.getFilteredCalibrateData(path, queryAll)
         val plotDataTree = ObjectMapper().readTree(JSONArray(plotData).toString())
         val expectedTree = ObjectMapper().readTree(expectedRow.toString())
         assert(plotDataTree.equals(expectedTree))
@@ -84,7 +94,7 @@ class CalibrateDataRepositoryTests
     fun `throws error if connection is invalid`()
     {
         assertThatThrownBy {
-            sut.getDataFromPath(Paths.get("src/test/resources/duckdb/test1.duckdb"), "all")
+            sut.getFilteredCalibrateData(Paths.get("src/test/resources/duckdb/test1.duckdb"), queryAll)
         }.isInstanceOf(java.nio.file.NoSuchFileException::class.java)
             .hasMessageContaining("src/test/resources/duckdb/test1.duckdb")
     }

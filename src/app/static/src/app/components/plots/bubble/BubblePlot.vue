@@ -80,7 +80,7 @@
     import MapLegend from "../MapLegend.vue";
     import FilterSelect from "../FilterSelect.vue";
     import {CircleMarker, GeoJSON, circleMarker} from "leaflet";
-    import {ChoroplethIndicatorMetadata, FilterOption, NestedFilterOption} from "../../../generated";
+    import {ChoroplethIndicatorMetadata, FilterOption} from "../../../generated";
     import {
         BubblePlotSelections,
         ScaleSelections,
@@ -89,7 +89,7 @@
     } from "../../../store/plottingSelections/plottingSelections";
     import {getFeatureIndicators} from "./utils";
     import {getIndicatorRange, toIndicatorNameLookup, formatOutput} from "../utils";
-    import {BubbleIndicatorValuesDict, Dict, Filter, LevelLabel, NumericRange} from "../../../types";
+    import {Dict, Filter, LevelLabel, NumericRange} from "../../../types";
     import {flattenOptions, flattenToIdSet} from "../../../utils";
     import SizeLegend from "./SizeLegend.vue";
     import {initialiseScaleFromMetadata} from "../choropleth/utils";
@@ -453,18 +453,19 @@
             },
         },
         beforeMount() {
+            let initialFilterSelections: Partial<BubblePlotSelections> = {};
             //If selections have not been initialised, refresh them
             if (this.selections.detail < 0) {
-                this.onDetailChange(this.maxLevel);
+                initialFilterSelections = {...initialFilterSelections, detail: this.maxLevel};
             }
 
             if (!this.selections.colorIndicatorId) {
                 const colorIndicator = this.indicatorNameLookup.prevalence ? "prevalence" : this.indicators[0].indicator;
-                this.changeSelections({colorIndicatorId: colorIndicator});
+                initialFilterSelections = {...initialFilterSelections, colorIndicatorId: colorIndicator};
             }
             if (!this.selections.sizeIndicatorId) {
                 const sizeIndicator = this.indicatorNameLookup.plhiv ? "plhiv" : this.indicators[0].indicator;
-                this.changeSelections({sizeIndicatorId: sizeIndicator});
+                initialFilterSelections = {...initialFilterSelections, sizeIndicatorId: sizeIndicator};
             }
             
             if (Object.keys(this.selections.selectedFilterOptions).length < 1) {
@@ -472,8 +473,10 @@
                     obj[current.id] = current.options.length > 0 ? [current.options[0]] : [];
                     return obj;
                 }, {} as Dict<FilterOption[]>);
-                this.changeSelections({selectedFilterOptions: defaultSelected});
+                initialFilterSelections = {...initialFilterSelections, selectedFilterOptions: defaultSelected};
             }
+
+            this.changeSelections(initialFilterSelections);
         }
     });
 </script>

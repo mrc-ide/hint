@@ -3,6 +3,7 @@ package org.imperial.mrc.hint.unit.controllers
 import org.junit.jupiter.api.Test
 import org.imperial.mrc.hint.models.ModelOptions
 import org.imperial.mrc.hint.models.CalibrateResultRow
+import org.imperial.mrc.hint.models.FilterQuery
 import org.imperial.mrc.hint.clients.HintrAPIClient
 import org.imperial.mrc.hint.controllers.CalibrateController
 import org.imperial.mrc.hint.db.CalibrateDataRepository
@@ -27,6 +28,7 @@ class CalibrateControllerTests
     )
     private val mockDataFromPath = listOf(mockResultRow)
     private val mockJsonDataFromPath = ObjectMapper().writeValueAsString(JSONArray(mockDataFromPath))
+    private val filterQuery = FilterQuery(listOf(), listOf(), listOf(), listOf(), listOf(), listOf())
 
     @Test
     fun `can submit calibrate`()
@@ -68,15 +70,15 @@ class CalibrateControllerTests
     }
 
     @Test
-    fun `can get calibrate result data`()
+    fun `can get filtered calibrate result data`()
     {
         val mockAPIClient = mock<HintrAPIClient>()
         val mockCalibrateDataService = mock<CalibrateDataService> {
-            on { getCalibrateData("testId", "all") } doReturn mockDataFromPath
+            on { getFilteredCalibrateData("testId", filterQuery) } doReturn mockDataFromPath
         }
         val sut = CalibrateController(mockAPIClient, mockCalibrateDataService)
 
-        val result = sut.calibrateResultData("testId", "all")
+        val result = sut.filteredCalibrateResultData("testId", filterQuery)
         assertThat(result.body?.toString()).isEqualTo(
             "{\"data\":$mockJsonDataFromPath,\"errors\":[],\"status\":\"success\"}"
         )

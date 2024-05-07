@@ -92,11 +92,9 @@ export default defineComponent({
             return presetFilterSelection;
         };
 
-        const changePresetSelection = (presetOption: Partial<FilterOption>) => {
+        const getPresetTableSelections = (presetOption: Partial<FilterOption>): Partial<TableSelections> => {
             const currentPreset = presets.value?.find(p => p.defaults.id === presetOption.id);
-            if (!currentPreset) return;
-
-            updateTableSelections({ preset: presetOption.id });
+            if (!currentPreset) return {};
 
             const payload = {
                 selectedFilterOptions: getCurrentPresetColumnDefaults(currentPreset)
@@ -110,16 +108,35 @@ export default defineComponent({
                 }
                 payload.selectedFilterOptions = newPresetSelections;
             }
+
+            return payload;
+        };
+
+        const changePresetSelection = async (presetOption: Partial<FilterOption>) => {
+            const currentPreset = presets.value?.find(p => p.defaults.id === presetOption.id);
+            if (!currentPreset) return;
+
+            await updateTableSelections({ preset: presetOption.id });
+
+            const payload = getPresetTableSelections(presetOption);
             updateTableSelections(payload);
         };
 
-        onMounted(() => {
+        onMounted(async () => {
+            const initialSelections: Partial<TableSelections> = {};
+
             if (!tableSelections.value.preset) {
-                changePresetSelection({ id: presets.value![0].defaults.id });
+                await updateTableSelections({ preset: presets.value![0].defaults.id })
+
+                const defaultFilterSelections = getPresetTableSelections({ id: presets.value![0].defaults.id });
+                initialSelections.selectedFilterOptions = defaultFilterSelections.selectedFilterOptions;
             }
+
             if (!tableSelections.value.indicator) {
-                changeIndicatorSelection({ id: indicatorOptions.value[0].id });
+                initialSelections.indicator = indicatorOptions.value[0].id;
             }
+
+            updateTableSelections(initialSelections);
         });
 
         return {

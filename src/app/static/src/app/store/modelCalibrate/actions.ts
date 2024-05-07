@@ -9,6 +9,7 @@ import {
     CalibrateDataResponse,
     CalibrateMetadataResponse,
     CalibrateResultResponse,
+    Filter,
     FilterOption,
     ModelResultResponse,
     ModelStatusResponse,
@@ -19,9 +20,11 @@ import {CalibrateResultWithType, Dict, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
 import {PlottingSelectionsMutations} from "../plottingSelections/mutations";
 import { ModelOutputMutation } from "../modelOutput/mutations";
+import { FetchResultDataPayload } from "../plottingSelections/actions";
+import { getPayloadWithNestedAreas } from "./utils";
 
-type ResultDataPayload = {
-    indicatorId: string,
+type FilterDataPayload = {
+    payload: FetchResultDataPayload,
     tab: ModelOutputTabs
 }
 
@@ -33,7 +36,7 @@ export interface ModelCalibrateActions {
     getCalibratePlot: (store: ActionContext<ModelCalibrateState, RootState>) => void
     getComparisonPlot: (store: ActionContext<ModelCalibrateState, RootState>) => void
     resumeCalibrate: (store: ActionContext<ModelCalibrateState, RootState>) => void
-    getResultData: (store: ActionContext<ModelCalibrateState, RootState>, payload: ResultDataPayload) => void
+    getResultData: (store: ActionContext<ModelCalibrateState, RootState>, payload: FilterDataPayload) => void
 }
 
 export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrateActions = {
@@ -130,47 +133,30 @@ export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrat
     },
 
     async getResultData(context, payload) {
-        const {indicatorId, tab} = payload;
-        const {commit, state} = context;
+        const {payload: fetchPayload, tab} = payload;
+        const {commit, state, rootGetters} = context;
         const calibrateId = state.calibrateId;
+        if (!state.status.done) return;
 
-        if (!state.status.done || !indicatorId) {
-            // Don't try to fetch data if the calibration hasn't finished
-            return
-        }
+        // temporary, necessary for map plot types to get nested area data points
+        const payloadWithNestedAreas = getPayloadWithNestedAreas(fetchPayload, tab, rootGetters);
 
-        let indicatorKnown = false;
-        if (state.fetchedIndicators) {
-            indicatorKnown = state.fetchedIndicators.some(indicator => {
-                return indicator === indicatorId
-            })
-        }
-
-        if (!indicatorKnown) {
+        const loadingTimeout = setTimeout(() => {
             commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: true}}, {root: true});
-            const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
-                .ignoreSuccess()
-                .withError(ModelCalibrateMutation.SetError)
-                .freezeResponse()
-                .get<CalibrateDataResponse["data"]>(`calibrate/result/data/${calibrateId}/${indicatorId}`);
-            if (response) {
-                const payload = {
-                    data: response.data,
-                    indicatorId: indicatorId
-                } as CalibrateResultWithType
-                commit({type: ModelCalibrateMutation.CalibrateResultFetched, payload: payload});
-            }
-            commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: false}}, {root: true});
-        }
-    }
-};
+        }, 300);
 
-export const fetchFirstNIndicators = async (dispatch: Dispatch, indicators: BarchartIndicator[], n: number) => {
-    const promisesArray = [];
-    for (let i = 0; i < n && i < indicators.length; i++) {
-        promisesArray.push(dispatch("modelCalibrate/getResultData", {indicatorId: indicators[i].indicator, tab: ModelOutputTabs.Bar}, {root: true}));
+        const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
+            .ignoreSuccess()
+            .withError(ModelCalibrateMutation.SetError)
+            .freezeResponse()
+            .postAndReturn<CalibrateDataResponse["data"]>(`calibrate/result/filteredData/${calibrateId}`, payloadWithNestedAreas);
+        if (response) {
+            commit({type: ModelCalibrateMutation.SetData, payload: response.data});
+        }
+
+        clearTimeout(loadingTimeout);
+        commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: false}}, {root: true});
     }
-    await Promise.all(promisesArray);
 };
 
 export const getResultMetadata = async function (context: ActionContext<ModelCalibrateState, RootState>) {
@@ -189,11 +175,7 @@ export const getResultMetadata = async function (context: ActionContext<ModelCal
 
         selectFilterDefaults(data, commit, PlottingSelectionsMutations.updateBarchartSelections)
 
-        const indicators = data.plottingMetadata.barchart.indicators;
-        await fetchFirstNIndicators(dispatch, indicators, 5);
-        
         commit(ModelCalibrateMutation.Calibrated);
-
 
         if (switches.modelCalibratePlot) {
             dispatch("getCalibratePlot");
