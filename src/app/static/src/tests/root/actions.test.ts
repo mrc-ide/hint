@@ -2,9 +2,10 @@ import {actions} from "../../app/store/root/actions";
 import {ErrorReport, ErrorReportManualDetails} from "../../app/types";
 import {
     mockAxios,
-    mockFailure,
     mockBaselineState,
+    mockDownloadResultsState,
     mockError,
+    mockFailure,
     mockGenericChartState,
     mockHintrVersionState,
     mockModelCalibrateState,
@@ -12,7 +13,7 @@ import {
     mockProjectsState,
     mockRootState,
     mockStepperState,
-    mockSuccess, mockDownloadResultsState
+    mockSuccess
 } from "../mocks";
 import {Language} from "../../app/store/translations/locales";
 import {currentHintVersion} from "../../app/hintVersion";

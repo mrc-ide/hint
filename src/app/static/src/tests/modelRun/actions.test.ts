@@ -2,18 +2,20 @@ import {
     mockAxios,
     mockError,
     mockFailure,
-    mockModelOptionsState, mockModelResultResponse,
+    mockModelOptionsState,
+    mockModelResultResponse,
     mockModelRunState,
     mockRootState,
-    mockSuccess, mockWarning
+    mockSuccess,
+    mockWarning
 } from "../mocks";
 import {actions} from "../../app/store/modelRun/actions";
 import {ModelStatusResponse} from "../../app/generated";
 import {expectEqualsFrozen} from "../testHelpers";
 import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {freezer} from "../../app/utils";
-import { Mock } from "vitest";
-import { flushPromises } from "@vue/test-utils";
+import {Mock} from "vitest";
+import {flushPromises} from "@vue/test-utils";
 
 const rootState = mockRootState();
 

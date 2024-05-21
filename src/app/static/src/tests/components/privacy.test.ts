@@ -3,12 +3,11 @@ import Vuex from "vuex";
 import Privacy from "../../app/components/Privacy.vue"
 
 import registerTranslations from "../../app/store/translations/registerTranslations";
-import {shallowMount} from "@vue/test-utils";
 import {expectTranslated, shallowMountWithTranslate} from "../testHelpers";
 import {actions} from "../../app/store/root/actions";
 import {mutations} from "../../app/store/root/mutations";
 import {Language} from "../../app/store/translations/locales";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 describe(`privacy`, () =>{
     const createStore = () => {

@@ -3,12 +3,11 @@ import Vuex from "vuex";
 import Accessibility from "../../app/components/Accessibility.vue"
 
 import registerTranslations from "../../app/store/translations/registerTranslations";
-import {mount, shallowMount} from "@vue/test-utils";
 import {expectTranslated, mountWithTranslate} from "../testHelpers";
 import {actions} from "../../app/store/root/actions";
 import {mutations} from "../../app/store/root/mutations";
 import {Language} from "../../app/store/translations/locales";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 describe(`accessibility`, () =>{
     const createStore = () => {

@@ -1,4 +1,4 @@
-import { shallowMount } from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 import ModelOutput from "../../../app/components/modelOutput/ModelOutput.vue";
 
 describe("Model Output page", () => {

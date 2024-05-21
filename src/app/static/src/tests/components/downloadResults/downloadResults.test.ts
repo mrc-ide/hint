@@ -1,4 +1,4 @@
-import {shallowMount, mount, VueWrapper} from '@vue/test-utils';
+import {mount, shallowMount} from '@vue/test-utils';
 import Vuex, {Store} from 'vuex';
 import {
     mockADRState,

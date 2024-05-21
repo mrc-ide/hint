@@ -1,4 +1,4 @@
-import { VueWrapper, mount } from "@vue/test-utils";
+import {mount, VueWrapper} from "@vue/test-utils";
 import HintTreeSelect from "../../app/components/HintTreeSelect.vue";
 import Treeselect from "@reside-ic/vue3-treeselect";
 

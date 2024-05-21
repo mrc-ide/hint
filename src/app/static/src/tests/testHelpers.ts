@@ -1,16 +1,15 @@
 import {mockAxios, mockBaselineState, mockError, mockFailure, mockRootState} from "./mocks";
 import {ActionContext, MutationTree, Store} from "vuex";
 import {PayloadWithType, TranslatableState} from "../app/types";
-import {DOMWrapper} from "@vue/test-utils";
+import {DOMWrapper, mount, shallowMount, VueWrapper} from "@vue/test-utils";
 import {Language, Translations} from "../app/store/translations/locales";
 import registerTranslations from "../app/store/translations/registerTranslations";
 import {LanguageMutation} from "../app/store/language/mutations";
 import ErrorReport from "../app/components/ErrorReport.vue";
-import { VueWrapper, mount, shallowMount } from "@vue/test-utils";
 import translate from "../app/directives/translate";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 import {RootState} from "../app/root";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 export function expectEqualsFrozen(args: PayloadWithType<any>, expected: PayloadWithType<any>) {
     expect(Object.isFrozen(args["payload"])).toBe(true);

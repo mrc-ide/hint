@@ -2,13 +2,15 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import {BaselineState, initialBaselineState} from "../app/store/baseline/baseline";
 import {initialPasswordState, PasswordState} from "../app/store/password/password";
-import {
-    initialSurveyAndProgramState,
-    SurveyAndProgramState
-} from "../app/store/surveyAndProgram/surveyAndProgram"
+import {initialSurveyAndProgramState, SurveyAndProgramState} from "../app/store/surveyAndProgram/surveyAndProgram"
 
 import {
     AncResponse,
+    CalibratePlotResponse,
+    CalibrateResultResponse,
+    ComparisonPlotResponse,
+    DownloadSubmitRequest,
+    Error,
     ModelResultResponse,
     ModelStatusResponse,
     PjnzResponse,
@@ -21,13 +23,8 @@ import {
     SurveyFilters,
     SurveyResponse,
     ValidateBaselineResponse,
-    Error,
-    CalibrateResultResponse,
-    Warning,
-    DownloadSubmitRequest,
-    ComparisonPlotResponse,
-    CalibrateMetadataResponse,
-    VmmcResponse, CalibratePlotResponse
+    VmmcResponse,
+    Warning
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -37,15 +34,16 @@ import {initialLoadState, LoadState} from "../app/store/load/state";
 import {initialModelOptionsState, ModelOptionsState} from "../app/store/modelOptions/modelOptions";
 import {initialModelOutputState, ModelOutputState} from "../app/store/modelOutput/modelOutput";
 import {
+    ColourScalesState,
+    initialColourScalesState,
     initialPlottingSelectionsState,
     PlottingSelectionsState
 } from "../app/store/plottingSelections/plottingSelections";
 import {ErrorsState, initialErrorsState} from "../app/store/errors/errors";
-import {ColourScalesState, initialColourScalesState} from "../app/store/plottingSelections/plottingSelections";
 import {Dataset, DatasetResource, DownloadIndicatorDataset, DownloadResultsDependency, Release} from "../app/types";
 import {initialProjectsState, ProjectsState} from "../app/store/projects/projects";
 import {initialModelCalibrateState, ModelCalibrateState} from "../app/store/modelCalibrate/modelCalibrate";
-import { HintrVersionState, initialHintrVersionState } from "../app/store/hintrVersion/hintrVersion";
+import {HintrVersionState, initialHintrVersionState} from "../app/store/hintrVersion/hintrVersion";
 import {ADRState, initialADRState} from "../app/store/adr/adr";
 import {ADRUploadState, initialADRUploadState} from "../app/store/adrUpload/adrUpload";
 import {DownloadResultsState, initialDownloadResultsState} from "../app/store/downloadResults/downloadResults";
@@ -53,8 +51,8 @@ import {GenericChartState, initialGenericChartState} from "../app/store/genericC
 import {DynamicControlType, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
 import {initialPlotSelectionsState, PlotSelectionsState} from "../app/store/plotSelections/plotSelections";
 import {DownloadIndicatorState, initialDownloadIndicatorState} from "../app/store/downloadIndicator/downloadIndicator";
-import { PlotDataState, initialPlotDataState } from "../app/store/plotData/plotData";
-import { PlotState, initialPlotState } from "../app/store/plotState/plotState";
+import {initialPlotDataState, PlotDataState} from "../app/store/plotData/plotData";
+import {initialPlotState, PlotState} from "../app/store/plotState/plotState";
 
 export const mockAxios = new MockAdapter(axios);
 

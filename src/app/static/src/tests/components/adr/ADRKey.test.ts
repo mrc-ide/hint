@@ -1,4 +1,4 @@
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 import ADRKey from "../../../app/components/adr/ADRKey.vue";
 import Vuex, {ActionTree} from "vuex";
@@ -10,7 +10,7 @@ import {RootState} from "../../../app/root";
 import ErrorAlert from "../../../app/components/ErrorAlert.vue";
 import {ADRActions} from "../../../app/store/adr/actions";
 import {ADRState} from "../../../app/store/adr/adr";
-import { mountWithTranslate, shallowMountWithTranslate } from "../../testHelpers";
+import {mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
 
 describe("ADR Key", function () {
 

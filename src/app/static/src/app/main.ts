@@ -18,8 +18,3 @@ export const passwordStoreOptions: StoreOptions<PasswordState> = {
 
 export const storePassword = new Vuex.Store<PasswordState>(passwordStoreOptions);
 registerTranslations(storePassword);
-
-// Reset password app
-
-
-export const inactiveFeatures: string[] = [];

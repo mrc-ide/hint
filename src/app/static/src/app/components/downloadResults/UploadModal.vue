@@ -79,10 +79,7 @@
 
 <script lang="ts">
     import Modal from "../Modal.vue";
-    import {
-        Dict, DownloadResultsDependency,
-        UploadFile
-    } from "../../types";
+    import {Dict, UploadFile} from "../../types";
     import {BaselineState} from "../../store/baseline/baseline";
     import {mapActionByName, mapStateProp, mapStateProps} from "../../utils";
     import {ADRUploadState} from "../../store/adrUpload/adrUpload";
@@ -91,35 +88,7 @@
     import {Language} from "../../store/translations/locales";
     import {RootState} from "../../root";
     import {DownloadResultsState} from "../../store/downloadResults/downloadResults";
-    import { defineComponent } from "vue";
-
-    interface Methods {
-        uploadFilesToADRAction: (selectedUploadFiles: { uploadFiles: UploadFile[], createRelease: boolean }) => void;
-        confirmUpload: () => void;
-        handleCancel: () => void
-        setDefaultCheckedItems: () => void
-        translate(text: string): string;
-        sendUploadFilesToADR: () => void
-        outputFileIsAvailable: (outputFileType: string) => boolean
-        getSectionHeading: (index: number) => string,
-        translatedOutputFileError: (key: string) => string
-    }
-
-    interface ComputedFromDownloadResults {
-        summary: DownloadResultsDependency,
-        spectrum: DownloadResultsDependency,
-        comparison: DownloadResultsDependency
-    }
-
-    interface Computed extends ComputedFromDownloadResults{
-        dataset: string | undefined,
-        uploadableFiles: Dict<UploadFile>,
-        uploadFileSections: Array<Dict<UploadFile>>
-        currentLanguage: Language;
-        createRelease: boolean
-        outputFileError:  string | null,
-        isOutputFileErrorKey: boolean
-    }
+    import {defineComponent} from "vue";
 
     interface Data {
         uploadFilesToAdr: string[]

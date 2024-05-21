@@ -1,8 +1,8 @@
 import i18next from "i18next";
-import { createApp } from "vue";
+import {createApp} from "vue";
 import Vuex from "vuex";
-import { Language, locales } from "../app/store/translations/locales";
-import { RootState } from "../app/root";
+import {Language, locales} from "../app/store/translations/locales";
+import {RootState} from "../app/root";
 import Hint from "../app/components/Hint.vue";
 
 // Implement innerText as it's not implemented in Jest/jsdom

@@ -4,7 +4,7 @@ import LoggedOutHeader from "../../../app/components/header/LoggedOutHeader.vue"
 import LanguageMenu from "../../../app/components/header/LanguageMenu.vue";
 import {emptyState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
-import { shallowMountWithTranslate } from "../../testHelpers";
+import {shallowMountWithTranslate} from "../../testHelpers";
 
 describe("logged out header", () => {
 

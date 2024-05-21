@@ -18,7 +18,7 @@ import {BaselineMutation} from "../../app/store/baseline/mutations";
 import {expectEqualsFrozen, testUploadErrorCommitted} from "../testHelpers";
 import {ADRSchemas} from "../../app/types";
 import {initialChorplethSelections} from "../../app/store/plottingSelections/plottingSelections";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 const adrSchemas: ADRSchemas = {
     baseUrl: "adr.com",

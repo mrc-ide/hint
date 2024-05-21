@@ -23,7 +23,7 @@ export const actions: ActionTree<MetadataState, RootState> & MetadataActions = {
     },
 
     async getReviewInputMetadata(context) {
-        const { commit, rootState, state } = context;
+        const { commit, rootState } = context;
         const iso3 = rootState.baseline.iso3;
         const sap = rootState.surveyAndProgram;
         const fileTypes = [FileType.Shape]

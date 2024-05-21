@@ -23,7 +23,7 @@ export const filtersAfterUseShapeRegions = (filterTypes: FilterTypes[], rootStat
             [rootState.baseline.shape!.filters!.regions] : [];
 
         const index = filters.findIndex(f => f.id === "area");
-        const {use_shape_regions, ...areaFilterConfig} = area;
+        const {use_shape_regions: _, ...areaFilterConfig} = area;
         filters[index] = {...areaFilterConfig, options: regions};
     }
     return filters;

@@ -67,7 +67,6 @@
     import CalibrationResults from "./CalibrationResults.vue";
     import { defineComponent } from "vue";
 
-
     const namespace = "modelCalibrate";
 
     export default defineComponent({

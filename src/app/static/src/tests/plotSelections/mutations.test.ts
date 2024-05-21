@@ -1,4 +1,4 @@
-import { mutations } from "../../app/store/plotSelections/mutations";
+import {mutations} from "../../app/store/plotSelections/mutations";
 
 describe("Plot selections mutations", () => {
     it("commits plot selections as expected", () => {

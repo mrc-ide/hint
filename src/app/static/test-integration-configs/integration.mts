@@ -1,4 +1,4 @@
-import baseConfig from "../vitest.config.ts";
+import baseConfig from "../vitest.config.mts";
 import { mergeConfig, defineConfig } from "vitest/config";
 
 export default mergeConfig(

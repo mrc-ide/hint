@@ -53,7 +53,7 @@ export default defineComponent({
             required: true
         },
     },
-    setup(props) {
+    setup() {
         const store = useStore<RootState>();
         const colourScales = computed(() => {
             return store.state.plotState.output.colourScales;

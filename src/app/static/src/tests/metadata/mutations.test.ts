@@ -1,9 +1,5 @@
 import {mutations} from "../../app/store/metadata/mutations";
-import {
-    mockError,
-    mockMetadataState,
-    mockPlottingMetadataResponse,
-} from "../mocks";
+import {mockError, mockMetadataState, mockPlottingMetadataResponse,} from "../mocks";
 
 describe("Metadata mutations", () => {
 

@@ -90,7 +90,7 @@ export default defineComponent({
         const circleFromRadius = (r: number, value: number, under = false) => {
             const y = height - r;
 
-            const { format, scale, accuracy } = props.indicatorMetadata;
+            const { format, scale } = props.indicatorMetadata;
             let text = formatLegend(value, format, scale)
             const zeros = ['0', '0%', '0.0%', '0.00%']
             if (under && !zeros.includes(text)) {

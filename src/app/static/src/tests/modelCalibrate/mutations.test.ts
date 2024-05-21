@@ -1,14 +1,7 @@
 import {expectAllMutationsDefined} from "../testHelpers";
 import {ModelCalibrateMutation, mutations} from "../../app/store/modelCalibrate/mutations";
-import {
-    mockCalibratePlotResponse,
-    mockCalibrateResultResponse,
-    mockError,
-    mockModelCalibrateState,
-    mockWarning,
-} from "../mocks";
-import {VersionInfo, ComparisonPlotResponse} from "../../app/generated";
-import {DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
+import {mockCalibratePlotResponse, mockError, mockModelCalibrateState, mockWarning,} from "../mocks";
+import {ComparisonPlotResponse, VersionInfo} from "../../app/generated";
 
 describe("ModelCalibrate mutations", () => {
     afterEach(() => {

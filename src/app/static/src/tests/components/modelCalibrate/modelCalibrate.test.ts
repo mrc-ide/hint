@@ -17,7 +17,7 @@ import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from ".
 import Tick from "../../../app/components/Tick.vue";
 import ErrorAlert from "../../../app/components/ErrorAlert.vue";
 import {ModelCalibrateMutation} from "../../../app/store/modelCalibrate/mutations";
-import { Language } from "../../../app/store/translations/locales";
+import {Language} from "../../../app/store/translations/locales";
 
 describe("Model calibrate component", () => {
     const getStore = (state: Partial<ModelCalibrateState> = {},

@@ -96,7 +96,7 @@ async function uploadOrImportShape(context: ActionContext<BaselineState, RootSta
 export const actions: ActionTree<BaselineState, RootState> & BaselineActions = {
 
     async refreshDatasetMetadata(context) {
-        const { commit, state, rootState, rootGetters, dispatch } = context
+        const { commit, state, rootState, rootGetters } = context
         if (state.selectedDataset) {
             let url = `/adr/datasets/${state.selectedDataset.id}`;
             if (state.selectedDataset.release) {
@@ -117,7 +117,7 @@ export const actions: ActionTree<BaselineState, RootState> & BaselineActions = {
                         }
                         const resources: { [k in keyof DatasetResourceSet]?: DatasetResource | null } = {}
 
-                        Object.entries(availableResources).forEach(([key, value]) => {
+                        Object.entries(availableResources).forEach(([key]) => {
                             // If an available resource has a value, find the resource (using the alternate schema key where needed)
                             // and add it to the committed object under the original key
                             const schemaKey = key in exceptions ? exceptions[key as "pop" || "program"] : key

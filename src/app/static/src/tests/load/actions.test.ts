@@ -1,8 +1,10 @@
 import {
-    mockAxios, mockCalibrateResultResponse,
+    mockAxios,
+    mockCalibrateResultResponse,
     mockError,
     mockFailure,
-    mockLoadState, mockModelCalibrateState,
+    mockLoadState,
+    mockModelCalibrateState,
     mockOptionsFormMeta,
     mockRootState,
     mockSuccess
@@ -14,8 +16,8 @@ import {ProjectRehydrateStatusResponse} from "../../app/generated";
 import {DynamicControlType} from "@reside-ic/vue-next-dynamic-form";
 import {RootState} from "../../app/root";
 import {router} from "../../app/router";
-import { Mock } from "vitest";
-import { flushPromises } from "@vue/test-utils";
+import {Mock} from "vitest";
+import {flushPromises} from "@vue/test-utils";
 
 const rootState = mockRootState();
 

@@ -6,11 +6,11 @@ import {mockError, mockPasswordState} from "../../mocks";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import LoggedOutHeader from "../../../app/components/header/LoggedOutHeader.vue";
 import {expectTranslatedWithStoreType, shallowMountWithTranslate} from "../../testHelpers";
-import {LanguageMutation, mutations} from "../../../app/store/language/mutations";
+import {mutations} from "../../../app/store/language/mutations";
 import {Language} from "../../../app/store/translations/locales";
 import ErrorAlert from "../../../app/components/ErrorAlert.vue";
-import { nextTick } from "vue";
-import { Mocked } from "vitest";
+import {nextTick} from "vue";
+import {Mocked} from "vitest";
 
 describe("Reset password component", () => {
 

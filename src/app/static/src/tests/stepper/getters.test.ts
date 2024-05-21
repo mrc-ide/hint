@@ -1,6 +1,7 @@
 import {
     mockADRState,
-    mockBaselineState, mockModelCalibrateState,
+    mockBaselineState,
+    mockModelCalibrateState,
     mockModelRunState,
     mockRootState,
     mockStepperState,

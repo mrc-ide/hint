@@ -21,13 +21,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, onMounted, ref } from 'vue';
-import { useStore } from 'vuex';
-import { RootState } from '../../root';
-import { FileType } from "../../store/surveyAndProgram/surveyAndProgram"
+import {computed, defineComponent, onBeforeMount, ref} from 'vue';
+import {useStore} from 'vuex';
+import {RootState} from '../../root';
 import PlotControlSet from '../plots/PlotControlSet.vue';
 import FilterSet from '../plots/FilterSet.vue';
-import { InputPlotName, inputPlotNames } from '../../store/plotSelections/plotSelections';
+import {InputPlotName, inputPlotNames} from '../../store/plotSelections/plotSelections';
 import TimeSeries from "../plots/timeSeries/TimeSeries.vue";
 
 export default defineComponent({

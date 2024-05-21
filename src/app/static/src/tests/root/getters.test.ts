@@ -5,13 +5,18 @@ import {
     mockBaselineState,
     mockDownloadResultsState,
     mockError,
-    mockErrorsState, mockGenericChartState, mockHintrVersionState,
+    mockErrorsState,
+    mockGenericChartState,
+    mockHintrVersionState,
     mockLoadState,
     mockMetadataState,
     mockModelCalibrateState,
     mockModelOptionsState,
-    mockModelRunState, mockProjectOutputState, mockProjectsState,
-    mockRootState, mockSurveyAndProgramState
+    mockModelRunState,
+    mockProjectOutputState,
+    mockProjectsState,
+    mockRootState,
+    mockSurveyAndProgramState
 } from "../mocks";
 import {RootState} from "../../app/root";
 import {initialDownloadResults} from "../../app/store/downloadResults/downloadResults";
