@@ -27,7 +27,7 @@ import {
     DownloadSubmitRequest,
     ComparisonPlotResponse,
     CalibrateMetadataResponse,
-    VmmcResponse, CalibratePlotResponse
+    VmmcResponse, CalibratePlotResponse, ReviewInputFilterMetadataResponse
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -660,6 +660,46 @@ export const mockDownloadIndicatorData = (props: Partial<DownloadIndicatorDatase
                 "value": 20
             }
         ],
+        ...props
+    }
+}
+
+export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadataResponse> = {}): ReviewInputFilterMetadataResponse => {
+    return {
+        filterTypes: [
+            {
+                id: "1",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op1",
+                        label: "lab1"
+                    }
+                ]
+            }
+        ],
+        indicators: [
+            {
+                indicator: "prevalence",
+                value_column: "iindicator",
+                name: "Prevalence",
+                min: 0,
+                max: 1,
+                colour: "red",
+                invert_scale: false,
+                scale: 1,
+                accuracy: null,
+                format: "0.0%"
+            }
+        ],
+        plotSettingsControl: {
+            timeSeries: {
+                plotSettings: []
+            },
+            inputChoropleth: {
+                plotSettings: []
+            }
+        },
         ...props
     }
 }
