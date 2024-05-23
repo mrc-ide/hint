@@ -233,11 +233,14 @@ describe("ModelCalibrate mutations", () => {
         expect(state.error).toBe(null);
     });
 
-    it("sets calibration plot data", () => {
+    it("sets calibration plot data and fetched state", () => {
         const state = mockModelCalibrateState({generatingCalibrationPlot: true});
         const payload = { data: "TEST DATA" };
         mutations[ModelCalibrateMutation.SetCalibratePlotResult](state, {payload});
         expect(state.calibratePlotResult).toStrictEqual({ payload });
+        expect(state.generatingCalibrationPlot).toBe(true);
+
+        mutations[ModelCalibrateMutation.CalibratePlotFetched](state, {payload});
         expect(state.generatingCalibrationPlot).toBe(false);
     });
 
@@ -314,5 +317,12 @@ describe("ModelCalibrate mutations", () => {
         };
         expect(state.result).toStrictEqual(expected2);
         expect(state.fetchedIndicators).toStrictEqual(["plhiv", "prevalence"]);
+    });
+
+    it("sets calibratePlotResult", () => {
+        const state = mockModelCalibrateState();
+        const calibratePlotResponse = mockCalibratePlotResponse();
+        mutations[ModelCalibrateMutation.SetCalibratePlotResult](state, calibratePlotResponse);
+        expect(state.calibratePlotResult).toStrictEqual(calibratePlotResponse);
     });
 });
