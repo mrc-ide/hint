@@ -471,6 +471,29 @@ export const mockCalibratePlotResponse = (props: Partial<CalibratePlotResponse> 
     }
 }
 
+export const mockCalibrateMetadataResponse = (props: Partial<CalibrateMetadataResponse> = {}): CalibrateMetadataResponse => {
+    return {
+        filterTypes: [],
+        indicators: [],
+        plotSettingsControl: {
+            choropleth: {
+                plotSettings: []
+            },
+            barchart: {
+                plotSettings: []
+            },
+            table: {
+                plotSettings: []
+            },
+            bubble: {
+                plotSettings: []
+            },
+        },
+        warnings: [],
+        ...props
+    }
+}
+
 export const mockComparisonPlotResponse = (props: Partial<ComparisonPlotResponse> = {}): ComparisonPlotResponse => {
     return {
         data: [{

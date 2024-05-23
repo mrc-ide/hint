@@ -203,4 +203,4 @@ it("areaIdToLevelMap returns empty if no shape data or properties", () => {
     });
 
     expect(baselineGetters.areaIdToLevelMap(state)).toStrictEqual({});
-})
+});
