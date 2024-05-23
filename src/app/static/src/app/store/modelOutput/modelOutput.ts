@@ -2,7 +2,6 @@ import {Module} from "vuex";
 import {RootState} from "../../root";
 import {ModelOutputTabs} from "../../types";
 import {mutations} from "./mutations";
-import {actions} from "./actions";
 import {OutputPlotName, outputPlotNames} from "../plotSelections/plotSelections";
 
 const namespaced = true;
@@ -32,6 +31,5 @@ export const modelOutput = (existingState: Partial<RootState> | null): Module<Mo
         namespaced,
         state: {...initialModelOutputState(), ...existingState && existingState.modelOutput},
         mutations,
-        actions
     };
 };
