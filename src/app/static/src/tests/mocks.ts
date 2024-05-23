@@ -27,7 +27,7 @@ import {
     DownloadSubmitRequest,
     ComparisonPlotResponse,
     CalibrateMetadataResponse,
-    VmmcResponse, CalibratePlotResponse, ReviewInputFilterMetadataResponse
+    VmmcResponse, CalibratePlotResponse, ReviewInputFilterMetadataResponse, CalibrateDataResponse
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -415,39 +415,20 @@ export const mockModelResultResponse = (props: Partial<ModelResultResponse> = {}
     };
 };
 
-export const mockCalibrateResultResponse = (props: Partial<CalibrateResultResponse> = {}): CalibrateResultResponse => {
-    return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [], filters: []
-            },
-            choropleth: {
-                indicators: [], filters: []
-            }
-        },
-        tableMetadata: {
-            presets: []
-        },
-        uploadMetadata: {
-            outputSummary: {description: "Naomi output files"},
-            outputZip: {description:"Naomi output files"}
-        },
-        data: [{
-            area_id: "MWI",
-            sex: "both",
-            age_group: "1",
-            calendar_quarter: "1",
-            indicator_id: 1,
-            indicator: 'mock',
-            lower: 0.5,
-            mean: 0.5,
-            mode: 0.5,
-            upper: 0.5
-        }],
-        warnings: [],
-        ...props
-    }
-};
+export const mockCalibrateDataResponse = (): CalibrateDataResponse["data"] => {
+    return [{
+        area_id: "MWI",
+        sex: "both",
+        age_group: "1",
+        calendar_quarter: "1",
+        indicator_id: 1,
+        indicator: 'mock',
+        lower: 0.5,
+        mean: 0.5,
+        mode: 0.5,
+        upper: 0.5
+    }]
+}
 
 export const mockCalibratePlotResponse = (props: Partial<CalibratePlotResponse> = {}): CalibratePlotResponse => {
     return {
@@ -515,20 +496,14 @@ export const mockComparisonPlotResponse = (props: Partial<ComparisonPlotResponse
             indicators: [],
             plotSettingsControl: {
                 comparison: {
-                    plotSettings: [
-                        {
-                            id: "1",
-                            label: "setting",
-                            options: []
-                        }
-                    ]
+                    plotSettings: []
                 }
-            }
+            },
+            warnings: []
         },
         ...props
     }
 };
-
 
 
 export const mockPlottingMetadataResponse = (props: Partial<PlottingMetadataResponse> = {}): PlottingMetadataResponse => {

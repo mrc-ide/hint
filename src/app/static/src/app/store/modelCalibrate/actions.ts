@@ -19,11 +19,6 @@ import { ModelOutputMutation } from "../modelOutput/mutations";
 import {commitPlotDefaultSelections, filtersAfterUseShapeRegions} from "../plotSelections/utils";
 import {commitInitialScaleSelections} from "../plotState/utils";
 
-type ResultDataPayload = {
-    indicatorId: string,
-    tab: ModelOutputTabs
-}
-
 export interface ModelCalibrateActions {
     fetchModelCalibrateOptions: (store: ActionContext<ModelCalibrateState, RootState>) => void
     submit: (store: ActionContext<ModelCalibrateState, RootState>, options: DynamicFormData) => void
@@ -31,7 +26,6 @@ export interface ModelCalibrateActions {
     getResult: (store: ActionContext<ModelCalibrateState, RootState>) => void
     getComparisonPlot: (store: ActionContext<ModelCalibrateState, RootState>) => void
     resumeCalibrate: (store: ActionContext<ModelCalibrateState, RootState>) => void
-    getResultData: (store: ActionContext<ModelCalibrateState, RootState>, payload: ResultDataPayload) => void
 }
 
 export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrateActions = {
@@ -126,50 +120,7 @@ export const actions: ActionTree<ModelCalibrateState, RootState> & ModelCalibrat
         if (state.calibrating && !state.complete && state.calibrateId) {
             await dispatch("poll");
         }
-    },
-
-    async getResultData(context, payload) {
-        const {indicatorId, tab} = payload;
-        const {commit, state} = context;
-        const calibrateId = state.calibrateId;
-
-        if (!state.status.done || !indicatorId) {
-            // Don't try to fetch data if the calibration hasn't finished
-            return
-        }
-
-        let indicatorKnown = false;
-        if (state.fetchedIndicators) {
-            indicatorKnown = state.fetchedIndicators.some(indicator => {
-                return indicator === indicatorId
-            })
-        }
-
-        if (!indicatorKnown) {
-            commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: true}}, {root: true});
-            const response = await api<ModelCalibrateMutation, ModelCalibrateMutation>(context)
-                .ignoreSuccess()
-                .withError(ModelCalibrateMutation.SetError)
-                .freezeResponse()
-                .get<CalibrateDataResponse["data"]>(`calibrate/result/data/${calibrateId}/${indicatorId}`);
-            if (response) {
-                const payload = {
-                    data: response.data,
-                    indicatorId: indicatorId
-                } as CalibrateResultWithType
-                commit({type: ModelCalibrateMutation.CalibrateResultFetched, payload: payload});
-            }
-            commit(`modelOutput/${ModelOutputMutation.SetTabLoading}`, {payload:{tab, loading: false}}, {root: true});
-        }
     }
-};
-
-export const fetchFirstNIndicators = async (dispatch: Dispatch, indicators: BarchartIndicator[], n: number) => {
-    const promisesArray = [];
-    for (let i = 0; i < n && i < indicators.length; i++) {
-        promisesArray.push(dispatch("modelCalibrate/getResultData", {indicatorId: indicators[i].indicator, tab: ModelOutputTabs.Bar}, {root: true}));
-    }
-    await Promise.all(promisesArray);
 };
 
 export const getResultMetadata = async function (context: ActionContext<ModelCalibrateState, RootState>) {
