@@ -50,13 +50,5 @@ export const getters = {
         } else {
             return emptyData
         }
-    },
-    tableMetadata: (state: PlotSelectionsState, getters: any, rootState: RootState) =>
-        (plotName: PlotName, selectedPreset: FilterOption): TableMetadata | undefined => {
-        const tableMetadata: PlotMetadataFrame = getMetadataFromPlotName(rootState, plotName);
-        const currentPreset = tableMetadata.plotSettingsControl[plotName].plotSettings
-            .find(s => s.id === "presets")?.options
-            .find(o => o.id === selectedPreset.id);
-        return currentPreset?.effect.customPlotEffect;
     }
 };
