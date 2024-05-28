@@ -1,24 +1,10 @@
 import {plotDataToChartData} from "../../../../app/components/plots/bar/utils";
 import {PlotData} from "../../../../app/store/plotData/plotData";
 import {ChoroplethIndicatorMetadata, FilterOption} from "../../../../app/generated";
+import {mockChoroplethIndicatorMetadata} from "../../../mocks";
 
 describe("barchart utils work as expected", () => {
-    const indicator: ChoroplethIndicatorMetadata = {
-        indicator: "prevalence",
-        value_column: "mean",
-        indicator_column: "indicator",
-        indicator_value: "prevalence",
-        name: "Prevalence",
-        error_low_column: "lower",
-        error_high_column: "upper",
-        min: 0,
-        max: 1,
-        colour: "interpolateReds",
-        invert_scale: false,
-        format: "0.00",
-        scale: 1,
-        accuracy: null
-    };
+    const indicator = mockChoroplethIndicatorMetadata()
 
     const data: PlotData = [
         {area_id: "MWI_1_1", age_group: '0:4', sex: 'female', calendar_quarter: "1", indicator: "prevalence", mode: null, mean: 0.40, upper: 0.43, lower: 0.38},

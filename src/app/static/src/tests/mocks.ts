@@ -27,7 +27,11 @@ import {
     DownloadSubmitRequest,
     ComparisonPlotResponse,
     CalibrateMetadataResponse,
-    VmmcResponse, CalibratePlotResponse, ReviewInputFilterMetadataResponse, CalibrateDataResponse
+    VmmcResponse,
+    CalibratePlotResponse,
+    ReviewInputFilterMetadataResponse,
+    CalibrateDataResponse,
+    ChoroplethIndicatorMetadata
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -171,11 +175,32 @@ export const mockPlottingSelections = (props?: Partial<PlottingSelectionsState>)
     }
 };
 
-export const mockPlotData = (props?: Partial<PlotDataState>) => {
+export const mockPlotDataState = (props?: Partial<PlotDataState>) => {
     return {
         ...initialPlotDataState(),
         ...props
     }
+};
+
+
+export const mockChoroplethIndicatorMetadata = (props?: Partial<ChoroplethIndicatorMetadata>): ChoroplethIndicatorMetadata => {
+    return {
+        indicator: "prevalence",
+        value_column: "mean",
+        indicator_column: "indicator",
+        indicator_value: "prevalence",
+        name: "Prevalence",
+        error_low_column: "lower",
+        error_high_column: "upper",
+        min: 0,
+        max: 1,
+        colour: "interpolateReds",
+        invert_scale: false,
+        format: "0.00",
+        scale: 1,
+        accuracy: null,
+        ...props
+    };
 };
 
 export const mockPlotSelections = (props?: Partial<PlotSelectionsState>) => {
