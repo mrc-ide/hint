@@ -95,7 +95,7 @@ describe("plotSelections getters", () => {
 
     beforeEach(() => {
         vi.resetAllMocks()
-    })
+    });
 
     it("can get control selection from ID", () => {
         const plotSelectionsState = mockPlotSelectionsState({

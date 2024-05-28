@@ -36,7 +36,7 @@ import {
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
 import {initialStepperState, StepperState} from "../app/store/stepper/stepper";
-import {initialMetadataState, MetadataState} from "../app/store/metadata/metadata";
+import {initialMetadataState, MetadataState, PlotMetadataFrame} from "../app/store/metadata/metadata";
 import {initialLoadState, LoadState} from "../app/store/load/state";
 import {initialModelOptionsState, ModelOptionsState} from "../app/store/modelOptions/modelOptions";
 import {initialModelOutputState, ModelOutputState} from "../app/store/modelOutput/modelOutput";
@@ -704,7 +704,7 @@ export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadata
         indicators: [
             {
                 indicator: "prevalence",
-                value_column: "iindicator",
+                value_column: "indicator",
                 name: "Prevalence",
                 min: 0,
                 max: 1,
@@ -725,4 +725,56 @@ export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadata
         },
         ...props
     }
+}
+
+
+export const mockPlotMetadataFrame = (props: Partial<PlotMetadataFrame> = {}): PlotMetadataFrame => {
+    return {
+        filterTypes: [
+            {
+                id: "filterType1",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op1",
+                        label: "lab1"
+                    },
+                    {
+                        id: "op2",
+                        label: "lab2"
+                    }
+                ]
+            },
+            {
+                id: "filterType2",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op2",
+                        label: "lab2"
+                    }
+                ]
+            }
+        ],
+        indicators: [
+            {
+                indicator: "prevalence",
+                value_column: "indicator",
+                name: "Prevalence",
+                min: 0,
+                max: 1,
+                colour: "red",
+                invert_scale: false,
+                scale: 1,
+                accuracy: null,
+                format: "0.0%"
+            }
+        ],
+        plotSettingsControl: {
+            choropleth: {
+                plotSettings: []
+            }
+        },
+        ...props
+    };
 }
