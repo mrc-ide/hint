@@ -116,7 +116,7 @@ describe("App", () => {
         document.body.appendChild(div);
 
         const store = getStore();
-        const _rendered = shallowMount(Hint, {
+        shallowMount(Hint, {
             global: {
                 plugins: [store]
             },

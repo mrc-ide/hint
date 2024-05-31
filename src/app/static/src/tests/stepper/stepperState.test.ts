@@ -9,7 +9,6 @@ const existingState = {
     },
     baseline: {}
 } as any;
-;
 
 import {stepper, StepperState} from "../../app/store/stepper/stepper";
 

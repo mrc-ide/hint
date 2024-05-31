@@ -684,7 +684,7 @@ describe("Stepper component", () => {
     it("pushes router to projects if logged in user and currentProject not set", () => {
         const mockRouterPush = vi.fn();
         //current user is set in vi.config and currentProject is not set be default in the wrapper
-        const _wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(1);
         expect(mockRouterPush.mock.calls[0][0]).toBe("/projects");
@@ -692,7 +692,7 @@ describe("Stepper component", () => {
 
     it("does not push router to projects if guest user", () => {
         const mockRouterPush = vi.fn();
-        const _wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush, {currentUser: 'guest'});
+        createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush, {currentUser: 'guest'});
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });
@@ -700,7 +700,7 @@ describe("Stepper component", () => {
     it("does not push router to projects if logged in user and currentProject set", () => {
         const mockRouterPush = vi.fn();
         const projectsState = {currentProject: {id: 1, name: "testProject", versions: []}};
-        const _wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });
@@ -708,7 +708,7 @@ describe("Stepper component", () => {
     it("does not push router to projects if project is loading", () => {
         const mockRouterPush = vi.fn();
         const projectsState = {loading: true};
-        const _wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });

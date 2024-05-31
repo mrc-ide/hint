@@ -59,7 +59,7 @@ describe("File upload component", () => {
         });
     };
 
-    const _testFile = mockFile("TEST FILE NAME", "TEST CONTENTS");
+    mockFile("TEST FILE NAME", "TEST CONTENTS");
 
     function deleteConfirmationModal(wrapper: VueWrapper) {
         return wrapper.findAllComponents(ResetConfirmation)[1]

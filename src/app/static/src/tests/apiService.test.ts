@@ -263,7 +263,7 @@ describe("ApiService", () => {
             committedOptions = options;
         };
 
-        const _response = await api({commit, rootState} as any)
+        await api({commit, rootState} as any)
             .withError("TEST_TYPE", true)
             .get("/baseline/");
 

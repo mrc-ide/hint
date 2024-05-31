@@ -222,7 +222,7 @@ describe("Model options component", () => {
             fetchModelRunOptions: fetchMock
 
         });
-        const _rendered = shallowMount(ModelOptions, {
+        shallowMount(ModelOptions, {
             global: {
                 plugins: [store]
             }
