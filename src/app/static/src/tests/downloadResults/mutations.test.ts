@@ -1,10 +1,5 @@
-import {
-    mockDownloadResultsDependency,
-    mockDownloadResultsState,
-    mockError
-} from "../mocks";
-import {mutations} from "../../app/store/downloadResults/mutations";
-import {DownloadResultsMutation} from "../../app/store/downloadResults/mutations";
+import {mockDownloadResultsDependency, mockDownloadResultsState, mockError} from "../mocks";
+import {DownloadResultsMutation, mutations} from "../../app/store/downloadResults/mutations";
 import {DOWNLOAD_TYPE} from "../../app/types";
 import {DownloadStatusResponse} from "../../app/generated";
 

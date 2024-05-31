@@ -1,14 +1,7 @@
 import {api} from "../app/apiService";
-import {
-    mockAxios,
-    mockDownloadFailure,
-    mockError,
-    mockFailure,
-    mockRootState,
-    mockSuccess
-} from "./mocks";
+import {mockAxios, mockDownloadFailure, mockError, mockFailure, mockRootState, mockSuccess} from "./mocks";
 import {freezer} from '../app/utils';
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 const rootState = mockRootState();
 
@@ -205,11 +198,9 @@ describe("ApiService", () => {
 
         let committedType: any = false;
         let committedPayload: any = false;
-        let committedOptions: any = null;
-        const commit = ({type, payload}: any, options?: any) => {
+        const commit = ({type, payload}: any, _options?: any) => {
             committedType = type;
             committedPayload = payload;
-            committedOptions = options;
         };
 
         await api({commit, rootState} as any)
@@ -226,11 +217,9 @@ describe("ApiService", () => {
 
         let committedType: any = false;
         let committedPayload: any = false;
-        let committedOptions: any = null;
-        const commit = ({type, payload}: any, options?: any) => {
+        const commit = ({type, payload}: any, _options?: any) => {
             committedType = type;
             committedPayload = payload;
-            committedOptions = options;
         };
 
         const response = await api({commit, rootState} as any)
@@ -248,11 +237,9 @@ describe("ApiService", () => {
 
         let committedType: any = false;
         let committedPayload: any = false;
-        let committedOptions: any = null;
-        const commit = ({type, payload}: any, options?: any) => {
+        const commit = ({type, payload}: any, _options?: any) => {
             committedType = type;
             committedPayload = payload;
-            committedOptions = options;
         };
 
         await api({commit, rootState} as any)
@@ -276,7 +263,7 @@ describe("ApiService", () => {
             committedOptions = options;
         };
 
-        const response = await api({commit, rootState} as any)
+        await api({commit, rootState} as any)
             .withError("TEST_TYPE", true)
             .get("/baseline/");
 

@@ -11,7 +11,7 @@
     "copy": "cp -r ./templates/*.ftl ./public && cp -r ./assets/* ./public",
     "test": "vitest --run --coverage",
     "browser-test": "npx playwright test",
-    "integration-test": "vitest --config ./test-integration-configs/integration.ts --run --coverage",
+    "integration-test": "vitest --config test-integration-configs/integration.mts --run --coverage",
     "adr-integration-test": "vitest --config ./test-integration-configs/adr-integration.ts --run",
     "lint": "npx eslint src --ext .js,.jsx,.ts,.tsx,vue"
   },

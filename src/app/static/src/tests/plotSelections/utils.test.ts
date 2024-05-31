@@ -1,4 +1,4 @@
-import { filtersAfterUseShapeRegions } from "../../app/store/plotSelections/utils";
+import {filtersAfterUseShapeRegions} from "../../app/store/plotSelections/utils";
 
 describe("Plot selections utils", () => {
     it("filtersAfterUseShapeRegions works as expected", () => {

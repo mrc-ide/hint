@@ -1,4 +1,4 @@
-import {flushPromises, mount, RouterLinkStub} from "@vue/test-utils";
+import {mount, RouterLinkStub} from "@vue/test-utils";
 import LoadInvalidModal from "../../../app/components/load/LoadInvalidModal.vue"
 import Vuex from "vuex";
 import {emptyState, RootState} from "../../../app/root";
@@ -6,8 +6,6 @@ import {initialStepperState} from "../../../app/store/stepper/stepper";
 import {expectHasTranslationKey, expectTranslated, mountWithTranslate} from "../../testHelpers";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {getters as stepperGetters} from "../../../app/store/stepper/getters";
-import { nextTick } from "vue";
-import translate from "../../../app/directives/translate";
 
 const mockRollbackInvalidState = vi.fn();
 const mockLoadVersion = vi.fn();
@@ -162,7 +160,6 @@ describe("loadInvalidModal", () => {
 });
 
 describe("loadInvalidModal translations", () => {
-    const mockTranslate = vi.fn();
     const getWrapper = (invalidSteps: number[] = [], isGuest: boolean = false)  => {
         const store = getStore(invalidSteps, isGuest);
         return mountWithTranslate(LoadInvalidModal, store, {

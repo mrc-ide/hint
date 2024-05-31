@@ -1,4 +1,3 @@
-import {mount} from "@vue/test-utils";
 import ResetConfirmation from "../../app/components/resetConfirmation/ResetConfirmation.vue";
 import LoadingSpinner from "../../app/components/LoadingSpinner.vue";
 import Vuex from "vuex";
@@ -10,7 +9,7 @@ import {mutations as errorMutations} from "../../app/store/errors/mutations";
 import {getters} from "../../app/store/root/getters";
 import {expectTranslated, mountWithTranslate} from "../testHelpers";
 import {Step} from "../../app/types";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 const createStore = (newVersion = vi.fn(), partialRootState: Partial<RootState> = {}, partialStepperGetters = {}) => {
     const store = new Vuex.Store({

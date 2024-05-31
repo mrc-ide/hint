@@ -1,11 +1,5 @@
 import {ModelRunMutation, mutations} from "../../app/store/modelRun/mutations";
-import {
-    mockError,
-    mockModelResultResponse,
-    mockModelRunState,
-    mockModelStatusResponse,
-    mockWarning
-} from "../mocks";
+import {mockError, mockModelResultResponse, mockModelRunState, mockModelStatusResponse, mockWarning} from "../mocks";
 import {expectAllMutationsDefined} from "../testHelpers";
 import {ModelStatusResponse} from "../../app/generated";
 

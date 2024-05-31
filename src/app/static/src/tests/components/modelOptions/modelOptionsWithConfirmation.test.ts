@@ -1,5 +1,5 @@
 import Vuex, {ActionTree, MutationTree} from "vuex";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 import ModelOptions from "../../../app/components/modelOptions/ModelOptions.vue";
 import {ModelOptionsMutation} from "../../../app/store/modelOptions/mutations";
@@ -11,7 +11,7 @@ import {DynamicForm} from "@reside-ic/vue-next-dynamic-form";
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {getters} from "../../../app/store/root/getters";
-import { mountWithTranslate } from "../../testHelpers";
+import {mountWithTranslate} from "../../testHelpers";
 
 declare var currentUser: string;
 currentUser = "guest";

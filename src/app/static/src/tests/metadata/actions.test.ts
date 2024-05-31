@@ -1,11 +1,6 @@
-import {
-    mockAxios, mockError,
-    mockFailure, mockRootState,
-    mockSuccess
-} from "../mocks";
+import {mockAxios, mockError, mockFailure, mockRootState, mockSuccess} from "../mocks";
 import {actions} from "../../app/store/metadata/actions";
-import {MetadataMutations} from "../../app/store/metadata/mutations";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 const rootState = mockRootState();
 describe("Metadata actions", () => {

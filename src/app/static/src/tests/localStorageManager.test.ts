@@ -2,31 +2,30 @@ import {
     mockADRState,
     mockADRUploadState,
     mockBaselineState,
+    mockCalibratePlotResponse,
     mockCalibrateResultResponse,
+    mockComparisonPlotResponse,
     mockDataset,
+    mockDownloadIndicatorState,
+    mockDownloadResultsState,
     mockError,
     mockErrorsState,
     mockGenericChartState,
     mockHintrVersionState,
+    mockLoadState,
     mockMetadataState,
     mockModelCalibrateState,
     mockModelOptionsState,
     mockModelOutputState,
     mockModelRunState,
+    mockPlotData,
+    mockPlotSelections,
+    mockPlotState,
     mockPlottingSelections,
     mockProjectsState,
     mockRelease,
     mockStepperState,
-    mockSurveyAndProgramState,
-    mockComparisonPlotResponse,
-    mockRootState,
-    mockLoadState,
-    mockDownloadResultsState,
-    mockDownloadIndicatorData,
-    mockDownloadIndicatorState,
-    mockPlotData,
-    mockPlotSelections,
-    mockPlotState, mockCalibratePlotResponse
+    mockSurveyAndProgramState
 } from "./mocks";
 import {localStorageManager, serialiseState} from "../app/localStorageManager";
 import {RootState} from "../app/root";
@@ -36,7 +35,6 @@ import {Language} from "../app/store/translations/locales";
 import registerTranslations from "../app/store/translations/registerTranslations";
 import Vuex from 'vuex';
 import i18next from "i18next";
-import {initialDownloadIndicatorState} from "../app/store/downloadIndicator/downloadIndicator";
 
 declare const currentUser: string; // set in jest config, or on the index page when run for real
 

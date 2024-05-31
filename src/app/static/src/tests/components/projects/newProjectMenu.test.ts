@@ -1,7 +1,7 @@
 import {expectHasTranslationKey} from "../../testHelpers";
 import Vuex from "vuex";
-import {mockFile, mockProjectsState, mockLoadState, mockRootState} from "../../mocks";
-import {DOMWrapper, mount, shallowMount, VueWrapper} from "@vue/test-utils";
+import {mockFile, mockLoadState, mockProjectsState, mockRootState} from "../../mocks";
+import {DOMWrapper, mount, VueWrapper} from "@vue/test-utils";
 import NewProjectMenu from "../../../app/components/projects/NewProjectMenu.vue";
 import UploadNewProject from "../../../app/components/load/NewProjectCreate.vue";
 import {Translations} from "../../../app/store/translations/locales";
@@ -11,7 +11,7 @@ describe("New project menu component", () => {
     // @ts-ignore
     global.File = class MockFile {
         filename: string;
-        constructor(parts: (string | Blob | ArrayBuffer | ArrayBufferView)[], filename: string, properties ? : FilePropertyBag) {
+        constructor(_parts: (string | Blob | ArrayBuffer | ArrayBufferView)[], filename: string, _properties ? : FilePropertyBag) {
             this.filename = filename;
         }
     }

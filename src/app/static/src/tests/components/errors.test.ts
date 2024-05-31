@@ -4,7 +4,6 @@ import {mutations} from "../../app/store/errors/mutations";
 import Errors from "../../app/components/Errors.vue";
 import {mockErrorsState} from "../mocks";
 import {Error} from "../../app/generated";
-import { shallowMountWithTranslate } from "../testHelpers";
 
 describe("Errors component", () => {
 

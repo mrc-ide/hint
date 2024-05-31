@@ -1,31 +1,21 @@
-import * as CryptoJS from 'crypto-js';
-import {
-    ActionContext,
-    ActionMethod,
-    CustomVue,
-    mapActions,
-    mapGetters,
-    mapMutations,
-    mapState,
-    MutationMethod
-} from "vuex";
+import {ActionMethod, CustomVue, mapActions, mapGetters, mapMutations, mapState, MutationMethod} from "vuex";
 import {ADRSchemas, Dataset, DatasetResource, DatasetResourceType, Dict, UploadFile, Version} from "./types";
 import {Error, FilterOption, NestedFilterOption, ProjectRehydrateResultResponse, Response} from "./generated";
 import moment, {utc} from 'moment';
 import {
     DynamicControlGroup,
-    DynamicControlSection, DynamicFormData,
+    DynamicControlSection,
+    DynamicFormData,
     DynamicFormMeta
 } from "@reside-ic/vue-next-dynamic-form";
 import {DataType} from "./store/surveyAndProgram/surveyAndProgram";
 import {RootState} from "./root";
 import {initialStepperState} from "./store/stepper/stepper";
-import {LoadState} from "./store/load/state";
 import {initialModelRunState} from "./store/modelRun/modelRun";
 import {initialModelCalibrateState} from "./store/modelCalibrate/modelCalibrate";
 import {AxiosResponse} from "axios";
-import { ComputedGetter } from 'vue';
-import {isMultiselectControl, isDropdown} from "./store/modelOptions/optionsUtils";
+import {ComputedGetter} from 'vue';
+import {isDropdown, isMultiselectControl} from "./store/modelOptions/optionsUtils";
 
 export type ComputedWithType<T> = () => T;
 
@@ -118,6 +108,7 @@ export const mapGettersByNames = <Names extends readonly string[], Types extends
     return mapGetters(namespace, nameCopy) as Result
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const mapActionByName = <T>(namespace: string | null, name: string): ActionMethod => {
     return (!!namespace && mapActions(namespace, [name])[name]) || mapActions([name])[name]
 };
@@ -138,7 +129,7 @@ export const mapMutationsByNames = <Names extends readonly string[]>(namespace: 
     return mapMutations(namespace, nameCopy) as Result
 };
 
-export const mapMutationByName = <T>(namespace: string | null, name: string): MutationMethod => {
+export const mapMutationByName = (namespace: string | null, name: string): MutationMethod => {
     return (!!namespace && mapMutations(namespace, [name])[name]) || mapMutations([name])[name]
 };
 
@@ -440,7 +431,7 @@ const transformPathToHash = (dataset: any) => {
     return dataset
 }
 
-export const constructRehydrateProjectState = async (context: ActionContext<LoadState, RootState>, data: ProjectRehydrateResultResponse) => {
+export const constructRehydrateProjectState = (data: ProjectRehydrateResultResponse) => {
     const files = transformPathToHash({...data.state.datasets});
 
     const modelOptions = {

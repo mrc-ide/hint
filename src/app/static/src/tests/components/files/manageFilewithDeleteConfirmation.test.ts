@@ -1,13 +1,12 @@
 import Vuex from "vuex";
-import {mount, VueWrapper} from '@vue/test-utils';
-import FileUpload from "../../../app/components/files/FileUpload.vue";
+import {VueWrapper} from '@vue/test-utils';
 import ManageFile from "../../../app/components/files/ManageFile.vue";
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
 import {mockFile, mockRootState} from "../../mocks";
-import {emptyState, RootState} from "../../../app/root";
+import {RootState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {getters} from "../../../app/store/root/getters";
-import { mountWithTranslate } from "../../testHelpers";
+import {mountWithTranslate} from "../../testHelpers";
 
 declare let currentUser: string;
 currentUser = "guest";
@@ -60,7 +59,7 @@ describe("File upload component", () => {
         });
     };
 
-    const testFile = mockFile("TEST FILE NAME", "TEST CONTENTS");
+    mockFile("TEST FILE NAME", "TEST CONTENTS");
 
     function deleteConfirmationModal(wrapper: VueWrapper) {
         return wrapper.findAllComponents(ResetConfirmation)[1]

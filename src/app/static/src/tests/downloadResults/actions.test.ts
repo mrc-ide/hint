@@ -1,6 +1,11 @@
 import {
-    mockAxios, mockDownloadResultsDependency,
-    mockDownloadResultsState, mockError, mockFailure, mockMetadataState, mockModelCalibrateState,
+    mockAxios,
+    mockDownloadResultsDependency,
+    mockDownloadResultsState,
+    mockError,
+    mockFailure,
+    mockMetadataState,
+    mockModelCalibrateState,
     mockRootState,
     mockSuccess
 } from "../mocks";
@@ -8,7 +13,7 @@ import {actions} from "../../app/store/downloadResults/actions";
 import {DOWNLOAD_TYPE} from "../../app/types";
 import {DownloadStatusResponse} from "../../app/generated";
 import {switches} from "../../app/featureSwitches";
-import { flushPromises } from "@vue/test-utils";
+import {flushPromises} from "@vue/test-utils";
 
 const RunningStatusResponse: DownloadStatusResponse = {
     id: "db0c4957aea4b32c507ac02d63930110",

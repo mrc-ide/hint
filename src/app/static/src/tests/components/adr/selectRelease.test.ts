@@ -7,7 +7,7 @@ import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from ".
 import {Language} from "../../../app/store/translations/locales";
 import {Dataset} from "../../../app/types";
 import VueFeather from "vue-feather";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 import HintTreeSelect from "../../../app/components/HintTreeSelect.vue";
 
 describe("select release", () => {

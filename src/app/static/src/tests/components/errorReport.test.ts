@@ -1,4 +1,4 @@
-import {shallowMount, mount} from '@vue/test-utils';
+import {mount} from '@vue/test-utils';
 import ErrorReport from "../../app/components/ErrorReport.vue";
 import Modal from "../../app/components/Modal.vue";
 import Vuex from "vuex";
@@ -7,14 +7,14 @@ import registerTranslations from "../../app/store/translations/registerTranslati
 import {StepDescription, StepperState} from "../../app/store/stepper/stepper";
 import {ProjectsState} from "../../app/store/projects/projects";
 import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../testHelpers";
-import VueRouter, { createRouter, createWebHashHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import {Language} from "../../app/store/translations/locales";
 import ErrorAlert from "../../app/components/ErrorAlert.vue";
 import {RootState} from "../../app/root";
-import { ErrorsState } from "../../app/store/errors/errors";
+import {ErrorsState} from "../../app/store/errors/errors";
 import LoadingSpinner from "../../app/components/LoadingSpinner.vue";
 import {emailRegex, mapStateProp} from "../../app/utils";
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 
 describe("Error report component", () => {
 

@@ -1,11 +1,6 @@
 import {metadataGetters} from "../../app/store/metadata/metadata"
 import {DataType} from "../../app/store/surveyAndProgram/surveyAndProgram";
-import {
-    mockMetadataState,
-    mockPlottingMetadataResponse,
-    mockRootState,
-    mockSurveyAndProgramState
-} from "../mocks";
+import {mockMetadataState, mockPlottingMetadataResponse, mockRootState, mockSurveyAndProgramState} from "../mocks";
 
 const testIndicators = [
     {indicator: "art_coverage", name: "ART Coverage"},

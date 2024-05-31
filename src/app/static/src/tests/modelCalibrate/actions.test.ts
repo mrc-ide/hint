@@ -1,6 +1,7 @@
 import {
     mockAxios,
-    mockBaselineState, mockCalibrateResultResponse,
+    mockBaselineState,
+    mockCalibrateResultResponse,
     mockError,
     mockFailure,
     mockModelCalibrateState,
@@ -14,10 +15,10 @@ import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
 import {freezer} from "../../app/utils";
 import {switches} from "../../app/featureSwitches";
 import {DownloadResultsMutation} from "../../app/store/downloadResults/mutations";
-import { ModelOutputTabs } from "../../app/types";
-import { BarchartIndicator } from "../../app/generated";
-import { Mock } from "vitest";
-import { flushPromises } from "@vue/test-utils";
+import {ModelOutputTabs} from "../../app/types";
+import {BarchartIndicator} from "../../app/generated";
+import {Mock} from "vitest";
+import {flushPromises} from "@vue/test-utils";
 
 const rootState = mockRootState();
 describe("ModelCalibrate actions", () => {
@@ -69,7 +70,7 @@ describe("ModelCalibrate actions", () => {
         const mockOptions = {"param_1": "value 1"};
         const url = `calibrate/submit/123A`;
         mockAxios.onPost(url).reply(200, mockSuccess("TEST"));
-        const freezeSpy = vi.spyOn(freezer, "deepFreeze");
+        vi.spyOn(freezer, "deepFreeze");
         await actions.submit({commit, dispatch, state, rootState: root} as any, mockOptions);
 
         expect(mockAxios.history.post.length).toBe(1);
@@ -405,7 +406,6 @@ describe("ModelCalibrate actions", () => {
     });
 
     it("getComparisonPlot commits error with unsuccessful fetch", async () => {
-        const testResult = {data: "TEST DATA"};
         mockAxios.onGet(`/model/comparison/plot/1234`)
             .reply(500, mockFailure("Test Error"));
 
@@ -452,7 +452,7 @@ describe("ModelCalibrate actions", () => {
         // Following state should not be possible but checking for completeness
         const brokenState = mockModelCalibrateState(
             {calibrating: true, complete: false, calibrateId: ""});
-        await actions.resumeCalibrate({dispatch, state: completeState} as any);
+        await actions.resumeCalibrate({dispatch, state: brokenState} as any);
 
         // No new polls
         expect(dispatch.mock.calls.length).toBe(1);

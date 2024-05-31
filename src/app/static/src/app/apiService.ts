@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {ErrorsMutation} from "./store/errors/mutations";
-import {ActionContext, Commit} from "vuex";
+import {Commit} from "vuex";
 import {freezer, isHINTResponse, readStream} from "./utils";
 import {Error, Response} from "./generated";
 import i18next from "i18next";

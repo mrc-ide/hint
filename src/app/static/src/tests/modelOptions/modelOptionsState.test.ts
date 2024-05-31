@@ -1,5 +1,3 @@
-import {localStorageManager} from "../../app/localStorageManager";
-
 declare const currentUser: string; // set in jest config, or on the index page when run for real
 localStorage.setItem("user", currentUser);
 const existingState = {
@@ -10,7 +8,7 @@ const existingState = {
     baseline: {}
 } as any;
 
-import {modelOptions, ModelOptionsState, modelOptionsGetters} from "../../app/store/modelOptions/modelOptions";
+import {modelOptions, modelOptionsGetters, ModelOptionsState} from "../../app/store/modelOptions/modelOptions";
 
 it("loads initial state from existingState", () => {
     const state = modelOptions(existingState).state as ModelOptionsState;

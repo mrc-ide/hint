@@ -35,7 +35,7 @@
 
 <script lang="ts">
     import ErrorAlert from "../ErrorAlert.vue";
-    import {mapActions, mapState} from "vuex";
+    import {mapActions} from "vuex";
     import {PasswordState} from "../../store/password/password";
     import LoggedOutHeader from "../header/LoggedOutHeader.vue";
     import {Language} from "../../store/translations/locales";

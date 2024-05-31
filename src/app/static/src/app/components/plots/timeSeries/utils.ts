@@ -89,7 +89,7 @@ export const getScatterPoints = (plotData: (InputTimeSeriesRow | null)[], areaDa
         }
         return x?.missing_ids?.length ? colours.MISSING : colours.BASE;
     });
-    const markerOutlineColors = plotData.map((x, i) => {
+    const markerOutlineColors = plotData.map((_x, i) => {
         return isFirstPointHighlight && i === 0 ? PlotColours.HIGHLIGHT.BASE : colours.BASE;
     });
     const points: any = {

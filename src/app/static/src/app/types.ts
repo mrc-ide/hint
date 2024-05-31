@@ -6,12 +6,6 @@ export interface PayloadWithType<T> extends Payload {
     payload: T
 }
 
-export interface PartialFileUploadProps {
-    valid: boolean,
-    error: Error | null
-    existingFileName: string
-}
-
 export interface IndicatorValues {
     value: number,
     color: string
@@ -24,12 +18,6 @@ export interface BubbleIndicatorValues extends IndicatorValues {
     sizeValue: number
     sizeLower?: number
     sizeUpper?: number
-}
-
-export interface LevelLabel {
-    id: number
-    area_level_label: string
-    display: boolean
 }
 
 export type Dict<V> = { [k: string]: V }
@@ -183,12 +171,6 @@ export interface PollingStarted {
     pollId: number,
     downloadType: string
 }
-export interface SelectedADRUploadFiles {
-    summary: any,
-    spectrum: any,
-    coarseOutput?: any,
-    agyw?: any,
-}
 
 export enum DOWNLOAD_TYPE {
     SPECTRUM = "Spectrum",
@@ -340,13 +322,6 @@ export interface DownloadIndicatorPayload {
     data: DownloadIndicatorDataset,
     filename: string,
     options?: any
-}
-
-export interface Field {
-    key: string,
-    label?: string
-    sortable: boolean,
-    sortByFormatted: boolean
 }
 
 export interface GenericResponse<T> {

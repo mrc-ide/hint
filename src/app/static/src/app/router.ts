@@ -5,7 +5,7 @@ import Privacy from "./components/Privacy.vue";
 import Projects from "./components/projects/Projects.vue";
 import {store} from "./main";
 
-export const beforeEnter = (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+export const beforeEnter = (_to: RouteLocationNormalized, _from: RouteLocationNormalized) => {
     if (store.state.currentUser === "guest" && !sessionStorage.getItem("asGuest")) {
         window.location.assign("/login");
     }

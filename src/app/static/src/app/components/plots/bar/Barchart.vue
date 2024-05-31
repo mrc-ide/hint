@@ -11,20 +11,17 @@
 
 <script lang="ts">
 import {Bar} from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import {BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from 'chart.js';
 import annotationPlugin from "chartjs-plugin-annotation";
 import {useStore} from "vuex";
 import {RootState} from "../../../root";
 import {computed, defineComponent, PropType, ref, watch} from "vue";
 import {PlotData} from "../../../store/plotData/plotData";
-import {
-    BarChartData,
-    getErrorLineAnnotations,
-    buildTooltipCallback,
-} from "./utils";
+import {BarChartData, buildTooltipCallback, getErrorLineAnnotations,} from "./utils";
 import {formatOutput, getIndicatorMetadata} from "../utils";
 import {ChoroplethIndicatorMetadata} from "../../../generated";
 import {PlotName} from "../../../store/plotSelections/plotSelections";
+
 ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, annotationPlugin);
 
 export default defineComponent({
@@ -91,7 +88,7 @@ export default defineComponent({
             hides some bars. This is required to coordinate the chart with
             the error bars.
         */
-        const customLegendClick = (e: Event, legendItem: any, legend: any) => {
+        const customLegendClick = (_e: Event, legendItem: any, legend: any) => {
             const index = legendItem.datasetIndex;
             const ci = legend.chart;
             const isDatasetVisible = ci.isDatasetVisible(index);

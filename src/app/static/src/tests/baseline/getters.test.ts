@@ -1,5 +1,12 @@
 import {baselineGetters} from "../../app/store/baseline/baseline";
-import { mockBaselineState, mockError, mockPopulationResponse, mockShapeResponse, mockRootState, mockADRState, mockDatasetResource } from "../mocks";
+import {
+    mockADRState,
+    mockBaselineState,
+    mockDatasetResource,
+    mockPopulationResponse,
+    mockRootState,
+    mockShapeResponse
+} from "../mocks";
 
 it("is complete iff all files are present", () => {
     let state = mockBaselineState({

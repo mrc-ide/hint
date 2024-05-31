@@ -1,28 +1,32 @@
-import {shallowMount} from '@vue/test-utils';
 import Vuex from 'vuex';
 import {baselineGetters, BaselineState} from "../../app/store/baseline/baseline";
 import {
+    mockADRState,
     mockBaselineState,
+    mockGenericChartState,
     mockLoadState,
     mockMetadataState,
+    mockModelCalibrateState,
     mockModelOptionsState,
     mockModelRunState,
     mockPlottingMetadataResponse,
-    mockPopulationResponse, mockRootState,
-    mockShapeResponse, mockStepperState,
+    mockPopulationResponse,
+    mockProjectsState,
+    mockRootState,
+    mockShapeResponse,
+    mockStepperState,
     mockSurveyAndProgramState,
-    mockValidateBaselineResponse,
-    mockProjectsState, mockModelCalibrateState, mockADRState, mockSurveyResponse, mockGenericChartState
-
+    mockSurveyResponse,
+    mockValidateBaselineResponse
 } from "../mocks";
 import {SurveyAndProgramState} from "../../app/store/surveyAndProgram/surveyAndProgram";
 import {getters as surveyAndProgramGetters} from "../../app/store/surveyAndProgram/getters";
 import {mutations} from '../../app/store/baseline/mutations';
 import {mutations as surveyAndProgramMutations} from '../../app/store/surveyAndProgram/mutations';
-import {mutations as modelRunMutations} from '../../app/store/modelRun/mutations';
+import {ModelRunMutation, mutations as modelRunMutations} from '../../app/store/modelRun/mutations';
 import {mutations as stepperMutations} from '../../app/store/stepper/mutations';
 import {mutations as loadMutations} from '../../app/store/load/mutations';
-import {mutations as modelCalibrateMutations} from '../../app/store/modelCalibrate/mutations';
+import {ModelCalibrateMutation, mutations as modelCalibrateMutations} from '../../app/store/modelCalibrate/mutations';
 import {modelRunGetters, ModelRunState} from "../../app/store/modelRun/modelRun";
 import ADRIntegration from "../../app/components/adr/ADRIntegration.vue";
 import Stepper from "../../app/components/Stepper.vue";
@@ -49,11 +53,9 @@ import StepperNavigation from "../../app/components/StepperNavigation.vue";
 import WarningAlert from "../../app/components/WarningAlert.vue";
 import LoadInvalidModal from "../../app/components/load/LoadInvalidModal.vue";
 import {ModelOptionsMutation} from "../../app/store/modelOptions/mutations";
-import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
-import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {GenericChartState} from "../../app/store/genericChart/genericChart";
 import {GenericChartMutation} from "../../app/store/genericChart/mutations";
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 
 describe("Stepper component", () => {
 
@@ -682,7 +684,7 @@ describe("Stepper component", () => {
     it("pushes router to projects if logged in user and currentProject not set", () => {
         const mockRouterPush = vi.fn();
         //current user is set in vi.config and currentProject is not set be default in the wrapper
-        const wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(1);
         expect(mockRouterPush.mock.calls[0][0]).toBe("/projects");
@@ -690,7 +692,7 @@ describe("Stepper component", () => {
 
     it("does not push router to projects if guest user", () => {
         const mockRouterPush = vi.fn();
-        const wrapper = createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush, {currentUser: 'guest'});
+        createSut({}, {}, {}, {}, {}, {}, {}, mockRouterPush, {currentUser: 'guest'});
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });
@@ -698,7 +700,7 @@ describe("Stepper component", () => {
     it("does not push router to projects if logged in user and currentProject set", () => {
         const mockRouterPush = vi.fn();
         const projectsState = {currentProject: {id: 1, name: "testProject", versions: []}};
-        const wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });
@@ -706,7 +708,7 @@ describe("Stepper component", () => {
     it("does not push router to projects if project is loading", () => {
         const mockRouterPush = vi.fn();
         const projectsState = {loading: true};
-        const wrapper = createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
+        createSut({}, {}, {}, {}, {}, {}, projectsState, mockRouterPush);
 
         expect(mockRouterPush.mock.calls.length).toBe(0);
     });

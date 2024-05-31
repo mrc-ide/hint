@@ -9,7 +9,7 @@ import BarChartWithFilters from '../../../app/vue-chart/src/bar/BarChartWithFilt
 import {ModelCalibrateState} from "../../../app/store/modelCalibrate/modelCalibrate";
 import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 import {BarchartIndicator} from "../../../app/types";
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 
 const defaultSelections = {
     indicator_id: "TestIndicator",

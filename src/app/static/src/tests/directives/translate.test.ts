@@ -1,10 +1,9 @@
-import {mount, shallowMount} from "@vue/test-utils";
 import Vuex from "vuex";
 import registerTranslations from "../../app/store/translations/registerTranslations";
 import {Language} from "../../app/store/translations/locales";
-import { mountWithTranslate, shallowMountWithTranslate } from "../testHelpers";
-import { nextTick } from "vue";
-import { Mock } from "vitest";
+import {mountWithTranslate, shallowMountWithTranslate} from "../testHelpers";
+import {nextTick} from "vue";
+import {Mock} from "vitest";
 
 describe("translate directive", () => {
 

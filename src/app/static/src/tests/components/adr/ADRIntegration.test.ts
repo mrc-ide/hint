@@ -1,11 +1,6 @@
 import {Error} from "../../../app/generated";
 import Vuex, {ActionTree} from "vuex";
-import {
-    mockADRState,
-    mockBaselineState,
-    mockDatasetResource,
-    mockRootState
-} from "../../mocks";
+import {mockADRState, mockBaselineState, mockDatasetResource, mockRootState} from "../../mocks";
 import {ADRActions} from "../../../app/store/adr/actions";
 import {RootState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
@@ -20,7 +15,7 @@ import {prefixNamespace} from "../../../app/utils";
 import {Language} from "../../../app/store/translations/locales";
 import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 import {BaselineState} from "../../../app/store/baseline/baseline";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 describe("adr integration", () => {
 

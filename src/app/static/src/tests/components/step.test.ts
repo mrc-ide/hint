@@ -4,7 +4,7 @@ import Step from "../../app/components/Step.vue";
 import {emptyState} from "../../app/root";
 import registerTranslations from "../../app/store/translations/registerTranslations";
 import {expectTranslated, shallowMountWithTranslate} from "../testHelpers";
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 
 describe("Step component", () => {
 

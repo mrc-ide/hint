@@ -46,18 +46,8 @@
     import Modal from "../Modal.vue";
     import {mapActionByName, mapGetterByName, mapStateProp, mapStateProps} from "../../utils";
     import {RootState} from "../../root";
-    import {Project, Version, VersionIds} from "../../types";
     import {ProjectsState} from "../../store/projects/projects";
-    import {StepDescription, StepperState} from "../../store/stepper/stepper";
-
-    interface ProjectComputed {
-      currentProject: Project,
-      currentVersion: Version
-    }
-
-    interface StepperComputed {
-      steps: StepDescription[]
-    }
+    import {StepperState} from "../../store/stepper/stepper";
 
     export default defineComponent({
         name: "LoadInvalidModal",

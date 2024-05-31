@@ -1,21 +1,22 @@
 import {
-    freezer,
+    constructUploadFile,
+    constructUploadFileWithResourceName,
+    extractFilenameFrom,
     flattenOptions,
     flattenOptionsIdsByHierarchy,
     flattenToIdSet,
     formatDateTime,
-    validateEmail,
-    versionLabel,
-    rootOptionChildren,
-    constructUploadFile,
-    constructUploadFileWithResourceName,
-    getFilenameFromImportUrl,
     formatToLocalISODateTime,
+    freezer,
+    getFilenameFromImportUrl,
+    parseAndFillForm,
     readStream,
-    extractFilenameFrom, parseAndFillForm
+    rootOptionChildren,
+    validateEmail,
+    versionLabel
 } from "../app/utils";
 import {NestedFilterOption} from "../app/generated";
-import {DynamicFormMeta, DynamicFormData} from "@reside-ic/vue-next-dynamic-form";
+import {DynamicFormData, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
 import {AxiosResponse} from "axios";
 
 describe("utils", () => {

@@ -1,4 +1,4 @@
-import {flushPromises, shallowMount} from '@vue/test-utils';
+import {flushPromises} from '@vue/test-utils';
 import Vuex from 'vuex';
 import ManageFile from "../../../app/components/files/ManageFile.vue";
 import {SurveyAndProgramState} from "../../../app/store/surveyAndProgram/surveyAndProgram";
@@ -11,8 +11,8 @@ import {
     mockSurveyAndProgramState
 } from "../../mocks";
 import UploadInputs from "../../../app/components/uploadInputs/UploadInputs.vue";
-import { shallowMountWithTranslate } from '../../testHelpers';
-import { Mocked } from 'vitest';
+import {shallowMountWithTranslate} from '../../testHelpers';
+import {Mocked} from 'vitest';
 
 export function testUploadComponent(name: string, position: number) {
 

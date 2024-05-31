@@ -1,13 +1,11 @@
-import {shallowMount } from "@vue/test-utils";
 import Vuex from "vuex";
 import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
 import HintrVersionMenu from "../../../app/components/header/HintrVersionMenu.vue";
 import DropDown from "../../../app/components/header/DropDown.vue";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
-import { mockHintrVersionState } from "../../mocks";
-import { emptyState } from "../../../app/root";
+import {mockHintrVersionState} from "../../mocks";
+import {emptyState} from "../../../app/root";
 import {currentHintVersion} from "../../../app/hintVersion";
-import { nextTick } from "vue";
 
 describe("Hintr Menu Version", () => {
 
