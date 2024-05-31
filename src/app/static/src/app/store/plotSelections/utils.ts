@@ -7,6 +7,7 @@ import {
     FilterOption,
     FilterTypes,
     PlotSettingEffect,
+    PlotSettingOption,
 } from "../../generated";
 import {
     getCalibrateFilteredDataset,
@@ -77,7 +78,7 @@ export const filtersInfoFromEffects = (
         }
     });
 
-    return filterRefs!.map(f => {
+    return filterRefs.map(f => {
         const filter = filterTypes.find(filterType => filterType.id === f.filterId)!;
         const isMultiple = multiFilters.includes(f.stateFilterId);
         const isHidden = hiddenFilters.includes(f.stateFilterId);
@@ -87,11 +88,12 @@ export const filtersInfoFromEffects = (
             // we have specified fixed values
             const optionIds = filterValues[f.stateFilterId];
             const filterOptions = [];
+            const maxLength = isMultiple ? optionIds.length : 1;
             for (let i = 0; i < filter.options.length; i++) {
                 if (optionIds.includes(filter.options[i].id)) {
                     filterOptions.push(filter.options[i]);
                 }
-                if (filterOptions.length === optionIds.length) {
+                if (filterOptions.length === maxLength) {
                     break;
                 }
             }
@@ -143,7 +145,7 @@ export const commitPlotDefaultSelections = async (
         const effects = control.defaultEffect ? [control.defaultEffect] : [];
         const selectedSettingOptions: PlotSelectionUpdate["selections"]["controls"] = [];
         control.plotSettings.forEach(setting => {
-            const defaultOption = setting.options[0];
+            const defaultOption: PlotSettingOption = setting.options.find(op => op.id === setting.value) || setting.options[0];
             effects.push(defaultOption.effect);
             selectedSettingOptions.push({
                 id: setting.id,

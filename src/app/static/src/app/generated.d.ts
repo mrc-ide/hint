@@ -187,6 +187,7 @@ export interface CalibrateMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -230,6 +231,7 @@ export interface CalibrateMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -273,6 +275,7 @@ export interface CalibrateMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -316,6 +319,7 @@ export interface CalibrateMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -413,6 +417,7 @@ export interface CalibratePlotMetadata {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -500,6 +505,7 @@ export interface CalibratePlotResponse {
               };
             };
           }[];
+          value?: string;
           hidden?: boolean;
         }[];
       };
@@ -778,6 +784,7 @@ export interface ComparisonPlotMetadata {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -868,6 +875,7 @@ export interface ComparisonPlotResponse {
               };
             };
           }[];
+          value?: string;
           hidden?: boolean;
         }[];
       };
@@ -1550,6 +1558,7 @@ export interface PlotSetting {
       };
     };
   }[];
+  value?: string;
   hidden?: boolean;
 }
 export interface PlotSettingEffect {
@@ -1628,6 +1637,7 @@ export interface PlotSettingsControl {
         };
       };
     }[];
+    value?: string;
     hidden?: boolean;
   }[];
 }
@@ -1985,6 +1995,7 @@ export interface ReviewInputFilterMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
@@ -2028,6 +2039,7 @@ export interface ReviewInputFilterMetadataResponse {
             };
           };
         }[];
+        value?: string;
         hidden?: boolean;
       }[];
     };
