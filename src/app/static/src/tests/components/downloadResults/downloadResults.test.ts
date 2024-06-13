@@ -110,16 +110,19 @@ describe("Download Results component", () => {
             "Télécharger le rapport de synthèse", "Descarregar relatório de síntese", store);
         expectTranslated(headers[3], "Download comparison report",
             "Télécharger le rapport de comparaison", "Baixar relatório de comparação", store);
-        expectTranslated(headers[4], "Upload to ADR",
+        expectTranslated(headers[4], "Download SHIPP tool",
+            "Télécharger l'outil SHIPP", "Descarregar a ferramenta SHIPP", store);
+        expectTranslated(headers[5], "Upload to ADR",
             "Télécharger vers ADR", "Carregar para o ADR", store);
 
         const buttons = wrapper.findAll("button");
-        expect(buttons.length).toBe(5);
+        expect(buttons.length).toBe(6);
         expectTranslated(buttons[0], "Download", "Télécharger", "Descarregar", store);
         expectTranslated(buttons[1], "Download", "Télécharger", "Descarregar", store);
         expectTranslated(buttons[2], "Download", "Télécharger", "Descarregar", store);
         expectTranslated(buttons[3], "Download", "Télécharger", "Descarregar", store);
-        expectTranslated(buttons[4], "Upload", "Télécharger", "Carregar", store);
+        expectTranslated(buttons[4], "Download", "Télécharger", "Descarregar", store);
+        expectTranslated(buttons[5], "Upload", "Télécharger", "Carregar", store);
     });
 
     it(`renders, opens and closes dialog as expected`, async () => {
@@ -177,7 +180,7 @@ describe("Download Results component", () => {
                 }
             });
         const headers = wrapper.findAll("h4");
-        expect(headers.length).toBe(4)
+        expect(headers.length).toBe(5)
     });
 
     it("does not render status messages or error alerts without appropriate states", () => {
@@ -294,11 +297,12 @@ describe("Download Results component", () => {
         });
 
         const downloadButtons = wrapper.findAllComponents(Download);
-        expect(downloadButtons.length).toBe(4)
+        expect(downloadButtons.length).toBe(5)
         expect(downloadButtons[0].props("disabled")).toBe(true)
         expect(downloadButtons[1].props("disabled")).toBe(true)
         expect(downloadButtons[2].props("disabled")).toBe(true)
         expect(downloadButtons[3].props("disabled")).toBe(true)
+        expect(downloadButtons[4].props("disabled")).toBe(true)
     });
 
     it("calls prepareOutputs on mount", () => {
