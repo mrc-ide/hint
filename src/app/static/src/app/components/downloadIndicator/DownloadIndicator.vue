@@ -9,29 +9,12 @@
 
 <script lang="ts">
     import DownloadButton from "./DownloadButton.vue";
-    import {DownloadIndicatorPayload} from "../../types";
     import {appendCurrentDateTime, mapActionByName, mapStateProps} from "../../utils";
     import {BaselineState} from "../../store/baseline/baseline";
     import {DownloadIndicatorState} from "../../store/downloadIndicator/downloadIndicator";
-    import { defineComponent } from "vue";
+    import {defineComponent} from "vue";
 
     const namespace = "downloadIndicator";
-
-    interface Methods {
-        download: () => void
-        downloadFile: (data: DownloadIndicatorPayload) => void
-    }
-
-    interface Props {
-        filteredData?: unknown[] | null
-        unfilteredData: unknown[]
-    }
-
-    interface Computed {
-        iso3: string
-        country: string
-        downloadingIndicator: boolean
-    }
 
     export default defineComponent({
         name: "downloadIndicator",

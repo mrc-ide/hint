@@ -1,6 +1,6 @@
 import axios, {AxiosError, AxiosResponse} from "axios";
 import {ErrorsMutation} from "./store/errors/mutations";
-import {ActionContext, Commit} from "vuex";
+import {Commit} from "vuex";
 import {freezer, isHINTResponse, readStream} from "./utils";
 import {Error, Response} from "./generated";
 import i18next from "i18next";
@@ -31,7 +31,7 @@ export class APIService<S extends string, E extends string> implements API<S, E>
     private readonly _commit: Commit;
     private readonly _headers: any;
 
-    constructor(context: ActionContext<any, TranslatableState>) {
+    constructor(context: APIContext) {
         this._commit = context.commit;
         this._headers = {"Accept-Language": context.rootState.language};
     }
@@ -221,5 +221,10 @@ export class APIService<S extends string, E extends string> implements API<S, E>
 
 }
 
+type APIContext = {
+    commit: Commit,
+    rootState: TranslatableState
+}
+
 export const api =
-    <S extends string, E extends string>(context: ActionContext<any, TranslatableState>) => new APIService<S, E>(context);
+    <S extends string, E extends string>(context: APIContext) => new APIService<S, E>(context);

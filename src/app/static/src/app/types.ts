@@ -6,12 +6,6 @@ export interface PayloadWithType<T> extends Payload {
     payload: T
 }
 
-export interface PartialFileUploadProps {
-    valid: boolean,
-    error: Error | null
-    existingFileName: string
-}
-
 export interface IndicatorValues {
     value: number,
     color: string
@@ -24,12 +18,6 @@ export interface BubbleIndicatorValues extends IndicatorValues {
     sizeValue: number
     sizeLower?: number
     sizeUpper?: number
-}
-
-export interface LevelLabel {
-    id: number
-    area_level_label: string
-    display: boolean
 }
 
 export type Dict<V> = { [k: string]: V }
@@ -182,12 +170,6 @@ export interface DownloadResultsDependency {
 export interface PollingStarted {
     pollId: number,
     downloadType: string
-}
-export interface SelectedADRUploadFiles {
-    summary: any,
-    spectrum: any,
-    coarseOutput?: any,
-    agyw?: any,
 }
 
 export enum DOWNLOAD_TYPE {
@@ -342,13 +324,6 @@ export interface DownloadIndicatorPayload {
     options?: any
 }
 
-export interface Field {
-    key: string,
-    label?: string
-    sortable: boolean,
-    sortByFormatted: boolean
-}
-
 export interface GenericResponse<T> {
     data: T | null
     errors: {
@@ -386,6 +361,7 @@ export interface CalibrateResultWithType {
     indicatorId: string;
 }
 
+// TODO: Remove this in favour of plotting metadata?
 export enum ModelOutputTabs {
     Map = "map",
     Bar = "bar",

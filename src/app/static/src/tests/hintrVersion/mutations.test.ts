@@ -1,6 +1,6 @@
-import {mockHintrVersionState, mockSuccess, mockFailure} from '../mocks'
-import {HintrVersionMutation, mutations} from "../../app/store/hintrVersion/mutations";
-import { HintrVersionResponse } from '../../app/generated';
+import {mockHintrVersionState} from '../mocks'
+import {mutations} from "../../app/store/hintrVersion/mutations";
+import {HintrVersionResponse} from '../../app/generated';
 
 describe("HintrVersion Mutation", () => {
 

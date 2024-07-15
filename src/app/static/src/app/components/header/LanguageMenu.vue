@@ -17,14 +17,6 @@
     import { RootState } from "../../root";
     import { defineComponent } from "vue";
 
-    interface Methods {
-        changeLanguage: (lang: string) => void
-    }
-
-    interface Computed {
-        currentLanguage: string
-    }
-
     export default defineComponent({
         computed: {
             currentLanguage: mapStateProp<RootState, string>(null,

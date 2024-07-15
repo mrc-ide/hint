@@ -1,16 +1,16 @@
 import ProjectHistory from "../../../app/components/projects/ProjectHistory.vue";
 import {formatDateTime} from "../../../app/utils";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
-import Vuex, {Store} from "vuex";
-import { nextTick } from "vue";
-import {emptyState, RootState} from "../../../app/root";
+import Vuex from "vuex";
+import {nextTick} from "vue";
+import {emptyState} from "../../../app/root";
 import {Project} from "../../../app/types";
 import {mockProjectsState} from "../../mocks";
 import {expectTranslated, mountWithTranslate} from "../../testHelpers";
 import ShareProject from "../../../app/components/projects/ShareProject.vue";
 import {Language} from "../../../app/store/translations/locales";
 import VueFeather from "vue-feather";
-import { flushPromises } from "@vue/test-utils";
+import {flushPromises} from "@vue/test-utils";
 
 describe("Project history component", () => {
 
@@ -262,8 +262,7 @@ describe("Project history component", () => {
         expect(versionMenu.classes()).toStrictEqual(["collapse"]);
     };
 
-    const testRendersVersion = (row: any, id: string, updatedIsoDate: string, versionNumber: number,
-                                store: Store<RootState>) => {
+    const testRendersVersion = (row: any, id: string, updatedIsoDate: string, versionNumber: number) => {
         expect(row.attributes("id")).toBe(`v-${id}`);
         let cells = row.findAll(".version-cell");
         expect(cells[0].text()).toBe("");
@@ -297,14 +296,14 @@ describe("Project history component", () => {
         const proj1Versions = wrapper.find("#versions-1");
         const proj1VersionRows = proj1Versions.findAll(".row");
         expect(proj1VersionRows.length).toBe(2);
-        testRendersVersion(proj1VersionRows[0], "s11", isoDates[1], 1, store);
-        testRendersVersion(proj1VersionRows[1], "s12", isoDates[2], 2, store);
+        testRendersVersion(proj1VersionRows[0], "s11", isoDates[1], 1);
+        testRendersVersion(proj1VersionRows[1], "s12", isoDates[2], 2);
 
         testRendersProject(wrapper, 2, "proj2", isoDates[3], 1);
         const proj2Versions = wrapper.find("#versions-2");
         const proj2VersionRows = proj2Versions.findAll(".row");
         expect(proj2VersionRows.length).toBe(1);
-        testRendersVersion(proj2VersionRows[0], "s21", isoDates[3], 1, store);
+        testRendersVersion(proj2VersionRows[0], "s21", isoDates[3], 1);
 
         const modal = wrapper.find(".modal");
         expect(modal.classes).not.toContain("show");
@@ -442,11 +441,11 @@ describe("Project history component", () => {
 
     const testLoadVersionLink = async function (elementId: string, projectId: number, versionId: string) {
         const wrapper = getWrapper(testProjects);
-        const versionLink = wrapper.find("#versions-1").findAll("button")[1];
+        const versionLink = wrapper.find(elementId).findAll("button")[1];
         await versionLink.trigger("click");
         await nextTick();
         expect(mockLoad.mock.calls.length).toBe(1);
-        expect(mockLoad.mock.calls[0][1]).toStrictEqual({projectId: 1, versionId: "s11"});
+        expect(mockLoad.mock.calls[0][1]).toStrictEqual({projectId: projectId, versionId: versionId});
     };
 
     it("does show project name as default value when a user clicks rename link", async () => {

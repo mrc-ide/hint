@@ -1,7 +1,7 @@
 import {expectHasTranslationKey} from "../../testHelpers";
 import Vuex from "vuex";
-import {mockFile, mockProjectsState, mockLoadState, mockRootState} from "../../mocks";
-import {DOMWrapper, mount, shallowMount, VueWrapper} from "@vue/test-utils";
+import {mockFile, mockLoadState, mockProjectsState, mockRootState} from "../../mocks";
+import {DOMWrapper, mount, VueWrapper} from "@vue/test-utils";
 import NewProjectMenu from "../../../app/components/projects/NewProjectMenu.vue";
 import UploadNewProject from "../../../app/components/load/NewProjectCreate.vue";
 import {Translations} from "../../../app/store/translations/locales";
@@ -11,7 +11,7 @@ describe("New project menu component", () => {
     // @ts-ignore
     global.File = class MockFile {
         filename: string;
-        constructor(parts: (string | Blob | ArrayBuffer | ArrayBufferView)[], filename: string, properties ? : FilePropertyBag) {
+        constructor(_parts: (string | Blob | ArrayBuffer | ArrayBufferView)[], filename: string, _properties ? : FilePropertyBag) {
             this.filename = filename;
         }
     }
@@ -109,7 +109,7 @@ describe("New project menu component", () => {
         // Then new project modal is opened
         const createProject = wrapper.find("#new-project-create")
         const createProjectModal = createProject.findComponent("#load") as VueWrapper
-        expect(createProjectModal.props("open")).toBe(true);
+        expect((createProjectModal as any).props("open")).toBe(true);
 
         // When I enter a name
         await createProjectModal.find("#project-name-input").setValue("new created project")
@@ -125,7 +125,7 @@ describe("New project menu component", () => {
         expect(mockNewProjectName.mock.calls.length).toBe(1);
         expect(mockNewProjectName.mock.calls[0][1]).toBe("new created project");
         expect(mockCreateProject.mock.calls.length).toBe(1);
-        expect(createProjectModal.props("open")).toBe(false);
+        expect((createProjectModal as any).props("open")).toBe(false);
     })
 
     it("clicking cancel from create project modal closes it", async () => {
@@ -146,14 +146,14 @@ describe("New project menu component", () => {
         // Then new project modal is opened
         const createProject = wrapper.find("#new-project-create")
         const createProjectModal = createProject.findComponent("#load") as VueWrapper
-        expect(createProjectModal.props("open")).toBe(true);
+        expect((createProjectModal as any).props("open")).toBe(true);
 
         // When I click cancel button
         const cancelLoad = createProjectModal.find("#cancel-load-project")
         await cancelLoad.trigger("click")
 
         // then modal is closed
-        expect(createProjectModal.props("open")).toBe(false);
+        expect((createProjectModal as any).props("open")).toBe(false);
     })
 
     it("triggers preparingRehydrate action when file is uploaded", async () => {
@@ -174,7 +174,7 @@ describe("New project menu component", () => {
         // Then project zip modal is opened
         const projectZip = wrapper.find("#new-project-create")
         const projectZipModal = projectZip.findComponent("#load") as VueWrapper
-        expect(projectZipModal.props("open")).toBe(true);
+        expect((projectZipModal as any).props("open")).toBe(true);
 
         // and confirm button is disabled
         const confirmLoad = projectZipModal.find("#confirm-load-project")
@@ -194,7 +194,7 @@ describe("New project menu component", () => {
         expect(mockNewProjectName.mock.calls[0][1]).toBe("new uploaded project");
         expect((wrapper.vm as any).fileToLoad).toStrictEqual(testFile);
         expect(mockPreparingRehydrate.mock.calls.length).toBe(1);
-        expect(projectZipModal.props("open")).toBe(false);
+        expect((projectZipModal as any).props("open")).toBe(false);
     });
 
     it("clicking cancel from Zip project name modal hides modal", async () => {
@@ -215,7 +215,7 @@ describe("New project menu component", () => {
         // Then project zip modal is opened
         const projectZip = wrapper.find("#new-project-create")
         const projectZipModal = projectZip.findComponent("#load") as VueWrapper
-        expect(projectZipModal.props("open")).toBe(true);
+        expect((projectZipModal as any).props("open")).toBe(true);
 
         // and value set for file
         const uploadZip = wrapper.find("#upload-zip");
@@ -234,7 +234,7 @@ describe("New project menu component", () => {
         await cancelLoad.trigger("click")
 
         // Then dialog is closed
-        expect((projectZipModal as VueWrapper).props("open")).toBe(false);
+        expect((projectZipModal as any).props("open")).toBe(false);
 
         // and upload zip is cleared
         expect((wrapper.vm as any).$refs.loadZip.value).toBe("")

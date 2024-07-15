@@ -49,6 +49,9 @@ import {
     DownloadIndicatorState,
     initialDownloadIndicatorState
 } from "./store/downloadIndicator/downloadIndicator";
+import { initialPlotSelectionsState, PlotSelectionsState, plotSelections } from "./store/plotSelections/plotSelections";
+import { initialPlotDataState, PlotDataState, plotData } from "./store/plotData/plotData";
+import { initialPlotState, PlotState, plotState } from "./store/plotState/plotState";
 import {TranslatableState} from "./types";
 
 export interface RootState extends TranslatableState {
@@ -65,6 +68,12 @@ export interface RootState extends TranslatableState {
     modelCalibrate: ModelCalibrateState,
     modelOutput: ModelOutputState,
     plottingSelections: PlottingSelectionsState,
+    // Output data used for plotting
+    plotData: PlotDataState,
+    // Control and filter selections for output plots
+    plotSelections: PlotSelectionsState,
+    // Colour and size scales selected by user in output plots
+    plotState: PlotState,
     stepper: StepperState,
     load: LoadState,
     errors: ErrorsState,
@@ -85,7 +94,7 @@ export interface WarningsState {
 
 const persistState = (store: Store<RootState>): void => {
     store.subscribe((mutation: MutationPayload, state: RootState) => {
-        console.log(mutation.type);
+        // console.log(mutation.type);
         localStorageManager.saveState(state);
 
         const {dispatch} = store;
@@ -169,6 +178,9 @@ export const emptyState = (): RootState => {
         stepper: initialStepperState(),
         load: initialLoadState(),
         plottingSelections: initialPlottingSelectionsState(),
+        plotData: initialPlotDataState(),
+        plotSelections: initialPlotSelectionsState(),
+        plotState: initialPlotState(),
         errors: initialErrorsState(),
         projects: initialProjectsState(),
         currentUser: currentUser,
@@ -194,6 +206,9 @@ export const storeOptions: StoreOptions<RootState> = {
         modelRun: modelRun(existingState),
         modelOutput: modelOutput(existingState),
         plottingSelections: plottingSelections(existingState),
+        plotData,
+        plotSelections,
+        plotState,
         stepper: stepper(existingState),
         load,
         errors,

@@ -5,13 +5,9 @@ import {emptyState} from "../../../app/root";
 import {mutations} from "../../../app/store/root/mutations";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {Language} from "../../../app/store/translations/locales";
-import {
-    expectTranslated,
-    expectErrorReportOpen,
-    mountWithTranslate,
-} from "../../testHelpers";
+import {expectErrorReportOpen, expectTranslated, mountWithTranslate,} from "../../testHelpers";
 import DropDown from "../../../app/components/header/DropDown.vue";
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import ErrorReport from "../../../app/components/ErrorReport.vue";
 import {mockErrorsState, mockProjectsState, mockStepperState} from "../../mocks";
 import {StepperState} from "../../../app/store/stepper/stepper";

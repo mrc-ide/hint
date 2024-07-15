@@ -1,8 +1,8 @@
 import {shallowMount} from "@vue/test-utils";
 import ModelOptions from "../../../app/components/modelOptions/ModelOptions.vue";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 import Vuex, {ActionTree, MutationTree} from "vuex";
-import {mockError, mockModelOptionsState, mockOptionsFormMeta, mockRootState} from "../../mocks";
+import {mockError, mockModelOptionsState, mockRootState} from "../../mocks";
 import {ModelOptionsState} from "../../../app/store/modelOptions/modelOptions";
 import {DynamicControlSection, DynamicForm} from "@reside-ic/vue-next-dynamic-form";
 import {ModelOptionsMutation} from "../../../app/store/modelOptions/mutations";
@@ -222,7 +222,7 @@ describe("Model options component", () => {
             fetchModelRunOptions: fetchMock
 
         });
-        const rendered = shallowMount(ModelOptions, {
+        shallowMount(ModelOptions, {
             global: {
                 plugins: [store]
             }

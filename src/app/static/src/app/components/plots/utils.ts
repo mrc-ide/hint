@@ -1,21 +1,57 @@
+import {NumericRange} from "../../types";
+import {CalibrateDataResponse, ChoroplethIndicatorMetadata, FilterOption} from "../../generated";
 import * as d3ScaleChromatic from "d3-scale-chromatic";
-import {ChoroplethIndicatorMetadata, FilterOption} from "../../generated";
-import {Dict, Filter, NumericRange} from "../../types";
-import numeral from 'numeral';
-import i18next from "i18next";
-import {Language} from "../../store/translations/locales";
-import {BarchartSelections} from "../../store/plottingSelections/plottingSelections";
-import {flattenOptionsIdsByHierarchy} from "../../utils"
-import { BarchartIndicator } from "../../vue-chart/src/bar/types";
+import {initialScaleSettings, ScaleSettings, ScaleType} from "../../store/plotState/plotState";
+import {Feature} from "geojson";
+import numeral from "numeral";
+import {Store} from "vuex";
+import {RootState} from "../../root";
+import {getMetadataFromPlotName} from "../../store/plotSelections/actions";
+import {PlotName} from "../../store/plotSelections/plotSelections";
+import { StyleValue } from "vue";
 
-export const getColor = (value: number,
+export const getIndicatorMetadata = (store: Store<RootState>, plotName: PlotName, selectedIndicator: string): ChoroplethIndicatorMetadata => {
+    const metadata = getMetadataFromPlotName(store.state, plotName);
+    return metadata.indicators.find(i => i.indicator == selectedIndicator)!
+}
+
+export interface ScaleLevels {
+    label: string
+    style: StyleValue
+}
+
+export const getColourScaleLevels = (indicatorMetadata: ChoroplethIndicatorMetadata, colourRange: NumericRange): ScaleLevels[] => {
+    if (!indicatorMetadata) {
+        return [];
+    }
+    const { format, scale, colour, invert_scale: invertScale } = indicatorMetadata;
+    const { min, max } = colourRange;
+    const colourFunction = colourFunctionFromName(colour);
+    const step = (max - min) / 5;
+    const indexes = max == min ? [0] : [5, 4, 3, 2, 1, 0];
+    return indexes.map((i) => {
+        let val: any = min + (i * step);
+        val = roundToContext(val, [min, max]);
+        let valAsProportion = (max != min) ? (val - min) / (max - min) : 0;
+        if (invertScale) {
+            valAsProportion = 1 - valAsProportion;
+        }
+        val = formatLegend(val, format, scale)
+        return {
+            label: val,
+            style: {background: colourFunction(valAsProportion)}
+        }
+    });
+};
+
+export const getColour = (value: number,
                          metadata: ChoroplethIndicatorMetadata,
                          colourRange: NumericRange) => {
 
     const min = colourRange.min;
     const max = colourRange.max;
 
-    const colorFunction = colorFunctionFromName(metadata.colour);
+    const colourFunction = colourFunctionFromName(metadata.colour);
 
     const rangeNum = ((max !== null) && (max != min)) ? //Avoid dividing by zero if only one value...
         max - (min || 0) :
@@ -33,14 +69,11 @@ export const getColor = (value: number,
         colorValue = 1 - colorValue;
     }
 
-    return colorFunction(colorValue);
+    return colourFunction(colorValue);
 };
 
-export const scaleStepFromMetadata = function (meta: ChoroplethIndicatorMetadata) {
-    return (meta.max - meta.min) / 10;
-};
 
-export const colorFunctionFromName = function (name: string) {
+const colourFunctionFromName = function (name: string) {
     let result = (d3ScaleChromatic as any)[name];
     if (!result) {
         //This is trying to be defensive against typos in metadata...
@@ -50,106 +83,14 @@ export const colorFunctionFromName = function (name: string) {
     return result;
 };
 
-export const getIndicatorRange = function (data: any,
-                                           indicatorMeta: ChoroplethIndicatorMetadata,
-                                           filters: Filter[] | null = null,
-                                           selectedFilterValues: Dict<FilterOption[]> | null = null,
-                                           selectedAreaIds: string[] | null = null): NumericRange {
-    let result = {} as NumericRange;
-    iterateDataValues(data, [indicatorMeta], selectedAreaIds, filters, selectedFilterValues,
-        (areaId: string, indicatorMeta: ChoroplethIndicatorMetadata, value: number) => {
-            if (!result.max) {
-                result = {min: value, max: value};
-            } else {
-                result.min = Math.min(result.min, value);
-                result.max = Math.max(result.max, value);
-            }
-        });
-    return roundRange({
-        min: result ? result.min : 0,
-        max: result ? result.max : 0
+export const getVisibleFeatures = function(features: Feature[], selectedLevels: FilterOption[]) {
+    const levels = selectedLevels.map((l: FilterOption) => parseInt(l.id));
+    return features.filter((feature: Feature) => {
+        return feature.properties && levels.includes(feature.properties["area_level"]);
     });
 };
 
-export const roundRange = function (unrounded: NumericRange) {
-    //round appropriate to the range magnitude
-    let decPl = 0;
-    let magnitude = unrounded.max == unrounded.min ? unrounded.min : (unrounded.max - unrounded.min);
-
-    magnitude = magnitude / 100;
-    if (magnitude < 1 && magnitude > 0) {
-        decPl = Math.trunc(Math.abs(Math.log10(magnitude)));
-    }
-
-    return {min: roundToPlaces(unrounded.min, decPl), max: roundToPlaces(unrounded.max, decPl)};
-};
-
-export const iterateDataValues = function (
-    data: any,
-    indicatorsMeta: ChoroplethIndicatorMetadata[],
-    selectedAreaIds: string[] | null,
-    filters: Filter[] | null,
-    selectedFilterValues: Dict<FilterOption[]> | null,
-    func: (areaId: string,
-           indicatorMeta: ChoroplethIndicatorMetadata, value: number, row: any) => void) {
-
-    const selectedFilterValueIds: Dict<string[]> = {};
-    const validFilters = filters && selectedFilterValues
-        && filters.filter(f => f.options && f.options.length > 0 && selectedFilterValues!.hasOwnProperty(f.id));
-
-    if (validFilters) {
-        for (const f of validFilters) {
-            selectedFilterValueIds[f.id] = selectedFilterValues![f.id].map(n => n.id)
-        }
-    }
-    for (const row of data) {
-        if (validFilters && excludeRow(row, validFilters, selectedFilterValueIds)) {
-            continue;
-        }
-
-        const areaId: string = row.area_id;
-
-        if (selectedAreaIds && !selectedAreaIds.includes(areaId)) {
-            continue;
-        }
-
-        for (const metadata of indicatorsMeta) {
-
-            if (metadata.indicator_column && metadata.indicator_value != row[metadata.indicator_column]) {
-                //This data is in long format, and the indicator column's value does not match that for this indicator
-                continue;
-            }
-
-            if (!row[metadata.value_column] && row[metadata.value_column] !== 0) {
-                //No value for this indicator in this row
-                continue;
-            }
-
-            const value = row[metadata.value_column];
-
-            func(areaId, metadata, value, row);
-        }
-    }
-};
-
-const excludeRow = function (row: any, filters: Filter[], selectedFilterValues: Dict<string[]>) {
-    let excludeRow = false;
-    for (const filter of filters) {
-        if (selectedFilterValues[filter.id].indexOf(row[filter.column_id].toString()) < 0) {
-            excludeRow = true;
-            break;
-        }
-    }
-    return excludeRow;
-};
-
-export const toIndicatorNameLookup = (array: ChoroplethIndicatorMetadata[]) =>
-    array.reduce((obj, current) => {
-        obj[current.indicator] = current.name;
-        return obj
-    }, {} as Dict<string>);
-
-export const roundToContext = function (value: number, context: number[]) {
+const roundToContext = function (value: number, context: number[]) {
     //Rounds the value to one more decimal place than is present in the 'context'
     let maxDecPl = 0;
     for (const contextValue of context) {
@@ -164,57 +105,6 @@ export const roundToContext = function (value: number, context: number[]) {
 const roundToPlaces = function (value: number, decPl: number) {
     const roundingNum = Math.pow(10, decPl);
     return Math.round(value * roundingNum) / roundingNum;
-};
-
-// Iteratively passes through the layers of a FilterOption object to find the regional hierarchy above the supplied id
-// Takes param any for obj and returns any because it will iterate through both objects (the NestedFilterOption) and arrays (the array of child options), treating array indices as keys
-export const findPath = function (id: string, obj: any): any {
-    for (const key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            if (id === obj[key]) return "";
-            else if (obj[key] && typeof obj[key] === "object") {
-                const path = findPath(id, obj[key]);
-                if (path != undefined) {
-                    return ((obj.label ? obj.label + "/" : "") + path).replace(/\/$/, '');
-                }
-            }
-        }
-    }
-};
-
-export const formatOutput = function (value: number | string, format: string, scale: number | null, accuracy: number | null, roundValue = true) {
-    let ans: number
-
-    if (typeof (value) === 'string') {
-        ans = parseFloat(value)
-    } else ans = value
-
-    if (!format.includes('%') && scale) {
-        ans = ans * scale
-    }
-
-    if (!format.includes('%') && accuracy && roundValue) {
-        /**
-         * When accuracy is set to 100 and selected value is less than 200
-         * barchart disarranges YAxis. Code below checks if value is greater
-         * than 500 before apply 100 scale range. Otherwise, chartJS will
-         * automatically use numeric algorithm to calculate scale range. 
-         * However, if accuracy is less than 100, we simply apply scale range
-         * rounding using the given accuracy value.
-         */
-
-        if (accuracy > 1) {
-            if (ans > 5 * accuracy) {
-                ans = Math.round(ans / accuracy) * accuracy
-            }
-        } else {
-            ans = Math.round(ans / accuracy) * accuracy
-        }
-    }
-
-    if (format) {
-        return numeral(ans).format(format)
-    } else return ans
 };
 
 export const formatLegend = function (text: string | number, format: string, scale: number): string {
@@ -236,41 +126,128 @@ export const formatLegend = function (text: string | number, format: string, sca
     return text
 }
 
-export const flattenXAxisFilterOptionIds = (selections: BarchartSelections, filters: Filter[]) => {
-    const xAxisId = selections?.xAxisId
-    let ids: string[] = []
-    if (xAxisId && filters?.length) {
-        const filter = filters.find((f: Filter) => f.id === xAxisId)
-        if (filter?.options.length) {
-            ids = flattenOptionsIdsByHierarchy(filter.options)
+export const formatOutput = function (value: number | string, format: string, scale: number | null, accuracy: number | null, roundValue = true) {
+    let ans: number
+
+    if (typeof (value) === 'string') {
+        ans = parseFloat(value)
+    } else ans = value
+
+    if (!format.includes('%') && scale) {
+        ans = ans * scale
+    }
+
+    if (!format.includes('%') && accuracy && roundValue) {
+        /**
+         * When accuracy is set to 100 and selected value is less than 200
+         * barchart disarranges YAxis. Code below checks if value is greater
+         * than 500 before apply 100 scale range. Otherwise, chartJS will
+         * automatically use numeric algorithm to calculate scale range.
+         * However, if accuracy is less than 100, we simply apply scale range
+         * rounding using the given accuracy value.
+         */
+
+        if (accuracy > 1) {
+            if (ans > 5 * accuracy) {
+                ans = Math.round(ans / accuracy) * accuracy
+            }
+        } else {
+            ans = Math.round(ans / accuracy) * accuracy
         }
     }
-    return ids
+
+    if (format) {
+        return numeral(ans).format(format)
+    } else return ans
+};
+
+const getPlotDataForIndicator = (indicatorMetadata: ChoroplethIndicatorMetadata, plotData: CalibrateDataResponse["data"]) => {
+    // if plotData doesn't have indicator key then we don't filter by it
+    if (!plotData?.at(0)?.hasOwnProperty("indicator")) return plotData;
+    return plotData.filter((row) => row.indicator == indicatorMetadata.indicator);
 }
 
+export const getIndicatorRange = (indicatorMetadata: ChoroplethIndicatorMetadata, scaleSettings: ScaleSettings, plotData: CalibrateDataResponse["data"]): NumericRange => {
+    if (!indicatorMetadata) {
+        return {max: 1, min: 0};
+    }
+    const indicatorData = getPlotDataForIndicator(indicatorMetadata, plotData);
+    switch (scaleSettings.type) {
+        case ScaleType.DynamicFiltered:
+            return getDynamicRange(indicatorData, indicatorMetadata);
+        case ScaleType.Custom:
+            return {
+                min: scaleSettings.customMin,
+                max: scaleSettings.customMax
+            };
+        case ScaleType.Default:
+        default:
+            return {max: indicatorMetadata.max, min: indicatorMetadata.min}
+    }
+}
 
-export const updateSelectionsAndXAxisOrder = (data: BarchartSelections, selections: BarchartSelections, flattenedXAxisFilterOptionIds: string[], updateSelections: (data: {payload: BarchartSelections}) => void) => {
-    const payload = {...selections, ...structuredClone(data)}
-    if (data.xAxisId && data.selectedFilterOptions) {
-        const {xAxisId, selectedFilterOptions} = data
-        if (selectedFilterOptions[xAxisId] && flattenedXAxisFilterOptionIds.length) {
-            // Sort the selected filter values according to the order given the barchart filters
-            const updatedFilterOptions = [...selectedFilterOptions[xAxisId]].sort((a: FilterOption, b: FilterOption) => {
-                return flattenedXAxisFilterOptionIds.indexOf(a.id) - flattenedXAxisFilterOptionIds.indexOf(b.id);
-            });
-            payload.selectedFilterOptions[xAxisId] = updatedFilterOptions
+const getDynamicRange = function (data: CalibrateDataResponse["data"],
+                                  indicatorMeta: ChoroplethIndicatorMetadata): NumericRange {
+    let result = {} as NumericRange;
+    for (const row of data) {
+        const value = row[indicatorMeta.value_column]
+        if (!result.max) {
+            result = {min: value, max: value};
+        } else {
+            result.min = Math.min(result.min, value);
+            result.max = Math.max(result.max, value);
         }
     }
-    // if unable to do the above, just updates the barchart as normal
-    updateSelections({payload})
+    return roundRange({
+        min: result ? result.min : 0,
+        max: result ? result.max : 0
+    });
+};
+
+
+const roundRange = function (unrounded: NumericRange) {
+    //round appropriate to the range magnitude
+    let decPl = 0;
+    let magnitude = unrounded.max == unrounded.min ? unrounded.min : (unrounded.max - unrounded.min);
+
+    magnitude = magnitude / 100;
+    if (magnitude < 1 && magnitude > 0) {
+        decPl = Math.trunc(Math.abs(Math.log10(magnitude)));
+    }
+
+    return {min: roundToPlaces(unrounded.min, decPl), max: roundToPlaces(unrounded.max, decPl)};
+};
+
+export const scaleStepFromMetadata = function (meta: ChoroplethIndicatorMetadata) {
+    return (meta.max - meta.min) / 10;
 }
 
-export const filterConfig = (currentLanguage: Language, filters: Filter[]) => {
-    return {
-        filterLabel: i18next.t("filters", currentLanguage),
-        indicatorLabel: i18next.t("indicator", currentLanguage),
-        xAxisLabel: i18next.t("xAxis", currentLanguage),
-        disaggLabel: i18next.t("disaggBy", currentLanguage),
-        filters
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const debounce = (fn: Function, ms = 300) => {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    return function (this: any, ...args: any[]) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => fn.apply(this, args), ms);
+    };
+};
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export const debounce_leading = (fn: Function, ms = 300) => {
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    return function (this: any, ...args: any[]) {
+        if (!timeoutId) {
+            fn.apply(this, args);
+        }
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => timeoutId = undefined, ms);
+    };
+};
+
+export const initialiseScaleFromMetadata = function (meta: ChoroplethIndicatorMetadata | undefined) {
+    const result = initialScaleSettings();
+    if (meta) {
+        result.customMin = meta.min;
+        result.customMax = meta.max;
     }
-}
+    return result;
+};

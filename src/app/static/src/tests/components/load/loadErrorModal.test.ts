@@ -88,7 +88,7 @@ describe("loadErrorModal", () => {
 });
 
 describe("loadErrorModal translations", () => {
-    const getWrapper = (hasError: boolean =  true, loadError: string = "Test Error Message", invalidSteps: number[] = [])  => {
+    const getWrapper = (hasError: boolean =  true, loadError: string = "Test Error Message")  => {
         const store = getStore(hasError, loadError);
         registerTranslations(store);
         return mountWithTranslate(LoadErrorModal, store, {

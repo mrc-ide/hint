@@ -234,7 +234,7 @@
                    class="form-control"
                    id="new-project-name"
                    v-translate:placeholder="'projectName'"
-                   @keyup.enter="confirmPromotion(newProjectName)"
+                   @keyup.enter="confirmPromotion()"
                    v-model="newProjectName"/>
             <div id="promoteNote" class="form-group pt-3">
                 <label class="h5" for="promoteNoteControl"><span v-translate="'copyNoteHeader'"></span></label>
@@ -244,7 +244,7 @@
                 <button type="button"
                         class="btn btn-red"
                         :disabled="disableCreate"
-                        @click="confirmPromotion(newProjectName)"
+                        @click="confirmPromotion()"
                         v-translate="'createProject'"></button>
                 <button type="button"
                         class="btn btn-white"
@@ -258,7 +258,7 @@
                    id="rename-project"
                    class="form-control"
                    v-translate:placeholder="'projectName'"
-                   @keyup.enter="confirmRename(renamedProjectName)"
+                   @keyup.enter="confirmRename()"
                    v-model="renamedProjectName">
             <div class="form-group pt-3">
                 <label class="h5" for="version-note-rename" v-translate="'renameNoteHeader'"></label>
@@ -271,7 +271,7 @@
                 <button type="button"
                         class="btn btn-red"
                         :disabled="disableRename"
-                        @click="confirmRename(renamedProjectName)"
+                        @click="confirmRename()"
                         v-translate="'renameProject'">
                 </button>
                 <button type="button"
@@ -459,7 +459,7 @@
                 this.projectToRename = null;
                 this.renamedProjectName = '';
             },
-            async confirmRename(name: string) {
+            async confirmRename() {
                 if (this.projectToRename) {
                     const projectPayload: projectPayload = {
                         projectId: this.projectToRename!,
@@ -542,7 +542,7 @@
                     this.versionToDelete = null;
                 }
             },
-            async confirmPromotion(name: string) {
+            async confirmPromotion() {
                 if (this.versionToPromote && this.newProjectName) {
                     const versionPayload: versionPayload = {
                         version: this.versionToPromote!,

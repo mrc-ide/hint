@@ -3,10 +3,10 @@ import {mount, VueWrapper} from '@vue/test-utils';
 import FileUpload from "../../../app/components/files/FileUpload.vue";
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
 import {mockFile, mockRootState} from "../../mocks";
-import {emptyState, RootState} from "../../../app/root";
+import {RootState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {getters} from "../../../app/store/root/getters";
-import { nextTick } from "vue";
+import {nextTick} from "vue";
 
 describe("File upload component", () => {
 

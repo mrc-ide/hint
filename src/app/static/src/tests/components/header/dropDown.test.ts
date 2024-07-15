@@ -1,9 +1,8 @@
-import {flushPromises, shallowMount} from "@vue/test-utils";
 import DropDown from "../../../app/components/header/DropDown.vue";
 import Vuex from "vuex";
 import {emptyState} from "../../../app/root";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
-import { shallowMountWithTranslate } from "../../testHelpers";
+import {shallowMountWithTranslate} from "../../testHelpers";
 
 describe("Drop down", () => {
     const store = new Vuex.Store({

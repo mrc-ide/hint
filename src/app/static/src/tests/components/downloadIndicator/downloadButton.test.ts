@@ -1,4 +1,4 @@
-import {mount, shallowMount} from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 import DownloadButton from "../../../app/components/downloadIndicator/DownloadButton.vue"
 import VueFeather from "vue-feather";
 

@@ -1,13 +1,19 @@
 import {
-    mockADRState, mockADRUploadState,
+    mockADRState,
+    mockADRUploadState,
     mockAxios,
-    mockBaselineState, mockDownloadResultsState,
+    mockBaselineState,
+    mockDownloadResultsState,
     mockError,
-    mockFailure, mockMetadataState,
+    mockFailure,
+    mockMetadataState,
+    mockModelCalibrateState,
+    mockModelResultResponse,
+    mockModelRunState,
     mockProjectsState,
     mockRootState,
-    mockSuccess, mockSurveyAndProgramState,
-    mockModelCalibrateState, mockModelRunState, mockModelResultResponse
+    mockSuccess,
+    mockSurveyAndProgramState
 } from "../mocks";
 import {actions} from "../../app/store/adrUpload/actions";
 import {mutations} from "../../app/store/adrUpload/mutations";
@@ -15,7 +21,7 @@ import {UploadFile} from "../../app/types";
 import Vuex from "vuex";
 import {RootState} from "../../app/root";
 import {mutations as baselineMutations} from "../../app/store/baseline/mutations";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 describe("ADR upload actions", () => {
     const state = mockADRUploadState();

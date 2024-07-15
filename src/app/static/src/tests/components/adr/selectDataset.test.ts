@@ -1,6 +1,6 @@
 import Vuex, {ActionTree} from "vuex";
-import { nextTick } from "vue";
-import { flushPromises } from "@vue/test-utils";
+import {nextTick} from "vue";
+import {flushPromises} from "@vue/test-utils";
 import SelectDataset from "../../../app/components/adr/SelectDataset.vue";
 import SelectRelease from "../../../app/components/adr/SelectRelease.vue";
 import Modal from "../../../app/components/Modal.vue";
@@ -10,7 +10,9 @@ import {
     mockDataset,
     mockDatasetResource,
     mockError,
-    mockErrorsState, mockPJNZResponse, mockPopulationResponse,
+    mockErrorsState,
+    mockPJNZResponse,
+    mockPopulationResponse,
     mockProjectsState,
     mockRootState,
     mockShapeResponse
@@ -29,7 +31,7 @@ import {ADRState} from "../../../app/store/adr/adr";
 import ResetConfirmation from "../../../app/components/resetConfirmation/ResetConfirmation.vue";
 import HintTreeSelect from "../../../app/components/HintTreeSelect.vue";
 import {getters} from "../../../app/store/root/getters";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
 
 describe("select dataset", () => {
 

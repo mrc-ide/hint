@@ -3,6 +3,7 @@ import {
     mockError,
     mockMetadataState,
     mockPlottingMetadataResponse,
+    mockReviewInputMetadata,
 } from "../mocks";
 
 describe("Metadata mutations", () => {
@@ -69,5 +70,45 @@ describe("Metadata mutations", () => {
             [{type: "spectrum", description: "new zip"}]
         );
         expect(testState.adrUploadMetadataError).toBe(null);
+    });
+
+    it("sets review input metadata fetched", () => {
+        const mockMetadata = mockReviewInputMetadata();
+
+        const testState = mockMetadataState({
+            reviewInputMetadata: null,
+            reviewInputMetadataError: mockError("previous error")
+        });
+
+        mutations.ReviewInputsMetadataFetched(testState, {
+            payload: mockMetadata
+        });
+
+        expect(testState.reviewInputMetadata).toStrictEqual(mockMetadata);
+        expect(testState.reviewInputMetadataError).toBe(null);
+    });
+
+    it("sets error on ReviewInputsMetadataError", () => {
+        const testState = mockMetadataState();
+        const error = mockError("Test Error");
+        mutations.ReviewInputsMetadataError(testState, {
+            payload: error
+        });
+        expect(testState.reviewInputMetadataError).toBe(error);
+    });
+
+    it("can toggle state of ReviewInputsMetadataToggleComplete", () => {
+        const testState = mockMetadataState();
+        expect(testState.reviewInputMetadataFetched).toBe(false);
+
+        mutations.ReviewInputsMetadataToggleComplete(testState, {
+            payload: true
+        });
+        expect(testState.reviewInputMetadataFetched).toBe(true);
+
+        mutations.ReviewInputsMetadataToggleComplete(testState, {
+            payload: false
+        });
+        expect(testState.reviewInputMetadataFetched).toBe(false);
     });
 });

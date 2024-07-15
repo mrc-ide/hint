@@ -2,28 +2,30 @@ import {
     mockADRState,
     mockADRUploadState,
     mockBaselineState,
-    mockCalibrateResultResponse,
+    mockCalibrateDataResponse,
+    mockCalibratePlotResponse,
+    mockComparisonPlotResponse,
     mockDataset,
+    mockDownloadIndicatorState,
+    mockDownloadResultsState,
     mockError,
     mockErrorsState,
     mockGenericChartState,
     mockHintrVersionState,
+    mockLoadState,
     mockMetadataState,
     mockModelCalibrateState,
     mockModelOptionsState,
     mockModelOutputState,
     mockModelRunState,
+    mockPlotData,
+    mockPlotSelections,
+    mockPlotState,
     mockPlottingSelections,
     mockProjectsState,
     mockRelease,
     mockStepperState,
-    mockSurveyAndProgramState,
-    mockComparisonPlotResponse,
-    mockRootState,
-    mockLoadState,
-    mockDownloadResultsState,
-    mockDownloadIndicatorData,
-    mockDownloadIndicatorState
+    mockSurveyAndProgramState
 } from "./mocks";
 import {localStorageManager, serialiseState} from "../app/localStorageManager";
 import {RootState} from "../app/root";
@@ -33,7 +35,6 @@ import {Language} from "../app/store/translations/locales";
 import registerTranslations from "../app/store/translations/registerTranslations";
 import Vuex from 'vuex';
 import i18next from "i18next";
-import {initialDownloadIndicatorState} from "../app/store/downloadIndicator/downloadIndicator";
 
 declare const currentUser: string; // set in jest config, or on the index page when run for real
 
@@ -92,9 +93,9 @@ describe("LocalStorageManager", () => {
             modelOptions: mockModelOptionsState(),
             modelOutput: mockModelOutputState(),
             modelCalibrate: mockModelCalibrateState({
-                result: mockCalibrateResultResponse(),
+                result: {data: mockCalibrateDataResponse()},
                 fetchedIndicators: [],
-                calibratePlotResult: {data: "test calibrate plot result"},
+                calibratePlotResult: mockCalibratePlotResponse(),
                 comparisonPlotResult: mockComparisonPlotResponse()
             }),
             stepper: mockStepperState(),
@@ -105,6 +106,9 @@ describe("LocalStorageManager", () => {
             language: Language.en,
             metadata: mockMetadataState({plottingMetadataError: mockError("metadataError")}),
             plottingSelections: mockPlottingSelections(),
+            plotData: mockPlotData(),
+            plotSelections: mockPlotSelections(),
+            plotState: mockPlotState(),
             surveyAndProgram: mockSurveyAndProgramState({
                 selectedDataType: DataType.Survey,
                 warnings: [{text: "test warning", locations: ["review_inputs"]}]

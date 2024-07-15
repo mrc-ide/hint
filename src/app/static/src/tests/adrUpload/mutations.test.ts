@@ -1,5 +1,5 @@
-import {mockError, mockADRUploadState} from "../mocks";
-import {mutations, ADRUploadMutation} from "../../app/store/adrUpload/mutations";
+import {mockADRUploadState, mockError} from "../mocks";
+import {ADRUploadMutation, mutations} from "../../app/store/adrUpload/mutations";
 import i18next from "i18next";
 
 describe("ADR mutations", () => {

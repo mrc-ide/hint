@@ -1,7 +1,7 @@
-import { chromium, FullConfig } from '@playwright/test';
+import {chromium, FullConfig} from '@playwright/test';
 import {baseURL} from "../../../playwright.config";
 
-async function loginSetup(config: FullConfig) {
+async function loginSetup(_config: FullConfig) {
     const browser = await chromium.launch();
     const page = await browser.newPage();
 

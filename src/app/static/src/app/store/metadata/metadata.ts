@@ -5,14 +5,30 @@ import {
     PlottingMetadataResponse,
     Error,
     Metadata,
-    AdrMetadataResponse, FilterOption, ChoroplethIndicatorMetadata
+    AdrMetadataResponse,
+    FilterOption,
+    ChoroplethIndicatorMetadata,
+    ReviewInputFilterMetadataResponse,
+    FilterTypes,
+    PlotSettingsControl
 } from "../../generated";
 import {DataType} from "../surveyAndProgram/surveyAndProgram";
-import {RootState} from "../../root";
+import { RootState } from '../../root';
+
+export type PlotMetadataFrame = {
+    filterTypes: FilterTypes[],
+    indicators: ChoroplethIndicatorMetadata[],
+    plotSettingsControl: {
+        [k: string]: PlotSettingsControl
+    }
+}
 
 export interface MetadataState {
     plottingMetadataError: Error | null
     plottingMetadata: PlottingMetadataResponse | null
+    reviewInputMetadata: ReviewInputFilterMetadataResponse | null
+    reviewInputMetadataError: Error | null
+    reviewInputMetadataFetched: boolean
     adrUploadMetadata: AdrMetadataResponse[]
     adrUploadMetadataError: Error | null
 }
@@ -21,6 +37,9 @@ export const initialMetadataState = (): MetadataState => {
     return {
         plottingMetadataError: null,
         plottingMetadata: null,
+        reviewInputMetadata: null,
+        reviewInputMetadataError: null,
+        reviewInputMetadataFetched: false,
         adrUploadMetadataError: null,
         adrUploadMetadata: [] as AdrMetadataResponse[]
     }

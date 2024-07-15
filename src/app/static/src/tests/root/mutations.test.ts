@@ -38,6 +38,8 @@ import {Language} from "../../app/store/translations/locales";
 import {router} from "../../app/router";
 import {initialModelCalibrateState} from "../../app/store/modelCalibrate/modelCalibrate";
 import {initialDownloadResultsState} from "../../app/store/downloadResults/downloadResults";
+import {ModelOutputTabs} from "../../app/types";
+import {outputPlotNames} from "../../app/store/plotSelections/plotSelections";
 
 describe("Root mutations", () => {
 
@@ -75,7 +77,7 @@ describe("Root mutations", () => {
             metadata: mockMetadataState({plottingMetadataError: mockError("Test Metadata Error")}),
             surveyAndProgram: mockSurveyAndProgramState({surveyError: mockError("Test Survey Error"), ready: true}),
             modelOptions: mockModelOptionsState({valid: true}),
-            modelOutput: mockModelOutputState({selectedTab: "Barchart"}),
+            modelOutput: mockModelOutputState({selectedTab: "barchart"}),
             modelRun: mockModelRunState({modelRunId: "123", ready: true}),
             modelCalibrate: mockModelCalibrateState({complete: true, ready: true}),
             plottingSelections: mockPlottingSelections({barchart: {indicatorId: "Test Indicator"} as BarchartSelections}),
@@ -246,7 +248,7 @@ describe("Root mutations", () => {
 
         const state = mockRootState({
             modelRun: mockModelRunState({modelRunId: "TEST"}),
-            modelOutput: mockModelOutputState({selectedTab: "TEST"}),
+            modelOutput: mockModelOutputState({selectedTab: "choropleth"}),
             modelCalibrate: mockModelCalibrateState({complete: true})
         });
 
@@ -263,7 +265,7 @@ describe("Root mutations", () => {
 
         mutations.ResetOutputs(state);
         expect(state.modelRun).toStrictEqual({...initialModelRunState(), ready: true});
-        expect(state.modelOutput.selectedTab).toBe("");
+        expect(state.modelOutput.selectedTab).toBe(outputPlotNames[0]);
 
         expect(state.plottingSelections.barchart.xAxisId).toBe("");
         expect(state.plottingSelections.outputChoropleth.detail).toBe(-1);

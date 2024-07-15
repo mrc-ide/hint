@@ -1,4 +1,4 @@
-import { defineComponent, nextTick } from "vue";
+import {defineComponent, nextTick} from "vue";
 
 import FileUpload from "../../../app/components/files/FileUpload.vue";
 import {mockFile} from "../../mocks";
@@ -11,7 +11,7 @@ import {expectTranslatedWithStoreType, mountWithTranslate, shallowMountWithTrans
 describe("File upload component", () => {
     global.FormData = class MockFormData {
         files: Record<string, File>;
-        constructor(key?: string, file?: File) {
+        constructor(_key?: string, _file?: File) {
           this.files = {}
         }
         append(key: string, file: File) {

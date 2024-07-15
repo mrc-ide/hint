@@ -1,4 +1,3 @@
-import {shallowMount} from '@vue/test-utils';
 import ErrorAlert from "../../app/components/ErrorAlert.vue";
 import {mockError} from "../mocks";
 import Vuex from "vuex";

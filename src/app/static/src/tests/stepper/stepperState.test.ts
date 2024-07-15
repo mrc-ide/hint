@@ -1,5 +1,3 @@
-import {localStorageManager} from "../../app/localStorageManager";
-
 declare const currentUser: string; // set in jest config, or on the index page when run for real
 localStorage.setItem("user", currentUser);
 const existingState = {
@@ -10,7 +8,7 @@ const existingState = {
         selectedDataType: null
     },
     baseline: {}
-} as any;;
+} as any;
 
 import {stepper, StepperState} from "../../app/store/stepper/stepper";
 

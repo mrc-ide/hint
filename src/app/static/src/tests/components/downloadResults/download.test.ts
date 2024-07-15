@@ -1,5 +1,5 @@
 import VueFeather from 'vue-feather';
-import {mount, shallowMount, VueWrapper} from "@vue/test-utils";
+import {shallowMount} from "@vue/test-utils";
 import Download from "../../../app/components/downloadResults/Download.vue"
 import {mockDownloadResultsDependency} from "../../mocks";
 import DownloadStatus from "../../../app/components/downloadResults/DownloadStatus.vue";

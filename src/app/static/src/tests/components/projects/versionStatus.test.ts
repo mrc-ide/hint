@@ -1,5 +1,4 @@
 import Vuex from 'vuex';
-import {shallowMount} from '@vue/test-utils';
 import VersionStatus from "../../../app/components/projects/VersionStatus.vue";
 import {ProjectsState} from "../../../app/store/projects/projects";
 import {mockProjectsState} from "../../mocks";

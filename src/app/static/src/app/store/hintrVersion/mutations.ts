@@ -1,7 +1,5 @@
-import { Mutation, MutationTree } from 'vuex';
-import { HintrVersionResponse, Error } from '../../generated';
-import { RootState } from '../../root';
-
+import { MutationTree } from 'vuex';
+import { HintrVersionResponse } from '../../generated';
 import { PayloadWithType } from "../../types";
 import { HintrVersionState } from './hintrVersion';
 

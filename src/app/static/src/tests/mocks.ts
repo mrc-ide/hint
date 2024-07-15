@@ -2,13 +2,15 @@ import MockAdapter from "axios-mock-adapter";
 import axios from "axios";
 import {BaselineState, initialBaselineState} from "../app/store/baseline/baseline";
 import {initialPasswordState, PasswordState} from "../app/store/password/password";
-import {
-    initialSurveyAndProgramState,
-    SurveyAndProgramState
-} from "../app/store/surveyAndProgram/surveyAndProgram"
+import {initialSurveyAndProgramState, SurveyAndProgramState} from "../app/store/surveyAndProgram/surveyAndProgram"
 
 import {
     AncResponse,
+    CalibrateDataResponse,
+    CalibratePlotResponse,
+    ComparisonPlotResponse,
+    DownloadSubmitRequest,
+    Error,
     ModelResultResponse,
     ModelStatusResponse,
     PjnzResponse,
@@ -17,17 +19,13 @@ import {
     ProgrammeFilters,
     ProgrammeResponse,
     Response,
+    ReviewInputFilterMetadataResponse,
     ShapeResponse,
     SurveyFilters,
     SurveyResponse,
     ValidateBaselineResponse,
-    Error,
-    CalibrateResultResponse,
-    Warning,
-    DownloadSubmitRequest,
-    ComparisonPlotResponse,
-    CalibrateMetadataResponse,
-    VmmcResponse
+    VmmcResponse,
+    Warning
 } from "../app/generated";
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
@@ -51,7 +49,10 @@ import {ADRUploadState, initialADRUploadState} from "../app/store/adrUpload/adrU
 import {DownloadResultsState, initialDownloadResultsState} from "../app/store/downloadResults/downloadResults";
 import {GenericChartState, initialGenericChartState} from "../app/store/genericChart/genericChart";
 import {DynamicControlType, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
+import {initialPlotSelectionsState, PlotSelectionsState} from "../app/store/plotSelections/plotSelections";
 import {DownloadIndicatorState, initialDownloadIndicatorState} from "../app/store/downloadIndicator/downloadIndicator";
+import { PlotDataState, initialPlotDataState } from "../app/store/plotData/plotData";
+import { PlotState, initialPlotState } from "../app/store/plotState/plotState";
 
 export const mockAxios = new MockAdapter(axios);
 
@@ -164,6 +165,34 @@ export const mockModelOutputState = (props?: Partial<ModelOutputState>): ModelOu
 export const mockPlottingSelections = (props?: Partial<PlottingSelectionsState>) => {
     return {
         ...initialPlottingSelectionsState(),
+        ...props
+    }
+};
+
+export const mockPlotData = (props?: Partial<PlotDataState>) => {
+    return {
+        ...initialPlotDataState(),
+        ...props
+    }
+};
+
+export const mockPlotSelections = (props?: Partial<PlotSelectionsState>) => {
+    return {
+        ...initialPlotSelectionsState(),
+        ...props
+    }
+};
+
+export const mockPlotState = (props?: Partial<PlotState>) => {
+    return {
+        ...initialPlotState(),
+        ...props
+    }
+};
+
+export const mockPlotSelectionsState = (props?: Partial<PlotSelectionsState>): PlotSelectionsState => {
+    return {
+        ...initialPlotSelectionsState(),
         ...props
     }
 };
@@ -384,69 +413,68 @@ export const mockModelResultResponse = (props: Partial<ModelResultResponse> = {}
     };
 };
 
-export const mockCalibrateResultResponse = (props: Partial<CalibrateResultResponse> = {}): CalibrateResultResponse => {
-    return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [], filters: []
-            },
-            choropleth: {
-                indicators: [], filters: []
-            }
-        },
-        tableMetadata: {
-            presets: []
-        },
-        uploadMetadata: {
-            outputSummary: {description: "Naomi output files"},
-            outputZip: {description:"Naomi output files"}
-        },
-        data: [{
-            area_id: "MWI",
-            sex: "both",
-            age_group: "1",
-            calendar_quarter: "1",
-            indicator_id: 1,
-            indicator: 'mock',
-            lower: 0.5,
-            mean: 0.5,
-            mode: 0.5,
-            upper: 0.5
-        }],
-        warnings: [],
-        ...props
-    }
-};
+export const mockCalibrateDataResponse = (): CalibrateDataResponse["data"] => {
+    return [{
+        area_id: "MWI",
+        sex: "both",
+        age_group: "1",
+        calendar_quarter: "1",
+        indicator_id: 1,
+        indicator: 'mock',
+        lower: 0.5,
+        mean: 0.5,
+        mode: 0.5,
+        upper: 0.5
+    }]
+}
 
-export const mockCalibrateMetadataResponse = (props: Partial<CalibrateMetadataResponse> = {})
-    : CalibrateMetadataResponse => {
+export const mockCalibratePlotResponse = (props: Partial<CalibratePlotResponse> = {}): CalibratePlotResponse => {
     return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [], filters: []
-            },
-            choropleth: {
-                indicators: [], filters: []
+        data: [],
+        metadata: {
+            filterTypes: [],
+            indicators: [],
+            plotSettingsControl: {
+                calibrate: {
+                    plotSettings: [
+                        {
+                            id: "1",
+                            label: "setting",
+                            options: []
+                        }
+                    ]
+                }
             }
         },
-        tableMetadata: {
-            presets: []
+        ...props
+    }
+}
+
+export const mockCalibrateMetadataResponse = (props: Partial<CalibrateMetadataResponse> = {}): CalibrateMetadataResponse => {
+    return {
+        filterTypes: [],
+        indicators: [],
+        plotSettingsControl: {
+            choropleth: {
+                plotSettings: []
+            },
+            barchart: {
+                plotSettings: []
+            },
+            table: {
+                plotSettings: []
+            },
+            bubble: {
+                plotSettings: []
+            },
         },
         warnings: [],
         ...props
     }
-};
+}
 
 export const mockComparisonPlotResponse = (props: Partial<ComparisonPlotResponse> = {}): ComparisonPlotResponse => {
     return {
-        plottingMetadata: {
-            barchart: {
-                indicators: [],
-                filters: [],
-                defaults: {} as any,
-                selections: []
-            }
-        },
         data: [{
             area_id: "MWI",
             area_name: "Test area",
@@ -461,10 +489,19 @@ export const mockComparisonPlotResponse = (props: Partial<ComparisonPlotResponse
             mode: 0.5,
             upper: 0.5
         }],
+        metadata: {
+            filterTypes: [],
+            indicators: [],
+            plotSettingsControl: {
+                comparison: {
+                    plotSettings: []
+                }
+            },
+            warnings: []
+        },
         ...props
     }
 };
-
 
 
 export const mockPlottingMetadataResponse = (props: Partial<PlottingMetadataResponse> = {}): PlottingMetadataResponse => {
@@ -619,6 +656,46 @@ export const mockDownloadIndicatorData = (props: Partial<DownloadIndicatorDatase
                 "value": 20
             }
         ],
+        ...props
+    }
+}
+
+export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadataResponse> = {}): ReviewInputFilterMetadataResponse => {
+    return {
+        filterTypes: [
+            {
+                id: "1",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op1",
+                        label: "lab1"
+                    }
+                ]
+            }
+        ],
+        indicators: [
+            {
+                indicator: "prevalence",
+                value_column: "iindicator",
+                name: "Prevalence",
+                min: 0,
+                max: 1,
+                colour: "red",
+                invert_scale: false,
+                scale: 1,
+                accuracy: null,
+                format: "0.0%"
+            }
+        ],
+        plotSettingsControl: {
+            timeSeries: {
+                plotSettings: []
+            },
+            inputChoropleth: {
+                plotSettings: []
+            }
+        },
         ...props
     }
 }

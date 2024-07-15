@@ -1,5 +1,14 @@
 import {baselineGetters} from "../../app/store/baseline/baseline";
-import { mockBaselineState, mockError, mockPopulationResponse, mockShapeResponse, mockRootState, mockADRState, mockDatasetResource } from "../mocks";
+import {
+    mockADRState,
+    mockBaselineState,
+    mockDatasetResource,
+    mockPopulationResponse,
+    mockRootState,
+    mockShapeResponse
+} from "../mocks";
+import {ShapeResponse} from "../../app/generated";
+import {Dict} from "../../app/types";
 
 it("is complete iff all files are present", () => {
     let state = mockBaselineState({
@@ -52,7 +61,7 @@ it("is complete iff all files are present", () => {
     expect(baselineGetters.complete(state)).toBe(false);
 });
 
-it("selectedDatasetAvailableResources only returns resources that the user has persmissions for (ie, exists in relevant dataset)", () => {
+it("selectedDatasetAvailableResources only returns resources that the user has permissions for (ie, exists in relevant dataset)", () => {
     const resources = [
         { resource_type: "inputs-unaids-spectrum-file" },
         { resource_type: "inputs-unaids-population" },
@@ -121,4 +130,84 @@ it("selectedDatasetAvailableResources only returns resources that the user has p
         })
     })
     expect(baselineGetters.selectedDatasetAvailableResources(state, getters, rootState)).toStrictEqual({...selectedDataset.resources, program: null});
+});
+
+it("areaIdToLevelMap returns map of area ID to level", () => {
+    const shape = {
+        data: {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "properties": {
+                        "area_id": "MWI_1_1",
+                        "area_level": 1
+                    }
+                },
+                {
+                    "properties": {
+                        "area_id": "MWI_2_1",
+                        "area_level": 2
+                    }
+                },
+                {
+                    "properties": {
+                        "area_id": "MWI_2_2",
+                        "area_level": 2
+                    }
+                }
+            ]
+        },
+        type: "shape",
+        hash: "1234.csv",
+        filename: "test.csv",
+        filters: {
+            level_labels: [{id: 1, area_level_label: "Country", display: true}],
+            regions: {label: "Malawi", id: "1", children: []}
+        }
+    } as ShapeResponse
+
+    let state = mockBaselineState({
+        shape
+    });
+
+    const expected = {
+        "MWI_1_1": 1,
+        "MWI_2_1": 2,
+        "MWI_2_2": 2
+    } as Dict<number>
+    expect(baselineGetters.areaIdToLevelMap(state)).toStrictEqual(expected);
+})
+
+it("areaIdToLevelMap returns empty if no shape data or properties", () => {
+    let state = mockBaselineState();
+    expect(baselineGetters.areaIdToLevelMap(state)).toStrictEqual({});
+
+    const shape = {
+        data: {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "feature",
+                    "geometry": {}
+                },
+                {
+                    "type": "feature",
+                    "geometry": {}
+                }
+            ]
+        },
+        type: "shape",
+        hash: "1234.csv",
+        filename: "test.csv",
+        filters: {
+            level_labels: [{id: 1, area_level_label: "Country", display: true}],
+            regions: {label: "Malawi", id: "1", children: []}
+        }
+    } as ShapeResponse
+
+    state = mockBaselineState({
+        shape
+    });
+
+    expect(baselineGetters.areaIdToLevelMap(state)).toStrictEqual({});
 });

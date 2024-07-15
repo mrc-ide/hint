@@ -21,7 +21,7 @@ export interface RootActions extends LanguageActions<RootState> {
 
 export const actions: ActionTree<RootState, RootState> & RootActions = {
     async validate(store) {
-        const {state, getters, commit, dispatch} = store;
+        const {state, getters, commit} = store;
         const completeSteps = state.stepper.steps.map((s: StepDescription) => s.number)
             .filter((i: number) => getters["stepper/complete"][i]);
         const maxCompleteOrActive = Math.max(...completeSteps, state.stepper.activeStep);

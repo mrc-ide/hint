@@ -112,12 +112,13 @@ test('marks as invalid if required controls are missing', () => {
         name: "id_5",
         type: "select",
         required: true,
+        value: null,
         options: [{id: "opt1", label: "option 1"}, {id: "opt2", label: "option2"}]
     } as SelectControl
 
     const missingRequiredValue = getForm([missingRequired])
     expect(checkOptionsValid(missingRequiredValue)).toStrictEqual(false);
 
-    const nullRequiredValue = getForm([missingRequired])
+    const nullRequiredValue = getForm([nullRequired])
     expect(checkOptionsValid(nullRequiredValue)).toStrictEqual(false);
 })

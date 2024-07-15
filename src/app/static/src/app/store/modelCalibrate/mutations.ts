@@ -5,6 +5,7 @@ import {CalibrateResultWithType, PayloadWithType} from "../../types";
 import {parseAndFillForm} from "../../utils";
 import {
     CalibrateMetadataResponse,
+    CalibratePlotResponse,
     CalibrateStatusResponse,
     CalibrateSubmitResponse,
     ComparisonPlotResponse,
@@ -27,9 +28,9 @@ export enum ModelCalibrateMutation {
     Ready = "Ready",
     CalibrationPlotStarted = "CalibrationPlotStarted",
     ComparisonPlotStarted = "ComparisonPlotStarted",
-    SetPlotData = "SetPlotData",
+    SetCalibratePlotResult = "SetCalibratePlotResult",
+    CalibratePlotFetched = "CalibratePlotFetched",
     SetComparisonPlotData = "SetComparisonPlotData",
-    CalibrateResultFetched = "CalibrateResultFetched",
     ClearWarnings = "ClearWarnings",
     ResetIds = "ResetIds",
     MetadataFetched = "MetadataFetched"
@@ -97,9 +98,12 @@ export const mutations: MutationTree<ModelCalibrateState> = {
         state.comparisonPlotError = null;
     },
 
-    [ModelCalibrateMutation.SetPlotData](state: ModelCalibrateState, action: PayloadWithType<any>) {
-        state.generatingCalibrationPlot = false;
+    [ModelCalibrateMutation.SetCalibratePlotResult](state: ModelCalibrateState, action: CalibratePlotResponse) {
         state.calibratePlotResult = action;
+    },
+
+    [ModelCalibrateMutation.CalibratePlotFetched](state: ModelCalibrateState) {
+        state.generatingCalibrationPlot = false;
     },
 
     [ModelCalibrateMutation.SetComparisonPlotData](state: ModelCalibrateState, action: ComparisonPlotResponse) {
@@ -143,21 +147,6 @@ export const mutations: MutationTree<ModelCalibrateState> = {
 
     [ModelCalibrateMutation.ResetIds](state: ModelCalibrateState) {
         stopPolling(state)
-    },
-
-    [ModelCalibrateMutation.CalibrateResultFetched](state: ModelCalibrateState, action: PayloadWithType<CalibrateResultWithType>) {
-        if (!state.result) {
-            state.result = structuredClone({data: action.payload.data});
-        } else {
-            state.result.data = [...state.result.data, ...action.payload.data];
-        }
-        if (!state.fetchedIndicators) {
-            state.fetchedIndicators = [action.payload.indicatorId];
-        } else {
-            if (state.fetchedIndicators.indexOf(action.payload.indicatorId) == -1) {
-                state.fetchedIndicators.push(action.payload.indicatorId);
-            }
-        }
     },
 };
 

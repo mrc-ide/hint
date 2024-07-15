@@ -3,12 +3,12 @@ import {BaselineActions} from "../../../app/store/baseline/actions";
 import {
     mockBaselineState,
     mockError,
+    mockFile,
     mockMetadataState,
     mockPopulationResponse,
     mockRootState,
     mockShapeResponse,
-    mockSurveyAndProgramState,
-    mockFile
+    mockSurveyAndProgramState
 } from "../../mocks";
 import {BaselineState} from "../../../app/store/baseline/baseline";
 import UploadInputs from "../../../app/components/uploadInputs/UploadInputs.vue";
@@ -22,8 +22,8 @@ import {SurveyAndProgramActions} from "../../../app/store/surveyAndProgram/actio
 import {getters} from "../../../app/store/surveyAndProgram/getters";
 import {DataType, SurveyAndProgramState} from "../../../app/store/surveyAndProgram/surveyAndProgram";
 import {testUploadComponent} from "./fileUploads";
-import { MockInstance, Mocked } from 'vitest';
-import { flushPromises, VueWrapper } from '@vue/test-utils';
+import {Mocked, MockInstance} from 'vitest';
+import {flushPromises, VueWrapper} from '@vue/test-utils';
 
 describe("UploadInputs upload component", () => {
 
@@ -617,7 +617,7 @@ describe("UploadInputs upload component", () => {
             },
         });
 
-        wrapper.findAllComponents(ManageFile)[index].props().upload({name: "TEST"});
+        wrapper.findAllComponents(ManageFile)[index].props().upload({name: "TEST"} as any);
         await flushPromises();
         expect(action().mock.calls[0][1]).toStrictEqual({name: "TEST"});
     };

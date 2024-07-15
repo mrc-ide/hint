@@ -1,4 +1,4 @@
-import {flushPromises, mount, shallowMount} from "@vue/test-utils";
+import {flushPromises} from "@vue/test-utils";
 import ShareProject from "../../../app/components/projects/ShareProject.vue";
 import Modal from "../../../app/components/Modal.vue";
 import Vuex from "vuex";
@@ -10,8 +10,8 @@ import {ProjectsState} from "../../../app/store/projects/projects";
 import {mockProjectsState} from "../../mocks";
 import {mutations, ProjectsMutations} from "../../../app/store/projects/mutations";
 import ErrorAlert from "../../../app/components/ErrorAlert.vue";
-import { Language } from "../../../app/store/translations/locales";
-import { nextTick } from "vue";
+import {Language} from "../../../app/store/translations/locales";
+import {nextTick} from "vue";
 
 declare var currentUser: string;
 currentUser = "test.user@example.com"
@@ -99,7 +99,6 @@ describe("ShareProject", () => {
         const link = wrapper.find("button");
         await link.trigger("click");
         expect(wrapper.findComponent(Modal).props("open")).toBe(true);
-        const input = wrapper.findComponent(Modal).find("input");
         await wrapper.findComponent(Modal).findAll("button")[1].trigger("mousedown");
         expect(wrapper.findComponent(Modal).props("open")).toBe(false);
 

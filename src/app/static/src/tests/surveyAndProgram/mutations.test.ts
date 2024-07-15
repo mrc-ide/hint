@@ -1,13 +1,7 @@
 import {DataType, SurveyAndProgramState} from "../../app/store/surveyAndProgram/surveyAndProgram";
 import {getters as surveyAndProgramGetters} from "../../app/store/surveyAndProgram/getters";
 import {mutations, SurveyAndProgramMutation} from "../../app/store/surveyAndProgram/mutations";
-import {
-    mockError,
-    mockRootState,
-    mockSurveyAndProgramState,
-    mockSurveyResponse,
-    mockWarning
-} from "../mocks";
+import {mockError, mockRootState, mockSurveyAndProgramState, mockSurveyResponse, mockWarning} from "../mocks";
 
 import {Module} from "vuex";
 import {RootState} from "../../app/root";

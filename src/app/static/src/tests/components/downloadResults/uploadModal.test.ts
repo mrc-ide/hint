@@ -7,12 +7,15 @@ import {
     mockADRState,
     mockADRUploadState,
     mockBaselineState,
-    mockDatasetResource, mockDownloadResultsDependency,
-    mockDownloadResultsState, mockError, mockMetadataState
+    mockDatasetResource,
+    mockDownloadResultsDependency,
+    mockDownloadResultsState,
+    mockError,
+    mockMetadataState
 } from "../../mocks";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
-import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from "../../testHelpers";
-import { nextTick } from 'vue';
+import {expectTranslated, mountWithTranslate} from "../../testHelpers";
+import {nextTick} from 'vue';
 import {Dict} from "../../../app/types";
 import {Language} from "../../../app/store/translations/locales";
 import {DownloadResultsState} from "../../../app/store/downloadResults/downloadResults";

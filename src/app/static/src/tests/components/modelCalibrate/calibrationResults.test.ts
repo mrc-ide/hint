@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import CalibrationResults from "../../../app/components/modelCalibrate/CalibrationResults.vue";
-import {mockCalibrateResultResponse} from "../../mocks";
+import {mockCalibratePlotResponse} from "../../mocks";
 import {mutations as modelCalibrateMutations} from "../../../app/store/modelCalibrate/mutations";
 import {mutations as plottingSelectionMutations} from "../../../app/store/plottingSelections/mutations";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
@@ -9,7 +9,7 @@ import BarChartWithFilters from '../../../app/vue-chart/src/bar/BarChartWithFilt
 import {ModelCalibrateState} from "../../../app/store/modelCalibrate/modelCalibrate";
 import {expectTranslated, shallowMountWithTranslate} from "../../testHelpers";
 import {BarchartIndicator} from "../../../app/types";
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 
 const defaultSelections = {
     indicator_id: "TestIndicator",
@@ -27,7 +27,7 @@ function getStore(modelCalibrateState: Partial<ModelCalibrateState> = {}, partia
         modules: {
             modelCalibrate: {
                 state: {
-                    calibratePlotResult: mockCalibrateResultResponse({data: ["TEST DATA"] as any}),
+                    calibratePlotResult: mockCalibratePlotResponse({data: ["TEST DATA"] as any}),
                     ...modelCalibrateState
                 },
                 namespaced: true,

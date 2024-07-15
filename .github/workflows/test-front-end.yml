@@ -25,14 +25,8 @@ jobs:
             - name: Lint
               run: npm run lint --prefix=src/app/static -- --quiet
 
-            - name: Run deps
-              run: scripts/run-dependencies.sh
-
-            - name: Start Kotlin server
-              run: scripts/run-kotlin-server.sh
-
-            - name: Integration tests
-              run: npm run integration-test --prefix=src/app/static
+            - name: Front-end tests
+              run: npm run test --prefix=src/app/static
 
             - name: CodeCov
               run: |

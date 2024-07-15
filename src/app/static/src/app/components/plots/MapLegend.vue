@@ -1,19 +1,24 @@
 <template>
     <l-control position="bottomright">
         <div class="legend-container">
-            <map-adjust-scale class="legend-element legend-adjust map-control" name="colour" :step="colourScaleStep"
-                              :show="showAdjust" :scale="colourScale" @update="update" :metadata="metadata">
+            <map-adjust-scale v-if="showAdjust"
+                              class="legend-element legend-adjust map-control"
+                              :scale="Scale.Colour"
+                              :indicator-metadata="indicatorMetadata"
+                              :selected-scale="selectedScale"
+                              @update:selected-scale="$emit('update:selectedScale')"
+                              :plot="plot">
             </map-adjust-scale>
             <div class="legend-element map-control p-3">
-            <label v-if="metadata">{{metadata.name}}</label>
-                <div class="legend" v-for="(level, index) in levels" v-bind:key="index">
+                <label>{{indicatorMetadata.name}}</label>
+                <div class="legend" v-for="(level, index) in scaleLevels" v-bind:key="index">
                     <i v-bind:style="level.style"></i>
-                    <span class="level">{{ level.val }}</span>
+                    <span class="level">{{ level.label }}</span>
                     <span class="hidden" style="display: none">{{ level.style }}</span>
                     <br/>
                 </div>
-                <div v-if="adjustable" class="adjust-scale mt-1">
-                    <a @click="toggleAdjust" href="">
+                <div v-if="!!colourScales" class="adjust-scale mt-1">
+                    <a @click.prevent="showAdjust = !showAdjust" href="">
                         <span v-if="showAdjust" v-translate="'done'"></span>
                         <span v-if="!showAdjust" v-translate="'adjustScale'"></span>
                     </a>
@@ -22,93 +27,55 @@
         </div>
     </l-control>
 </template>
+
 <script lang="ts">
-    import {LControl} from "@vue-leaflet/vue-leaflet";
-    import {
-        colorFunctionFromName,
-        scaleStepFromMetadata,
-        roundToContext,
-        formatOutput,
-        formatLegend
-    } from "./utils";
-    import {ChoroplethIndicatorMetadata} from "../../generated";
-    import {ScaleSettings} from "../../store/plottingSelections/plottingSelections";
-    import MapAdjustScale from "./MapAdjustScale.vue";
-    import {NumericRange} from "../../types";
-    import { PropType, defineComponent } from "vue";
 
-    export default defineComponent({
-        name: "MapLegend",
-        props: {
-            metadata: {
-                type: Object as PropType<ChoroplethIndicatorMetadata>,
-                required: false
-            },
-            colourScale: {
-                type: Object as PropType<ScaleSettings | null>,
-                required: true
-            },
-            colourRange: {
-                type: Object as PropType<NumericRange>,
-                required: true
-            }
+import {computed, defineComponent, PropType, ref} from "vue";
+import {LControl} from "@vue-leaflet/vue-leaflet";
+import MapAdjustScale from "./MapAdjustScale.vue";
+import {useStore} from "vuex";
+import {RootState} from "../../root";
+import {ChoroplethIndicatorMetadata} from "../../generated";
+import {Scale, ScaleSettings} from "../../store/plotState/plotState";
+import {ScaleLevels} from "./utils";
+import { PlotName } from "../../store/plotSelections/plotSelections";
+
+export default defineComponent({
+    props: {
+        indicatorMetadata: {
+            type: Object as PropType<ChoroplethIndicatorMetadata>,
+            required: true
         },
-        components: {
-            LControl,
-            MapAdjustScale
+        scaleLevels: {
+            type: Object as PropType<ScaleLevels[]>,
+            required: true
         },
-        data() {
-            return {
-                showAdjust: false
-            }
+        selectedScale: {
+            type: Object as PropType<ScaleSettings>,
+            required: true
         },
-        computed: {
-            adjustable: function () {
-                return !!this.colourScale;
-            },
-            colourScaleStep: function () {
-                return this.metadata ? scaleStepFromMetadata(this.metadata) : 1;
-            },
-            levels: function () {
-                if (this.metadata) {
-                    const { format, scale, accuracy} = this.metadata;
-                    const max = this.colourRange.max;
-                    const min = this.colourRange.min;
-
-                    const colorFunction = colorFunctionFromName(this.metadata.colour);
-                    const step = (max - min) / 5;
-
-                    const indexes = max == min ? [0] : [5, 4, 3, 2, 1, 0];
-
-                    const invertScale = this.metadata.invert_scale
-                    return indexes.map((i) => {
-                        let val: any = min + (i * step);
-                        val = roundToContext(val, [min, max]);
-
-                        let valAsProportion = (max != min) ? (val - min) / (max - min) : 0;
-
-                        if (invertScale) {
-                            valAsProportion = 1 - valAsProportion;
-                        }
-
-                        val = formatLegend(val, format, scale)
-
-                        return {
-                            val, style: {background: colorFunction(valAsProportion)}
-                        }
-                    });
-                }
-                return [];
-            }
-        },
-        methods: {
-            toggleAdjust: function (e: Event) {
-                e.preventDefault();
-                this.showAdjust = !this.showAdjust;
-            },
-            update: function (scale: ScaleSettings) {
-                this.$emit("update", scale);
-            }
+        plot: {
+            type: String as PropType<PlotName>,
+            required: true
         }
-    });
+    },
+    setup() {
+        const store = useStore<RootState>();
+        const colourScales = computed(() => {
+            return store.state.plotState.output.colourScales;
+        });
+
+        const showAdjust = ref<boolean>(false);
+
+        return {
+            colourScales,
+            showAdjust,
+            Scale
+        }
+    },
+    components: {
+        LControl,
+        MapAdjustScale
+    }
+})
 </script>

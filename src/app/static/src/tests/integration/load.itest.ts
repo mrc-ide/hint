@@ -1,12 +1,10 @@
 import {actions} from "../../app/store/load/actions";
 import {login, rootState} from "./integrationTest";
 import {actions as baselineActions} from "../../app/store/baseline/actions";
-import {ShapeResponse} from "../../app/generated";
 import {getFormData} from "./helpers";
 
 describe("load actions", () => {
 
-    let shape: any = {};
     const realLocation = window.location;
 
     beforeAll(async () => {
@@ -15,7 +13,6 @@ describe("load actions", () => {
         const formData = getFormData("../testdata/malawi.geojson");
 
         await baselineActions.uploadShape({commit, dispatch: vi.fn(), rootState} as any, formData);
-        shape = (commit.mock.calls[1][0]["payload"] as ShapeResponse);
 
         const mockLocationReload = vi.fn();
         delete (window as any).location;

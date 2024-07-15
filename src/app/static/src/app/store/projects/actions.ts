@@ -1,7 +1,7 @@
 import {RootMutation} from "../root/mutations";
 import {ErrorsMutation} from "../errors/mutations";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
-import {ActionContext, ActionTree, Store} from "vuex";
+import {ActionContext, ActionTree} from "vuex";
 import {ProjectsState} from "./projects";
 import {RootState} from "../../root";
 import {api} from "../../apiService";

@@ -29,5 +29,16 @@ module.exports = {
     rules: {
         'vue/multi-word-component-names': 'off',
         'no-prototype-builtins': 'off',
+        "@typescript-eslint/no-explicit-any": "off",
+        // TODO: enable this again and fix occurances of non-null assert
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            {
+                "argsIgnorePattern": "^_",
+                "varsIgnorePattern": "^_",
+                "caughtErrorsIgnorePattern": "^_"
+            }
+        ]
     },
 };

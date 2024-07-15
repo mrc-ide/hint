@@ -1,0 +1,39 @@
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - "*"
+
+name: Test Front End Integration
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Make shared env
+              uses: ./.github/actions/make-shared-env
+              with:
+                dh-username: ${{ secrets.DOCKERHUB_USERNAME }}
+                dh-password: ${{ secrets.DOCKERHUB_TOKEN }}
+                ghcr-username: ${{ github.actor }}
+                ghcr-password: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Run deps
+              run: scripts/run-dependencies.sh
+
+            - name: Start Kotlin server
+              run: scripts/run-kotlin-server.sh
+
+            - name: Integration tests
+              run: npm run integration-test --prefix=src/app/static
+
+            - name: CodeCov
+              run: |
+                codecov -p . -f src/app/static/coverage/unit/*.json
+                codecov -p . -f src/app/static/coverage/integration/*.json
+              env:
+                CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

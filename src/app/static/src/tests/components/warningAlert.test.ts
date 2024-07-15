@@ -1,4 +1,3 @@
-import {shallowMount} from '@vue/test-utils';
 import WarningAlert from "../../app/components/WarningAlert.vue";
 import Warning from "../../app/components/Warning.vue";
 import Vuex from "vuex";

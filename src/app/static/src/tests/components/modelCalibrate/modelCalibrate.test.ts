@@ -1,5 +1,11 @@
 import Vuex, {Store} from "vuex";
-import {mockError, mockModelCalibrateState, mockOptionsFormMeta, mockRootState} from "../../mocks";
+import {
+    mockCalibratePlotResponse,
+    mockError,
+    mockModelCalibrateState,
+    mockOptionsFormMeta,
+    mockRootState
+} from "../../mocks";
 import registerTranslations from "../../../app/store/translations/registerTranslations";
 import {RootState} from "../../../app/root";
 import {ModelCalibrateState} from "../../../app/store/modelCalibrate/modelCalibrate";
@@ -11,7 +17,7 @@ import {expectTranslated, mountWithTranslate, shallowMountWithTranslate} from ".
 import Tick from "../../../app/components/Tick.vue";
 import ErrorAlert from "../../../app/components/ErrorAlert.vue";
 import {ModelCalibrateMutation} from "../../../app/store/modelCalibrate/mutations";
-import { Language } from "../../../app/store/translations/locales";
+import {Language} from "../../../app/store/translations/locales";
 
 describe("Model calibrate component", () => {
     const getStore = (state: Partial<ModelCalibrateState> = {},
@@ -185,7 +191,7 @@ describe("Model calibrate component", () => {
     });
 
     it("renders calibration plot and label if calibration is complete", async () => {
-        const store = getStore({complete: true, calibratePlotResult: {}});
+        const store = getStore({complete: true, calibratePlotResult: mockCalibratePlotResponse()});
         const wrapper = getWrapper(store);
         expect(wrapper.findComponent(CalibrationResults).exists()).toBe(true);
         await expectTranslated(wrapper.find("#reviewResults"), "(Review results below)",
@@ -193,7 +199,7 @@ describe("Model calibrate component", () => {
     });
 
     it("it does not render calibration plot and label if calibration is incomplete", () => {
-        const store = getStore({complete: false, calibratePlotResult: {}});
+        const store = getStore({complete: false, calibratePlotResult: mockCalibratePlotResponse()});
         const wrapper = getWrapper(store);
         expect(wrapper.findComponent(CalibrationResults).exists()).toBe(false);
         expect(wrapper.find("#reviewResults").exists()).toBe(false)

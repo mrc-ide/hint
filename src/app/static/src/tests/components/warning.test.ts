@@ -1,6 +1,5 @@
-import {shallowMount} from '@vue/test-utils';
 import Warning from "../../app/components/Warning.vue";
-import Vue, { nextTick } from "vue";
+import {nextTick} from "vue";
 import Vuex from "vuex";
 import VueFeather from "vue-feather";
 import {emptyState} from "../../app/root";

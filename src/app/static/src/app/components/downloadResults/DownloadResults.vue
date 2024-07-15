@@ -109,7 +109,7 @@
 
     export default defineComponent({
         name: "downloadResults",
-        data() {
+        data(): Data {
             return {
                 uploadModalOpen: false,
                 comparisonSwitch: switches.comparisonOutput,

@@ -47,15 +47,14 @@ console.error = vi.fn();
 
 // only import the app after we have replaced action with mocks
 // as the app will call these actions on import
-import app from "../../app"
 import Hint from '../../app/components/Hint.vue';
 import {RootMutation} from "../../app/store/root/mutations";
 import {ModelRunMutation} from "../../app/store/modelRun/mutations";
 import {ModelCalibrateMutation} from "../../app/store/modelCalibrate/mutations";
 import {LanguageMutation} from "../../app/store/language/mutations";
 import {Language} from "../../app/store/translations/locales";
-import { nextTick } from 'vue';
-import { Mock } from 'vitest';
+import {nextTick} from 'vue';
+import {Mock} from 'vitest';
 
 describe("App", () => {
 
@@ -117,7 +116,7 @@ describe("App", () => {
         document.body.appendChild(div);
 
         const store = getStore();
-        const rendered = shallowMount(Hint, {
+        shallowMount(Hint, {
             global: {
                 plugins: [store]
             },

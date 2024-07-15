@@ -1,7 +1,7 @@
 import {actions, getCalibrateStatus} from "../../app/store/modelCalibrate/actions";
 import {rootState} from "./integrationTest";
 import {Language} from "../../app/store/translations/locales";
-import { isDynamicFormMeta } from "@reside-ic/vue-next-dynamic-form";
+import {isDynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
 
 describe("model calibrate actions integration", () => {
 
@@ -74,23 +74,6 @@ describe("model calibrate actions integration", () => {
             detail.includes("An unexpected error occurred")).toBe(true);
 
         expect(commit.mock.calls[1][0]).toBe("Ready");
-    });
-
-    it("can get calibrate plot", async () => {
-        const commit = vi.fn();
-        const state = {
-            calibrateId: "123",
-            status: {
-                done: true,
-                success: true
-            }
-        } as any;
-        await actions.getCalibratePlot({commit, state, rootState} as any);
-
-        expect(commit.mock.calls.length).toBe(2);
-        expect(commit.mock.calls[0][0]).toBe("CalibrationPlotStarted");
-        expect(commit.mock.calls[1][0]["type"]).toBe("SetError");
-        expect(commit.mock.calls[1][0]["payload"].detail).toBe("Failed to fetch result");
     });
 
     it("can get comparison plot", async () => {

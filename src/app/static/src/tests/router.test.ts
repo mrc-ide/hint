@@ -5,7 +5,8 @@ import Vuex from "vuex";
 import {mockRootState} from "./mocks";
 import {store} from "../app/main";
 import Hint from "../app/components/Hint.vue";
-import { Mock } from "vitest";
+import {Mock} from "vitest";
+import {beforeEnter, router} from '../app/router';
 
 // Mock the actions before import the router as the app will call
 // these actions on import
@@ -52,8 +53,6 @@ vi.mock("../app/components/projects/Projects.vue", () => ({
         template: "<div id='projects-stub'/>"
     }
 }))
-
-import {router, beforeEnter} from '../app/router';
 
 describe("Router", () => {
 

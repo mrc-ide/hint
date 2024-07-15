@@ -45,7 +45,7 @@
 }
 
 .legend-adjust {
-  width: 13.875rem;
+  width: 11rem;
 }
 
 .legend-adjust .static-container {
@@ -57,8 +57,12 @@
 }
 
 .legend-adjust input[type='number'] {
-  width: 4rem;
+  width: 5rem;
   outline: none;
+}
+
+.legend-adjust .scale-type-radio {
+  vertical-align: sub;
 }
 
 .vue-treeselect__multi-value-item {
@@ -129,4 +133,9 @@
 .geojson-grey {
   @extend .geojson !optional;
   fill: rgb(200, 200, 200);
+}
+
+// Hide the black square on the map when a feature is clicked
+path.leaflet-interactive:focus {
+  outline: none;
 }

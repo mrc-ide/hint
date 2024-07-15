@@ -1,6 +1,6 @@
 import {flushPromises, shallowMount} from '@vue/test-utils';
 import Vuex, {Store} from 'vuex';
-import { nextTick } from 'vue';
+import {nextTick} from 'vue';
 import {
     mockAxios,
     mockError,

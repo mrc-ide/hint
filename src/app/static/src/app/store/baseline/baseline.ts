@@ -1,9 +1,15 @@
 import {Module} from 'vuex';
 import {actions} from './actions';
 import {mutations} from './mutations';
-import {ReadyState, RootState} from "../../root";
-import {NestedFilterOption, PjnzResponse, PopulationResponse, ShapeResponse, Error} from "../../generated";
+import {
+    NestedFilterOption,
+    PjnzResponse,
+    PopulationResponse,
+    ShapeResponse,
+    Error,
+} from "../../generated";
 import { Dataset, Release, Dict, DatasetResourceSet, DatasetResource } from "../../types";
+import {ReadyState, RootState} from "../../root";
 import {resourceTypes} from "../../utils";
 
 export interface BaselineState extends ReadyState {
@@ -78,6 +84,19 @@ export const baselineGetters = {
             })
         }
         return resources
+    },
+    areaIdToLevelMap: (state: BaselineState): Dict<number> => {
+        const features = state.shape?.data.features
+        if (!features) {
+            return {}
+        }
+        return features.reduce(
+            (map: Dict<number>, feature: any) => {
+                if (feature.properties?.area_id) {
+                    map[feature.properties.area_id] = feature.properties.area_level;
+                }
+                return map;
+            }, {});
     },
 };
 
