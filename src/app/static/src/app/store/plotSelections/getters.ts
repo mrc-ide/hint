@@ -1,11 +1,10 @@
 import {ControlSelection, FilterSelection, PlotName, PlotSelectionsState} from "./plotSelections";
-import {ChoroplethIndicatorMetadata, FilterOption, TableMetadata} from "../../generated";
+import {ChoroplethIndicatorMetadata, FilterOption} from "../../generated";
 import {BarChartData, plotDataToChartData} from "../../components/plots/bar/utils";
 import {RootState} from "../../root";
 import {PlotData} from "../plotData/plotData";
 import {Dict} from "../../types";
 import {getMetadataFromPlotName} from "./actions";
-import {PlotMetadataFrame} from "../metadata/metadata";
 
 export const getters = {
     controlSelectionFromId: (state: PlotSelectionsState) => (plotName: PlotName, controlId: string): FilterOption | undefined => {
@@ -20,7 +19,7 @@ export const getters = {
         }
     },
     barchartData: (state: PlotSelectionsState, getters: any, rootState: RootState, rootGetters: any) =>
-        (plotName: PlotName,  plotData: PlotData, indicatorMetadata: ChoroplethIndicatorMetadata,
+        (plotName: PlotName, plotData: PlotData, indicatorMetadata: ChoroplethIndicatorMetadata,
          filterSelections: FilterSelection[]): BarChartData => {
         const disaggregateBy = getters.controlSelectionFromId(plotName, "disagg_by");
         const xAxis = getters.controlSelectionFromId(plotName, "x_axis");
@@ -42,7 +41,7 @@ export const getters = {
             areaIdToLevelMap = rootGetters["baseline/areaIdToLevelMap"];
             areaLevel = filterSelections.find(f => f.filterId == "detail")?.selection[0]?.id;
         }
-        if (disaggregateId && xAxisId && xAxisOptions && plotData) {
+        if (disaggregateId && xAxisId && xAxisOptions) {
             return plotDataToChartData(plotData, indicatorMetadata,
                 disaggregateId, disaggregateSelections,
                 xAxisId, xAxisSelections, xAxisOptions,
@@ -50,13 +49,5 @@ export const getters = {
         } else {
             return emptyData
         }
-    },
-    tableMetadata: (state: PlotSelectionsState, getters: any, rootState: RootState) =>
-        (plotName: PlotName, selectedPreset: FilterOption): TableMetadata | undefined => {
-        const tableMetadata: PlotMetadataFrame = getMetadataFromPlotName(rootState, plotName);
-        const currentPreset = tableMetadata.plotSettingsControl[plotName].plotSettings
-            .find(s => s.id === "presets")?.options
-            .find(o => o.id === selectedPreset.id);
-        return currentPreset?.effect.customPlotEffect;
     }
 };

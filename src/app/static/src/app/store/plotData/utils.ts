@@ -1,9 +1,9 @@
-import { Commit, Store } from "vuex";
-import { RootState } from "../../root";
-import { Feature } from "geojson";
-import { SurveyAndProgramMutation } from "../surveyAndProgram/mutations";
-import { SurveyAndProgramState } from "../surveyAndProgram/surveyAndProgram";
-import { AncResponse, ProgrammeResponse, SurveyResponse } from "../../generated";
+import {Commit} from "vuex";
+import {RootState} from "../../root";
+import {Feature} from "geojson";
+import {SurveyAndProgramMutation} from "../surveyAndProgram/mutations";
+import {SurveyAndProgramState} from "../surveyAndProgram/surveyAndProgram";
+import {AncResponse, ProgrammeResponse, SurveyResponse} from "../../generated";
 
 export const addAreaLevelsToSAPData = (state: RootState, dataSource: keyof SurveyAndProgramState, commit: Commit) => {
     const response = state.surveyAndProgram[dataSource] as AncResponse | SurveyResponse | ProgrammeResponse;
@@ -12,11 +12,11 @@ export const addAreaLevelsToSAPData = (state: RootState, dataSource: keyof Surve
         data: getDataWithAreaLevel(response.data, state.baseline.shape?.data.features as Feature[])
     };
     if (dataSource === "anc") {
-        commit(`surveyAndProgram/${SurveyAndProgramMutation.ANCUpdated}`, { payload }, { root: true });
+        commit(`surveyAndProgram/${SurveyAndProgramMutation.ANCUpdated}`, {payload}, {root: true});
     } else if (dataSource === "program") {
-        commit(`surveyAndProgram/${SurveyAndProgramMutation.ProgramUpdated}`, { payload }, { root: true });
+        commit(`surveyAndProgram/${SurveyAndProgramMutation.ProgramUpdated}`, {payload}, {root: true});
     } else if (dataSource === "survey") {
-        commit(`surveyAndProgram/${SurveyAndProgramMutation.SurveyUpdated}`, { payload }, { root: true });
+        commit(`surveyAndProgram/${SurveyAndProgramMutation.SurveyUpdated}`, {payload}, {root: true});
     }
 };
 

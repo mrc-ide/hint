@@ -78,6 +78,11 @@ export const plotDataToChartData = function (plotData: PlotData,
 
         const xAxisValue = row[xAxisId];
         const xAxisLabel = visibleXAxis.find(opt => opt.id == xAxisValue)?.label || "";
+        if (!xAxisLabel) {
+            // If the label isn't in the list of labels which should be visible
+            // then ignore it
+            continue;
+        }
 
         let dataset = datasets.filter(d => (d as any).label == datasetLabel)[0] || null;
         if (!dataset) {

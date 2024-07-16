@@ -34,7 +34,7 @@ export default defineComponent({
         });
 
         const tableMetadata = computed<TableMetadata | undefined>(() => {
-            return store.getters["plotSelections/tableMetadata"](props.plot, selectedPreset.value);
+            return store.getters["modelCalibrate/tableMetadata"](props.plot, selectedPreset.value.id);
         });
 
         const reshapedData = computed(() => {

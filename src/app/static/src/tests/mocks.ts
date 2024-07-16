@@ -8,6 +8,7 @@ import {
     AncResponse,
     CalibrateDataResponse,
     CalibratePlotResponse,
+    ChoroplethIndicatorMetadata,
     ComparisonPlotResponse,
     DownloadSubmitRequest,
     Error,
@@ -30,7 +31,7 @@ import {
 import {initialModelRunState, ModelRunState} from "../app/store/modelRun/modelRun";
 import {emptyState, RootState} from "../app/root";
 import {initialStepperState, StepperState} from "../app/store/stepper/stepper";
-import {initialMetadataState, MetadataState} from "../app/store/metadata/metadata";
+import {initialMetadataState, MetadataState, PlotMetadataFrame} from "../app/store/metadata/metadata";
 import {initialLoadState, LoadState} from "../app/store/load/state";
 import {initialModelOptionsState, ModelOptionsState} from "../app/store/modelOptions/modelOptions";
 import {initialModelOutputState, ModelOutputState} from "../app/store/modelOutput/modelOutput";
@@ -169,11 +170,32 @@ export const mockPlottingSelections = (props?: Partial<PlottingSelectionsState>)
     }
 };
 
-export const mockPlotData = (props?: Partial<PlotDataState>) => {
+export const mockPlotDataState = (props?: Partial<PlotDataState>) => {
     return {
         ...initialPlotDataState(),
         ...props
     }
+};
+
+
+export const mockChoroplethIndicatorMetadata = (props?: Partial<ChoroplethIndicatorMetadata>): ChoroplethIndicatorMetadata => {
+    return {
+        indicator: "prevalence",
+        value_column: "mean",
+        indicator_column: "indicator",
+        indicator_value: "prevalence",
+        name: "Prevalence",
+        error_low_column: "lower",
+        error_high_column: "upper",
+        min: 0,
+        max: 1,
+        colour: "interpolateReds",
+        invert_scale: false,
+        format: "0.00",
+        scale: 1,
+        accuracy: null,
+        ...props
+    };
 };
 
 export const mockPlotSelections = (props?: Partial<PlotSelectionsState>) => {
@@ -677,7 +699,7 @@ export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadata
         indicators: [
             {
                 indicator: "prevalence",
-                value_column: "iindicator",
+                value_column: "indicator",
                 name: "Prevalence",
                 min: 0,
                 max: 1,
@@ -698,4 +720,56 @@ export const mockReviewInputMetadata = (props: Partial<ReviewInputFilterMetadata
         },
         ...props
     }
+}
+
+
+export const mockPlotMetadataFrame = (props: Partial<PlotMetadataFrame> = {}): PlotMetadataFrame => {
+    return {
+        filterTypes: [
+            {
+                id: "filterType1",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op1",
+                        label: "lab1"
+                    },
+                    {
+                        id: "op2",
+                        label: "lab2"
+                    }
+                ]
+            },
+            {
+                id: "filterType2",
+                column_id: "1",
+                options: [
+                    {
+                        id: "op2",
+                        label: "lab2"
+                    }
+                ]
+            }
+        ],
+        indicators: [
+            {
+                indicator: "prevalence",
+                value_column: "indicator",
+                name: "Prevalence",
+                min: 0,
+                max: 1,
+                colour: "red",
+                invert_scale: false,
+                scale: 1,
+                accuracy: null,
+                format: "0.0%"
+            }
+        ],
+        plotSettingsControl: {
+            choropleth: {
+                plotSettings: []
+            }
+        },
+        ...props
+    };
 }

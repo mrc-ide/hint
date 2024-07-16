@@ -1,21 +1,17 @@
 import {ModelCalibrateState} from "./modelCalibrate";
-import {ActionContext, ActionTree, Dispatch} from "vuex";
+import {ActionContext, ActionTree} from "vuex";
 import {DynamicFormData, DynamicFormMeta} from "@reside-ic/vue-next-dynamic-form";
 import {api} from "../../apiService";
 import {RootState} from "../../root";
 import {ModelCalibrateMutation} from "./mutations";
 import {
-    BarchartIndicator,
-    CalibrateDataResponse,
     CalibrateMetadataResponse,
     CalibratePlotResponse,
     ComparisonPlotResponse,
     ModelStatusResponse,
     ModelSubmitResponse
 } from "../../generated";
-import {CalibrateResultWithType, ModelOutputTabs} from "../../types";
 import {DownloadResultsMutation} from "../downloadResults/mutations";
-import { ModelOutputMutation } from "../modelOutput/mutations";
 import {commitPlotDefaultSelections, filtersAfterUseShapeRegions} from "../plotSelections/utils";
 import {commitInitialScaleSelections} from "../plotState/utils";
 

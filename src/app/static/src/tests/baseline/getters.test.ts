@@ -63,19 +63,19 @@ it("is complete iff all files are present", () => {
 
 it("selectedDatasetAvailableResources only returns resources that the user has permissions for (ie, exists in relevant dataset)", () => {
     const resources = [
-        { resource_type: "inputs-unaids-spectrum-file" },
-        { resource_type: "inputs-unaids-population" },
-        { resource_type: "inputs-unaids-geographic" },
-        { resource_type: "inputs-unaids-survey" },
-        { resource_type: "inputs-unaids-art" },
-        { resource_type: "inputs-unaids-anc" }
+        {resource_type: "inputs-unaids-spectrum-file"},
+        {resource_type: "inputs-unaids-population"},
+        {resource_type: "inputs-unaids-geographic"},
+        {resource_type: "inputs-unaids-survey"},
+        {resource_type: "inputs-unaids-art"},
+        {resource_type: "inputs-unaids-anc"}
     ]
 
     const selectedDataset = {
         id: "id1",
         title: "Some data",
         url: "www.adr.com/naomi-data/some-data",
-        organization: { id: "org-id" },
+        organization: {id: "org-id"},
         resources: {
             pjnz: mockDatasetResource(),
             program: mockDatasetResource(),
@@ -91,7 +91,7 @@ it("selectedDatasetAvailableResources only returns resources that the user has p
         {
             id: "id1",
             title: "Some data",
-            organization: { title: "org", id: "org-id" },
+            organization: {title: "org", id: "org-id"},
             name: "some-data",
             type: "naomi-data",
             resources
@@ -119,17 +119,20 @@ it("selectedDatasetAvailableResources only returns resources that the user has p
                 {
                     id: "id1",
                     title: "Some data",
-                    organization: { title: "org", id: "org-id" },
+                    organization: {title: "org", id: "org-id"},
                     name: "some-data",
                     type: "naomi-data",
                     resources: [
-                        { resource_type: "inputs-unaids-spectrum-file" }
+                        {resource_type: "inputs-unaids-spectrum-file"}
                     ]
                 }
             ]
         })
     })
-    expect(baselineGetters.selectedDatasetAvailableResources(state, getters, rootState)).toStrictEqual({...selectedDataset.resources, program: null});
+    expect(baselineGetters.selectedDatasetAvailableResources(state, getters, rootState)).toStrictEqual({
+        ...selectedDataset.resources,
+        program: null
+    });
 });
 
 it("areaIdToLevelMap returns map of area ID to level", () => {

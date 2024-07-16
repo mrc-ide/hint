@@ -1,5 +1,5 @@
 import {mutations, PlotDataMutations} from "../../app/store/plotData/mutations";
-import {mockPlotData} from "../mocks";
+import {mockPlotDataState} from "../mocks";
 import {expectAllMutationsDefined} from "../testHelpers";
 
 describe("PlotData mutations", () => {
@@ -13,7 +13,7 @@ describe("PlotData mutations", () => {
     });
 
     it("can set plotData", () => {
-        const plotDataState = mockPlotData();
+        const plotDataState = mockPlotDataState();
         const newData = [{
             area_id: "MWI",
             sex: "both",
